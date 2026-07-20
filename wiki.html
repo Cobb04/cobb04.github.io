@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LLM Wiki · Knowledge Graph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--text:#d4d4d4;--text2:#888;--border:#2a2a2a;--accent:#D94F30}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+canvas{display:block;position:fixed;top:0;left:0;z-index:1}
+/* overlay */
+#overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;display:flex;flex-direction:column;justify-content:space-between}
+/* top nav */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;pointer-events:auto}
+.nav a{color:var(--text2);text-decoration:none;font-size:.82rem;transition:color .2s;font-family:'DM Sans',sans-serif}
+.nav a:hover{color:var(--accent)}
+.nav-logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.1rem;color:var(--text);text-decoration:none;letter-spacing:-.01em}
+.nav-logo span{color:var(--accent)}
+/* bottom */
+.bottom{display:flex;justify-content:space-between;align-items:flex-end;padding:0 1.5rem 1.5rem;pointer-events:auto}
+.legend{display:flex;gap:1.5rem;font-size:.7rem;color:var(--text2)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.legend span{vertical-align:middle}
+.legend i.ep{background:#D94F30;box-shadow:0 0 6px rgba(217,79,48,.5)}
+.legend i.fw{background:#4CAF50;box-shadow:0 0 6px rgba(76,175,80,.5)}
+.legend i.cn{background:#5A9DB8;box-shadow:0 0 6px rgba(90,157,184,.5)}
+.hint{font-size:.68rem;color:#555}
+/* tooltip */
+#tt{position:fixed;pointer-events:none;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:.8rem;box-shadow:0 4px 20px rgba(0,0,0,.5);z-index:20;display:none;min-width:180px}
+#tt .ttpill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;text-transform:uppercase;letter-spacing:.06em;padding:.15rem .5rem;border-radius:10px;margin-bottom:.35rem}
+#tt .ttname{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:.1rem}
+#tt .ttsub{font-size:.72rem;color:var(--text2);line-height:1.4}
+#tt .ttconn{font-size:.65rem;color:var(--text2);margin-top:.3rem}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <nav class="nav"><a href="/" class="nav-logo">C<span>·</span>bb <span style="font-weight:400;font-size:.85rem;color:var(--text2)">/ wiki</span></a><a href="/">← Home</a></nav>
+  <div class="bottom">
+    <div class="legend"><span><i class="ep"></i><span>Episode</span></span><span><i class="fw"></i><span>Framework</span></span><span><i class="cn"></i><span>Concept</span></span></div>
+    <div class="hint">拖拽 · 滚轮 · 悬停</div>
+  </div>
+</div>
+<div id="tt"><div class="ttpill"></div><div class="ttname"></div><div class="ttsub"></div><div class="ttconn"></div></div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ── DATA ──────────────────────────────
+var nodes=[
+  {id:"ep1",label:"AI PM 入行靠狗运",sub:"OtherWise · Harry · 2026-05-15",group:0},
+  {id:"ep2",label:"AI 时代的两个自己",sub:"以鹅传鹅FM · Jason&王博源 · 2026-05-19",group:0},
+  {id:"ep3",label:"超级APP的AI悖论",sub:"哇哦产品 · Link · 2026-07-08",group:0},
+  {id:"ep4",label:"AI 应用死了吗？",sub:"42章经 · 曲凯 · 2026-07-19",group:0},
+  {id:"fw1",label:"AI学习五步法",sub:"脉络→直觉→核心→对话→自测",group:1},
+  {id:"fw2",label:"无包袱优势",sub:"零传统经验可能是优势",group:1},
+  {id:"fw3",label:"哆啦A梦口袋模型",sub:"AI是工具池，人是提需求的大雄",group:1},
+  {id:"fw4",label:"调错退回人脑",sub:"跳出框架重构问题",group:1},
+  {id:"fw5",label:"品味护城河",sub:"AI做执行，人做品味",group:1},
+  {id:"fw6",label:"责任成本框架",sub:"门槛不是省点击，是托付信任",group:1},
+  {id:"fw7",label:"导航-委托光谱",sub:"定位决定价值上限和信任门槛",group:1},
+  {id:"fw8",label:"奔驰vs优惠券测试",sub:"完整交付还是半成品？",group:1},
+  {id:"fw9",label:"账房先生策略",sub:"低情绪高精准，AI越冷越可信",group:1},
+  {id:"fw10",label:"锤子-钉子套利",sub:"护城河在懂用户，不在懂模型",group:1},
+  {id:"fw11",label:"期权不爆仓",sub:"今天的积累等模型成熟兑现",group:1},
+  {id:"fw12",label:"逆风期=最好时光",sub:"市场低谷过滤泡沫",group:1},
+  {id:"c1",label:"责任成本",sub:"用户用AI承担的心理成本",group:2},
+  {id:"c2",label:"非对称宽容",sub:"对自己宽容，对AI苛刻",group:2},
+  {id:"c3",label:"导航 vs 委托",sub:"带路还是办成并担责",group:2},
+  {id:"c4",label:"从0到1 vs 换壳",sub:"新能力还是微调旧流程",group:2},
+  {id:"c5",label:"信息套利",sub:"锤子(模型)vs钉子(用户)",group:2},
+  {id:"c6",label:"表演型创业",sub:"嘴上出海，用户翻墙",group:2},
+  {id:"c7",label:"技术革命周期",sub:"导入→狂热→转折→展开",group:2}
+];
+var links=[
+  {s:"ep1",t:"fw1"},{s:"ep1",t:"fw2"},
+  {s:"ep2",t:"fw3"},{s:"ep2",t:"fw4"},{s:"ep2",t:"fw5"},
+  {s:"ep3",t:"fw6"},{s:"ep3",t:"fw7"},{s:"ep3",t:"fw8"},{s:"ep3",t:"fw9"},
+  {s:"ep4",t:"fw10"},{s:"ep4",t:"fw11"},{s:"ep4",t:"fw12"},
+  {s:"ep3",t:"c1"},{s:"ep3",t:"c2"},{s:"ep3",t:"c3"},{s:"ep3",t:"c4"},
+  {s:"ep4",t:"c5"},{s:"ep4",t:"c6"},{s:"ep4",t:"c7"},
+  {s:"fw10",t:"fw4",l:"Extends"},{s:"fw11",t:"fw4",l:"Extends"},
+  {s:"fw12",t:"fw6",l:"Reinforces"},{s:"fw12",t:"fw2",l:"Reinforces"},
+  {s:"fw3",t:"fw7",l:"Extends"},{s:"fw5",t:"fw9",l:"Reinforces"}
+];
+var colors=["#D94F30","#4CAF50","#5A9DB8"];
+var sizes=[14,10,8];
+
+// Build adjacency
+var adj={}; var deg={};
+nodes.forEach(function(n){adj[n.id]=[];deg[n.id]=0});
+links.forEach(function(l){adj[l.s].push({id:l.t,label:l.l||""});adj[l.t].push({id:l.s,label:l.l||""});deg[l.s]++;deg[l.t]++});
+
+// ── CANVAS ────────────────────────────
+var c=document.getElementById("c"),ctx=c.getContext("2d");
+var W,H; function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight} resize(); window.addEventListener("resize",resize);
+
+// ── SIMULATION ────────────────────────
+var simNodes=nodes.map(function(d){var r=sizes[d.group]+Math.min(deg[d.id]*1.5,6);return Object.assign({},d,{r:r,x:W/2+(Math.random()-.5)*200,y:H/2+(Math.random()-.5)*200})});
+var nodeMap={}; simNodes.forEach(function(n){nodeMap[n.id]=n});
+var simLinks=links.map(function(l){return{source:nodeMap[l.s],target:nodeMap[l.t],label:l.l||""}});
+
+var sim=d3.forceSimulation(simNodes)
+  .force("link",d3.forceLink(simLinks).id(function(d){return d.id}).distance(function(d){return d.label?180:100}).strength(function(d){return d.label?.3:.15}))
+  .force("charge",d3.forceManyBody().strength(-400))
+  .force("center",d3.forceCenter(W/2,H/2))
+  .force("collide",d3.forceCollide().radius(function(d){return d.r+8}))
+  .alphaDecay(.02);
+
+// ── RENDER ────────────────────────────
+var hovered=null,neighbors=new Set();
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  // links
+  simLinks.forEach(function(l){
+    var s=l.source,t=l.target;
+    var active=hovered&&(s===hovered||t===hovered);
+    var dim=hovered&&!active;
+    ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(t.x,t.y);
+    if(dim){ctx.strokeStyle="rgba(255,255,255,.04)";ctx.setLineDash([])}
+    else if(l.label){ctx.strokeStyle="rgba(217,79,48,.5)";ctx.setLineDash([4,3])}
+    else{ctx.strokeStyle="rgba(255,255,255,.12)";ctx.setLineDash([])}
+    ctx.lineWidth=active?2:1;ctx.stroke();
+    if(l.label&&!dim){var mx=(s.x+t.x)/2,my=(s.y+t.y)/2-5;ctx.fillStyle="rgba(255,255,255,.35)";ctx.font="8px 'JetBrains Mono',monospace";ctx.textAlign="center";ctx.fillText(l.label,mx,my)}
+  });
+  ctx.setLineDash([]);
+  // nodes
+  simNodes.forEach(function(n){
+    var opacity=hovered?neighbors.has(n.id)||n===hovered?1:.15:1;
+    var r=n.r;
+    // glow
+    var glow=ctx.createRadialGradient(n.x,n.y,r*.4,n.x,n.y,r*2.2);
+    glow.addColorStop(0,colors[n.group]+"80");glow.addColorStop(1,"transparent");
+    ctx.fillStyle=glow;ctx.beginPath();ctx.arc(n.x,n.y,r*2.2,0,2*Math.PI);ctx.fill();
+    // body
+    ctx.fillStyle=colors[n.group];ctx.globalAlpha=opacity;ctx.beginPath();ctx.arc(n.x,n.y,r,0,2*Math.PI);ctx.fill();
+    // ring
+    ctx.strokeStyle="rgba(255,255,255,"+(opacity*.25)+")";ctx.lineWidth=1.5;ctx.stroke();
+    if(n===hovered){ctx.strokeStyle="rgba(255,255,255,.7)";ctx.lineWidth=2.5;ctx.stroke()}
+    ctx.globalAlpha=1;
+    // label (only hovered or large)
+    if(n===hovered||n.group===0){
+      ctx.fillStyle=opacity===1?"#fff":"rgba(255,255,255,"+(opacity*.6)+")";
+      ctx.font=(n.group===0?"bold 11px":"9px")+" 'DM Sans',sans-serif";
+      ctx.textAlign="center";ctx.fillText(n.label,n.x,n.y+r+13)
+    }
+  });
+}
+sim.on("tick",draw);
+
+// ── MOUSE ─────────────────────────────
+var tt=document.getElementById("tt");
+function findNode(mx,my){
+  for(var i=simNodes.length-1;i>=0;i--){
+    var n=simNodes[i],dx=mx-n.x,dy=my-n.y;
+    if(dx*dx+dy*dy<(n.r+8)*(n.r+8))return n;
+  }return null;
+}
+c.addEventListener("mousemove",function(e){
+  var n=findNode(e.clientX,e.clientY);
+  if(n!==hovered){
+    hovered=n;neighbors.clear();
+    if(n){neighbors.add(n.id);adj[n.id].forEach(function(x){neighbors.add(x.id)})}
+    // tooltip
+    if(n){
+      var pills={0:"Episode",1:"Framework",2:"Concept"};
+      tt.querySelector(".ttpill").textContent=pills[n.group];tt.querySelector(".ttpill").style.background=colors[n.group]+"22";tt.querySelector(".ttpill").style.color=colors[n.group];
+      tt.querySelector(".ttname").textContent=n.label;tt.querySelector(".ttsub").textContent=n.sub;
+      var conns=adj[n.id].filter(function(x){return x.label}).map(function(x){return x.label}).join(" · ");
+      tt.querySelector(".ttconn").textContent=conns||deg[n.id]+" connections";
+      tt.style.display="block";tt.style.left=e.clientX+16+"px";tt.style.top=e.clientY-10+"px"
+    }else{tt.style.display="none"}
+  }
+  if(hovered){tt.style.left=e.clientX+16+"px";tt.style.top=e.clientY-10+"px"}
+  c.style.cursor=n?"pointer":"default";
+});
+c.addEventListener("mouseleave",function(){hovered=null;neighbors.clear();tt.style.display="none"});
+
+// ── DRAG ──────────────────────────────
+var dragNode=null;
+c.addEventListener("mousedown",function(e){var n=findNode(e.clientX,e.clientY);if(n){dragNode=n;sim.alphaTarget(.3).restart()}});
+c.addEventListener("mousemove",function(e){if(dragNode){dragNode.fx=e.clientX;dragNode.fy=e.clientY}});
+c.addEventListener("mouseup",function(){if(dragNode){sim.alphaTarget(0);dragNode.fx=null;dragNode.fy=null;dragNode=null}});
+c.addEventListener("wheel",function(e){e.preventDefault();var sc=e.deltaY<0?1.1:.9;simNodes.forEach(function(n){n.x=(n.x-W/2)*sc+W/2;n.y=(n.y-H/2)*sc+H/2})});
+
+// ── KEYBOARD ──────────────────────────
+document.addEventListener("keydown",function(e){if(e.key==="r"){simNodes.forEach(function(n){n.fx=null;n.fy=null});sim.alpha(.5).restart()}});
+</script>
+</body>
+</html>

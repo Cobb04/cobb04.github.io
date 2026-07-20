@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="warm">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cobb · AI Product Builder</title>
+<meta name="description" content="AI product builder, skill creator, and lifelong learner.">
+<meta property="og:title" content="Cobb · AI Product Builder">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   WARM NOTEBOOK THEME (default)
+   ═══════════════════════════════════════ */
+:root,[data-theme="warm"]{
+  --bg:#FDFAF5;--bg-card:#F8F4EC;--bg-warm:#F3EDE2;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--accent-h:#C4432A;--accent-l:#FDEEE9;--border:#E8E0D5;--r:12px;
+  --font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;
+  --shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06);--shadow-h:0 4px 12px rgba(0,0,0,.08);
+}
+/* ═══════════════════════════════════════
+   TERMINAL THEME
+   ═══════════════════════════════════════ */
+[data-theme="terminal"]{
+  --bg:#0a0a0a;--bg-card:#0d0d0d;--bg-warm:#0d0d0d;--text:#c0c0c0;--text2:#888;--text3:#555;--accent:#0f0;--accent-h:#0c0;--accent-l:#0f01a;--border:#1a1a1a;--r:0px;
+  --font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;
+  --shadow:none;--shadow-h:none;
+}
+[data-theme="terminal"] *::selection{background:#0f0;color:#000}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:17px;scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;transition:background .4s,color .4s,font-family .1s;-webkit-font-smoothing:antialiased}
+[data-theme="terminal"] body{-webkit-font-smoothing:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 1.5rem}
+
+/* nav */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0;border-bottom:1px solid var(--border);margin-bottom:3rem}
+.nav-logo{font-family:var(--font-display);font-weight:800;font-size:1.25rem;letter-spacing:-.01em;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:1.25rem;align-items:center}
+.nav-links a,.nav-links button{font-size:.85rem;color:var(--text2);text-decoration:none;background:none;border:none;cursor:pointer;font-family:var(--font-body);transition:color .2s}
+.nav-links a:hover,.nav-links button:hover{color:var(--accent)}
+
+/* theme switch button */
+.theme-switch{position:relative;display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--border)!important;border-radius:24px;padding:.4rem 1rem!important;font-size:.8rem!important;cursor:pointer;transition:all .3s!important}
+.theme-switch:hover{border-color:var(--accent)!important}
+[data-theme="terminal"] .theme-switch{color:var(--accent)!important}
+[data-theme="terminal"] .theme-switch:hover{border-color:var(--accent)!important;background:rgba(0,255,0,.05)}
+
+/* hero */
+.hero{padding:2rem 0 3rem}
+.hero h1{font-family:var(--font-display);font-weight:800;font-size:2.6rem;line-height:1.12;letter-spacing:-.02em;margin-bottom:.75rem}
+.hero h1 span{color:var(--accent)}
+.hero .tagline{font-size:1.1rem;color:var(--text2);max-width:560px;line-height:1.7;margin-bottom:1.25rem}
+[data-theme="terminal"] .hero .tagline{font-size:.9rem}
+.hero .socials{display:flex;gap:1rem;flex-wrap:wrap}
+.hero .socials a{display:inline-flex;align-items:center;gap:.35rem;font-size:.85rem;color:var(--text2);text-decoration:none;padding:.45rem .9rem;border:1px solid var(--border);border-radius:24px;transition:all .2s}
+.hero .socials a:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-l)}
+
+/* sections */
+.section{margin-bottom:3.5rem}
+.section-title{font-family:var(--font-display);font-weight:700;font-size:1.35rem;letter-spacing:-.01em;margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem;color:var(--accent)}
+[data-theme="terminal"] .section-title{font-weight:400;font-size:1rem}
+.section-title::after{content:"";flex:1;height:1px;background:var(--border)}
+[data-theme="terminal"] .section-title::after{display:none}
+.section-desc{font-size:.85rem;color:var(--text3);margin-bottom:1rem}
+
+/* project grid */
+.grid2{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;transition:all .25s;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:.55rem;box-shadow:var(--shadow)}
+a.card:hover{border-color:var(--accent);box-shadow:var(--shadow-h);transform:translateY(-2px)}
+[data-theme="terminal"] a.card:hover{transform:none;background:rgba(0,255,0,.03)}
+.card .meta{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:500}
+.card h3{font-family:var(--font-display);font-weight:700;font-size:1.1rem;line-height:1.3;letter-spacing:-.01em}
+[data-theme="terminal"] .card h3{font-weight:400;font-size:.95rem}
+.card .desc{font-size:.85rem;color:var(--text2);line-height:1.55}
+[data-theme="terminal"] .card .desc{font-size:.75rem}
+.card .tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:auto;padding-top:.4rem}
+.card .tag{font-size:.68rem;padding:.12rem .5rem;border-radius:8px;background:var(--bg);border:1px solid var(--border);color:var(--text3)}
+[data-theme="terminal"] .card .tag{border-radius:0;font-size:.62rem}
+
+/* skill row */
+.skill-row{display:flex;flex-wrap:wrap;gap:.6rem}
+.skill-chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;color:var(--text);text-decoration:none;padding:.5rem .9rem;border:1px solid var(--border);border-radius:8px;background:var(--bg-card);transition:all .2s}
+[data-theme="terminal"] .skill-chip{border-radius:0;font-family:var(--font-mono);font-size:.72rem}
+a.skill-chip:hover{border-color:var(--accent);background:var(--accent-l);color:var(--accent)}
+
+/* course cards */
+.c-grid{display:grid;grid-template-columns:1fr;gap:.75rem}
+@media(min-width:640px){.c-grid{grid-template-columns:1fr 1fr}}
+.c-card{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r);padding:1rem 1.2rem;transition:all .25s;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:.3rem;box-shadow:var(--shadow)}
+[data-theme="terminal"] .c-card{border-left-width:2px;border-radius:0}
+a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
+[data-theme="terminal"] a.c-card:hover{transform:none;background:rgba(0,255,0,.03)}
+.c-card .cmeta{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
+.c-card h4{font-family:var(--font-display);font-weight:700;font-size:.95rem;line-height:1.3;letter-spacing:-.01em}
+[data-theme="terminal"] .c-card h4{font-weight:400;font-size:.85rem}
+.c-card .cpod{font-size:.78rem;color:var(--text3)}
+[data-theme="terminal"] .c-card .cpod{font-size:.65rem}
+
+/* writing */
+.wip{background:var(--bg-card);border:2px dashed var(--border);border-radius:var(--r);padding:3rem 2rem;text-align:center}
+[data-theme="terminal"] .wip{border-radius:0;border:1px dashed var(--border)}
+.wip p{color:var(--text3);font-size:.95rem;line-height:1.7}
+.wip p strong{color:var(--text2)}
+
+/* footer */
+.footer{text-align:center;padding:2.5rem 0 4rem;border-top:1px solid var(--border);color:var(--text3);font-size:.8rem}
+.footer a{color:var(--accent);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+/* terminal cursor */
+[data-theme="terminal"] .cursor{display:inline-block;width:7px;height:14px;background:var(--accent);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:1px}
+@keyframes blink{50%{opacity:0}}
+
+/* accent bar colors per project */
+.bar-p2c{border-left-color:#D94F30!important}[data-theme="terminal"] .bar-p2c{border-left-color:#0f0!important}
+.bar-cdx{border-left-color:#2A7B9B!important}[data-theme="terminal"] .bar-cdx{border-left-color:#0f0!important}
+.bar-mbti{border-left-color:#D4A843!important}[data-theme="terminal"] .bar-mbti{border-left-color:#0f0!important}
+.bar-gaz{border-left-color:#E06B56!important}[data-theme="terminal"] .bar-gaz{border-left-color:#0f0!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav">
+    <a href="/" class="nav-logo"><span id="logo">C<span style="color:var(--accent)">·</span>bb</span></a>
+    <div class="nav-links">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#courses">Courses</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="#writing">Writing</a>
+      <button class="theme-switch" id="ts" title="切换主题">🖥️ terminal mode</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>AI product <span>builder</span>,<br>skill creator, lifelong learner.</h1>
+    <p class="tagline">I build tools that help people learn and create with AI — Claude Code skills, tiny desktop companions, and AI-powered courses.</p>
+    <div class="socials">
+      <a href="https://github.com/Cobb04" target="_blank">🐙 GitHub</a>
+      <a href="mailto:hi@cobb.sh" target="_blank">📧 Email</a>
+    </div>
+  </header>
+
+  <section class="section" id="projects">
+    <h2 class="section-title">Projects</h2>
+    <p class="section-desc">Standalone products and apps I've built.</p>
+    <div class="grid2">
+      <a class="card bar-p2c" href="https://github.com/Cobb04/podcast-to-course" target="_blank">
+        <span class="meta">Featured · Claude Code Skill + Python</span>
+        <h3>Podcast to Course</h3>
+        <p class="desc">Turn Xiaoyuzhou public episodes into structured AI judgment assets — framework cards, checklists, and interactive HTML courses. Automated Tingwu ASR pipeline.</p>
+        <div class="tags"><span class="tag">Tingwu</span><span class="tag">Xiaoyuzhou</span><span class="tag">HTML Course</span></div>
+      </a>
+      <a class="card bar-cdx" href="https://github.com/Cobb04/Codex-Level" target="_blank">
+        <span class="meta">macOS · SwiftUI</span>
+        <h3>Codex Level</h3>
+        <p class="desc">Menu bar app that turns lifetime Codex usage into QQ-style levels and progress — gamify your AI coding experience.</p>
+        <div class="tags"><span class="tag">SwiftUI</span><span class="tag">macOS</span><span class="tag">Menu Bar</span></div>
+      </a>
+      <a class="card bar-mbti" href="https://github.com/Cobb04/MBTI-clawd-on-desk" target="_blank">
+        <span class="meta">Desktop Pet · SwiftUI</span>
+        <h3>MBTI Clawd on Desk</h3>
+        <p class="desc">A pixel desktop pet that watches Claude Code, Codex, Cursor & other AI coding agents — so you don't have to.</p>
+        <div class="tags"><span class="tag">Desktop Pet</span><span class="tag">AI Agents</span></div>
+      </a>
+      <a class="card bar-gaz" href="https://github.com/Cobb04/ai-builders-gazette" target="_blank">
+        <span class="meta">Claude Code Skill</span>
+        <h3>AI Builders Gazette</h3>
+        <p class="desc">Portable agent skill for generating a newspaper-style daily digest for AI builders.</p>
+        <div class="tags"><span class="tag">Newsletter</span><span class="tag">Agent</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <h2 class="section-title">Skills</h2>
+    <p class="section-desc">Claude Code skills I've built — each one does one thing well.</p>
+    <div class="skill-row">
+      <a class="skill-chip" href="https://github.com/Cobb04/podcast-to-course" target="_blank">🎙️ podcast-to-course</a>
+      <a class="skill-chip" href="https://github.com/Cobb04/kaoyan-vocab-overlay" target="_blank">📖 kaoyan-vocab-overlay</a>
+      <a class="skill-chip" href="https://github.com/Cobb04/ai-builders-gazette" target="_blank">📰 ai-builders-gazette</a>
+    </div>
+  </section>
+
+  <section class="section" id="courses">
+    <h2 class="section-title">AI 判断力课程 <span style="font-size:.75rem;font-weight:400;color:var(--text3);font-family:var(--font-body)">— podcast → framework cards → HTML course</span></h2>
+    <div class="c-grid" id="cg"></div>
+    <p style="margin-top:1rem;font-size:.85rem;color:var(--text3)"><a href="https://cobb04.github.io/podcast-to-course/" style="color:var(--accent)">查看全部课程 →</a></p>
+  </section>
+
+  <section class="section" id="writing">
+    <h2 class="section-title">Writing & Thoughts</h2>
+    <div class="wip"><p><strong>Coming soon.</strong><br>This is where I'll share product thoughts, AI reflections, and what I'm learning along the way.<br>No imported repos — just things I actually write.</p></div>
+  </section>
+
+  <footer class="footer">
+    <p>Built with Claude Code · <a href="https://github.com/Cobb04">GitHub</a> · <a href="wiki.html">Wiki Graph</a></p>
+    <p style="margin-top:.3rem">© 2026 Cobb — AI product builder</p>
+  </footer>
+</div>
+<script>
+(function(){
+  var courses=[{date:"2026-07-19",title:"AI 发展了 4 年，把应用发展没了？",podcast:"42章经·曲凯",slug:"2026-07-19-ai-midyear-app-is-dead",accent:"#2D8B55"},{date:"2026-07-08",title:"为什么支付宝和微信的 AI，打开一次就不想再打开",podcast:"哇哦产品·Link",slug:"2026-07-08-super-app-ai-paradox",accent:"#D94F30"},{date:"2026-05-19",title:"AI 时代人应该有两个自己",podcast:"以鹅传鹅FM·Jason&王博源",slug:"2026-05-19-ai-two-selves-workbuddy",accent:"#2A7B9B"},{date:"2026-05-15",title:"硅谷00后AI产品经理入行靠的竟是狗运",podcast:"OtherWise·Harry",slug:"2026-05-15-doubao-ai-pm-dog-luck",accent:"#D4A843"}];
+  var g=document.getElementById("cg");
+  courses.forEach(function(c){g.insertAdjacentHTML("beforeend",'<a class="c-card" href="https://cobb04.github.io/podcast-to-course/courses/'+c.slug+'/" style="border-left-color:'+c.accent+'"><span class="cmeta">'+c.date+'</span><h4>'+c.title+'</h4><span class="cpod">🎙️ '+c.podcast+'</span></a>')});
+
+  // theme toggle
+  var btn=document.getElementById("ts"),h=document.documentElement;
+  function updateUI(t){
+    btn.innerHTML=t==="warm"?'🖥️ terminal mode':'📖 warm notebook';
+    var l=document.getElementById("logo");
+    if(l)l.innerHTML=t==="warm"?'C<span style="color:var(--accent)">·</span>bb':'cobb@web:<span style="color:var(--accent)">~</span>$ ';
+  }
+  btn.addEventListener("click",function(){
+    var next=h.getAttribute("data-theme")==="warm"?"terminal":"warm";
+    h.setAttribute("data-theme",next);updateUI(next);
+    try{localStorage.setItem("theme",next)}catch(e){}
+  });
+  try{var s=localStorage.getItem("theme");if(s){h.setAttribute("data-theme",s);updateUI(s)}}catch(e){}
+})();
+</script>
+</body>
+</html>

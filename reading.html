@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="warm">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reading · Cobb</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="warm"]{--bg:#FDFAF5;--bg-card:#F8F4EC;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--border:#E8E0D5;--r:12px;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace}
+[data-theme="terminal"]{--bg:#0a0a0a;--bg-card:#0d0d0d;--text:#c0c0c0;--text2:#888;--text3:#555;--accent:#0f0;--border:#1a1a1a;--r:0px;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+[data-theme="terminal"] body{-webkit-font-smoothing:none}
+.wrap{max-width:680px;margin:0 auto;padding:2rem 1.5rem}
+.back{font-size:.8rem;color:var(--text3);margin-bottom:2rem}.back a{color:var(--accent);text-decoration:none}
+h1{font-family:var(--font-display);font-weight:800;font-size:2rem;letter-spacing:-.02em;margin-bottom:.25rem}
+.sub{color:var(--text3);font-size:.85rem;margin-bottom:2rem}
+.r-item{display:flex;align-items:flex-start;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);transition:all .2s}
+a.r-item:hover{background:var(--bg-card);margin:0 -1rem;padding:1rem}
+.r-status{font-size:1.2rem;flex-shrink:0;width:32px;text-align:center;line-height:1.4}
+.r-body{flex:1}.r-body h3{font-family:var(--font-display);font-weight:700;font-size:1rem;letter-spacing:-.01em;margin-bottom:.1rem}
+[data-theme="terminal"] .r-body h3{font-weight:400;font-size:.9rem}
+.r-body .r-author{font-size:.8rem;color:var(--text2)}.r-body .r-date{font-size:.75rem;color:var(--text3);margin-left:.5rem}
+.theme-btn{position:fixed;top:1rem;right:1.5rem;border:1px solid var(--border);border-radius:20px;padding:.3rem .8rem;cursor:pointer;font-size:.75rem;color:var(--text2);background:var(--bg);font-family:var(--font-body)}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+</style></head><body>
+<div class="wrap">
+<button class="theme-btn" id="t">🌙</button>
+<p class="back"><a href="/">← Cobb</a></p>
+<h1>Reading</h1>
+<p class="sub">Articles and papers I'm reading.</p>
+<div id="list"></div>
+</div>
+<script>
+(function(){
+  var s2e={reading:"📖",done:"✅",want:"🔖"};
+  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){
+    var l=document.getElementById("list");if(!posts.length){l.innerHTML='<p style="color:var(--text3)">Nothing yet.</p>';return}
+    posts.reverse().forEach(function(p){
+      var a=document.createElement("a");a.className="r-item";a.href=p.link;a.target="_blank";
+      a.innerHTML='<span class="r-status">'+(s2e[p.status]||"📄")+'</span><div class="r-body"><h3>'+p.title+'</h3><span class="r-author">'+p.author+'</span><span class="r-date">'+p.date+'</span></div>';
+      l.appendChild(a)
+    })
+  }).catch(function(){document.getElementById("list").innerHTML='<p style="color:var(--text3)">Failed to load.</p>'});
+  var b=document.getElementById("t"),h=document.documentElement;
+  b.addEventListener("click",function(){var n=h.getAttribute("data-theme")==="warm"?"terminal":"warm";h.setAttribute("data-theme",n);b.textContent=n==="warm"?"🌙":"☀️";try{localStorage.setItem("theme",n)}catch(e){}});
+  try{var s=localStorage.getItem("theme");if(s){h.setAttribute("data-theme",s);b.textContent=s==="warm"?"🌙":"☀️"}}catch(e){}
+})();
+</script>
+</body>
+</html>

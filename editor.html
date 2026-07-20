@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="warm">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Editor · Cobb</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FDFAF5;--bg-card:#F8F4EC;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--border:#E8E0D5;--r:10px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:2rem 1.5rem}
+h1{font-size:1.5rem;font-weight:700;margin-bottom:.25rem}h1 span{color:var(--accent)}
+.sub{color:var(--text3);font-size:.85rem;margin-bottom:1.5rem}
+.row{display:flex;gap:.75rem;margin-bottom:1.5rem;align-items:center}
+.row label{font-size:.8rem;font-weight:600;color:var(--text2);min-width:50px}
+.row input{flex:1;padding:.55rem .75rem;border:1px solid var(--border);border-radius:var(--r);font-family:inherit;font-size:.9rem;background:var(--bg-card);color:var(--text);outline:none;transition:border-color .2s}
+.row input:focus{border-color:var(--accent)}
+#content{width:100%;min-height:300px;padding:.75rem;border:1px solid var(--border);border-radius:var(--r);font-family:inherit;font-size:.9rem;background:var(--bg-card);color:var(--text);resize:vertical;outline:none;line-height:1.7;margin-bottom:1.5rem}
+#content:focus{border-color:var(--accent)}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{padding:.55rem 1.2rem;border:none;border-radius:var(--r);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn.primary{background:var(--accent);color:#fff}.btn.primary:hover{opacity:.85}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+#preview{margin-top:2rem;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);min-height:100px;line-height:1.7;font-size:.9rem}
+#preview h1,#preview h2,#preview h3{margin:.8rem 0 .3rem}#preview p{margin-bottom:.5rem}#preview code{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:#eee;padding:.1rem .3rem;border-radius:4px}
+.msg{font-size:.8rem;padding:.5rem .75rem;border-radius:var(--r);margin-top:.5rem;display:none}.msg.ok{display:block;background:#e8f5e9;color:#2e7d32}.msg.err{display:block;background:#fdecea;color:#c62828}
+</style></head><body><div class="wrap">
+<h1>Write a <span>post</span></h1><p class="sub">Write in Markdown. Live preview. One click to publish.</p>
+<div class="row"><label>Slug</label><input id="slug" placeholder="my-post-slug"></div>
+<div class="row"><label>Title</label><input id="title" placeholder="Post title"></div>
+<div class="row"><label>Date</label><input id="date" type="date"></div>
+<textarea id="content" placeholder="Write your post in Markdown..."></textarea>
+<div class="btn-row">
+  <button class="btn primary" onclick="publish()">Publish</button>
+  <button class="btn ghost" onclick="saveDraft()">Save Draft</button>
+  <button class="btn ghost" onclick="loadDraft()">Load Draft</button>
+  <button class="btn ghost" onclick="togglePreview()">Preview</button>
+</div>
+<div id="msg" class="msg"></div>
+<div id="preview" style="display:none"></div>
+</div>
+<script>
+var D=new Date();document.getElementById("date").value=D.toISOString().slice(0,10);
+document.getElementById("slug").value="post-"+D.toISOString().slice(0,10);
+function m(t,c){var el=document.getElementById("msg");el.textContent=t;el.className="msg "+c;setTimeout(function(){el.className="msg"},4000)}
+function saveDraft(){var d={slug:document.getElementById("slug").value,title:document.getElementById("title").value,date:document.getElementById("date").value,content:document.getElementById("content").value};localStorage.setItem("draft",JSON.stringify(d));m("Draft saved.","ok")}
+function loadDraft(){var d=JSON.parse(localStorage.getItem("draft")||"{}");document.getElementById("slug").value=d.slug||"";document.getElementById("title").value=d.title||"";document.getElementById("date").value=d.date||"";document.getElementById("content").value=d.content||"";m("Draft loaded.","ok")}
+function togglePreview(){var p=document.getElementById("preview");var c=document.getElementById("content").value;if(p.style.display==="none"){p.style.display="block";p.innerHTML=c.split("\n").map(function(l){if(l.match(/^### /))return"<h3>"+l.slice(4)+"</h3>";if(l.match(/^## /))return"<h2>"+l.slice(3)+"</h2>";if(l.match(/^# /))return"<h1>"+l.slice(2)+"</h1>";if(l.match(/^- /))return"<li>"+l.slice(2)+"</li>";if(l.match(/^> /))return"<blockquote style='border-left:3px solid var(--accent);padding-left:.8rem;color:var(--text2)'>"+l.slice(2)+"</blockquote>";return"<p>"+l+"</p>"}).join("")}else{p.style.display="none"}}
+function publish(){
+  var slug=document.getElementById("slug").value.trim();
+  var title=document.getElementById("title").value.trim();
+  var date=document.getElementById("date").value;
+  var content=document.getElementById("content").value;
+  if(!slug||!title){m("Slug and title are required.","err");return}
+  var html='<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>'+title+' · Cobb</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"><style>body{font-family:\'DM Sans\',sans-serif;max-width:680px;margin:3rem auto;padding:0 1.5rem;background:#FDFAF5;color:#2C2C2C;line-height:1.7;-webkit-font-smoothing:antialiased}h1{font-size:1.8rem;font-weight:700;margin-bottom:.3rem}h2{font-size:1.3rem;margin:1.5rem 0 .5rem}h3{font-size:1.1rem;margin:1rem 0 .3rem}p{margin-bottom:.6rem}code{font-family:\'JetBrains Mono\',monospace;font-size:.85rem;background:#eee;padding:.1rem .3rem;border-radius:4px}blockquote{border-left:3px solid #D94F30;padding-left:.8rem;color:#6B6B6B;margin:.8rem 0}a{color:#D94F30}.back{font-size:.85rem;color:#999;margin-bottom:1.5rem}.back a{color:#D94F30;text-decoration:none}.date{font-size:.8rem;color:#999;margin-bottom:1.5rem}</style></head><body><p class="back"><a href="/">← Cobb</a></p><h1>'+title+'</h1><p class="date">'+date+'</p><div class="content">'+content.split("\n").map(function(l){if(l.match(/^### /))return"<h3>"+l.slice(4)+"</h3>";if(l.match(/^## /))return"<h2>"+l.slice(3)+"</h2>";if(l.match(/^# /))return"<h1>"+l.slice(2)+"</h1>";if(l.match(/^- /))return"<li>"+l.slice(2)+"</li>";if(l.match(/^> /))return"<blockquote>"+l.slice(2)+"</blockquote>";if(l.trim()==="")return"";return"<p>"+l+"</p>"}).join("\n")+'</div></body></html>';
+  var blob=new Blob([html],{type:"text/html"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=slug+".html";a.click();
+  m("✅ Post HTML downloaded! Save it to writing/"+slug+".html in your repo, add {\"title\":\""+title+"\",\"date\":\""+date+"\",\"slug\":\""+slug+"\"} to writing/posts.json, git push.","ok");
+}
+</script></body></html>

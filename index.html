@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root,[data-theme="warm"]{--bg:#FDFAF5;--bg-card:#F8F4EC;--bg-warm:#F3EDE2;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--border:#E8E0D5;--border-strong:#d4c8b8;--r:16px;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow:2px 2px 0 rgba(0,0,0,.06);--shadow-h:4px 4px 0 rgba(0,0,0,.1)}
+:root,[data-theme="warm"]{--bg:#FDFAF5;--bg-card:#F8F4EC;--bg-warm:#F3EDE2;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--border:#E8E0D5;--border-strong:#d4c8b8;--r:16px;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow:2px 2px 0 rgba(0,0,0,.06);--shadow-h:4px 4px 0 rgba(0,0,0,.1);--ease:cubic-bezier(.16,1,.3,1)}
 body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
 [data-theme="terminal"]{--bg:#0a0a0a;--bg-card:#0d0d0d;--bg-warm:#0d0d0d;--text:#c0c0c0;--text2:#888;--text3:#555;--accent:#0f0;--border:#1a1a1a;--r:0px;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;--shadow:none;--shadow-h:none}
 [data-theme="terminal"] *::selection{background:#0f0;color:#000}
@@ -55,7 +55,14 @@ a.card:hover{border-color:var(--accent);box-shadow:var(--shadow-h);transform:tra
 .skill-chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;color:var(--text);text-decoration:none;padding:.5rem 1rem;border:1.5px solid var(--border-strong);border-radius:24px;background:var(--bg-card);transition:all .2s;font-weight:500}
 [data-theme="terminal"] .skill-chip{border-radius:0;font-family:var(--font-mono);font-size:.72rem}
 a.skill-chip:hover{border-color:var(--accent);background:var(--accent-l);color:var(--accent)}
-.c-grid{display:grid;grid-template-columns:1fr;gap:.6rem}@media(min-width:640px){.c-grid{grid-template-columns:1fr 1fr}}
+.podcast-list{border-top:1px solid var(--border)}
+.podcast-item{display:grid;grid-template-columns:92px minmax(0,1fr);gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border);color:var(--text);text-decoration:none;transition:color .2s var(--ease),padding-left .2s var(--ease)}
+.podcast-item:hover{color:var(--accent);padding-left:.25rem}
+.podcast-date{font-family:var(--font-mono);font-size:.68rem;color:var(--text3);padding-top:.18rem}
+.podcast-copy{min-width:0}.podcast-copy h4{font-family:var(--font-display);font-size:.95rem;line-height:1.35;letter-spacing:-.01em}
+.podcast-source{display:block;margin-top:.18rem;font-size:.75rem;color:var(--text3)}
+[data-theme="terminal"] .podcast-copy h4{font-weight:400;font-size:.85rem}
+[data-theme="terminal"] .podcast-source{font-size:.65rem}
 .c-card{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r);padding:1rem 1.2rem;transition:all .25s;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:.3rem;box-shadow:var(--shadow)}
 [data-theme="terminal"] .c-card{border-left-width:2px;border-radius:0}
 a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme="terminal"] a.c-card:hover{transform:none;background:rgba(0,255,0,.03)}
@@ -65,21 +72,23 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .wip{background:var(--bg-card);border:2px dashed var(--border);border-radius:var(--r);padding:3rem 2rem;text-align:center}[data-theme="terminal"] .wip{border-radius:0;border:1px dashed var(--border)}
 .wip p{color:var(--text3);font-size:.95rem;line-height:1.7}.wip p strong{color:var(--text2)}
 /* shelf */
-.shelf-row{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;padding-bottom:.8rem;margin-bottom:.3rem;position:relative}
+.shelf-row{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;padding:2.5rem .25rem .8rem;margin-bottom:.3rem;position:relative}
 .shelf-row::after{content:"";position:absolute;bottom:2px;left:0;right:0;height:4px;background:linear-gradient(to bottom,var(--border),transparent);border-radius:2px}
 .book{position:relative;cursor:pointer;transition:transform .3s var(--ease);writing-mode:vertical-rl;text-orientation:mixed;padding:.5rem .3rem;border-radius:3px 5px 5px 3px;min-height:110px;font-family:var(--font-display);font-size:.65rem;font-weight:700;letter-spacing:.03em;line-height:1.3;color:#fff;display:flex;align-items:flex-start;box-shadow:1px 2px 6px rgba(0,0,0,.1),inset -1px 0 0 rgba(255,255,255,.1);text-decoration:none}
 .book:hover{transform:translateY(-6px) scale(1.05);box-shadow:3px 6px 14px rgba(0,0,0,.16),inset -1px 0 0 rgba(255,255,255,.15);z-index:2}
 .book .spine-title{white-space:nowrap;overflow:hidden}
 .book-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.45rem .7rem;font-size:.72rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;font-family:var(--font-body);writing-mode:horizontal-tb;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:3}
 .book:hover .book-tooltip{opacity:1}
+.book:focus-visible{outline:2px solid var(--accent);outline-offset:3px;transform:translateY(-4px)}
 .book-tooltip .tt-title{font-weight:700;display:block}.book-tooltip .tt-author{font-size:.65rem;color:var(--text2)}
 .shelf-theme{font-family:var(--font-display);font-weight:700;font-size:.85rem;color:var(--text2);margin-bottom:.4rem;letter-spacing:-.01em}
+@media(max-width:639px){.shelf-row{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding-top:.5rem;scrollbar-width:thin}.book{flex:0 0 auto}.book-tooltip{display:none}.podcast-item{grid-template-columns:1fr;gap:.15rem}.podcast-date{padding-top:0}}
 /* side toc */
 .side-nav{position:fixed;left:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;z-index:50;font-family:var(--font-body)}
 .side-nav a{font-size:.78rem;color:var(--text3);text-decoration:none;padding:4px 12px;border-radius:6px;transition:all .25s;letter-spacing:.01em;font-family:var(--font-body)}
 .side-nav a:hover{color:var(--text);background:var(--bg-card)}
 .side-nav a.active{color:var(--accent);font-weight:600}
-@media(max-width:768px){.side-nav{display:none}}
+@media(max-width:768px){.side-nav{display:none}.nav{align-items:flex-start;flex-direction:column;gap:.65rem}.nav-links{width:100%;max-width:100%;min-width:0;gap:1rem;overflow-x:auto;padding-bottom:.35rem;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.nav-links a,.nav-links button{flex:0 0 auto}}
 .footer{text-align:center;padding:1.5rem 0 3rem;border-top:1px solid var(--border);color:var(--text3);font-size:.8rem}
 .footer a{color:var(--accent);text-decoration:none}.footer a:hover{text-decoration:underline}
 .card-side{flex-direction:row!important;align-items:center;gap:1rem}.card-side-text{flex:1;display:flex;flex-direction:column;gap:.4rem}.card-side-img{width:120px;border-radius:8px}
@@ -120,21 +129,21 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
       <a class="card bar-mbti card-pet" href="https://github.com/Cobb04/MBTI-clawd-on-desk"><span class="meta">Desktop Pet · SwiftUI</span><h3>MBTI Clawd on Desk</h3><p class="desc">A pixel pet that watches your AI agents code. So you don't have to.</p><div class="tags"><span class="tag">Desktop Pet</span><span class="tag">AI Agents</span></div><object class="card-pet-object" data="infj-working.svg" type="image/svg+xml"></object></a>
     </div>
   </section>
-  <section class="section" id="skills"><h2 class="section-title">Skills</h2><p class="section-desc">Claude Code skills I've built — each one does one thing well.</p>
+  <section class="section" id="skills"><h2 class="section-title">Skills</h2><p class="section-desc">Claude Code skills I've built - each one does one thing well.</p>
     <div class="skill-row"><a class="skill-chip" href="https://github.com/Cobb04/podcast-to-course">🎙️ podcast-to-course</a><a class="skill-chip" href="https://github.com/Cobb04/kaoyan-vocab-overlay">📖 kaoyan-vocab-overlay</a><a class="skill-chip" href="https://github.com/Cobb04/ai-builders-gazette">📰 ai-builders-gazette</a></div>
   </section>
-  <section class="section" id="courses"><h2 class="section-title">Podcast</h2>
-    <div class="c-grid" id="cg"></div>
-    <p style="margin-top:1rem;font-size:.85rem;color:var(--text3)"><a href="https://cobb04.github.io/podcast-to-course/" style="color:var(--accent)">All episodes →</a></p>
+  <section class="section" id="courses"><h2 class="section-title">Podcast Notes</h2>
+    <div class="podcast-list" id="cg"></div>
+    <p style="margin-top:1rem;font-size:.85rem;color:var(--text3)"><a href="https://cobb04.github.io/podcast-to-course/" style="color:var(--accent)">View all notes →</a></p>
   </section>
-  <section class="section" id="reading"><h2 class="section-title">Reading <span style="font-size:.75rem;font-weight:400;color:var(--text3)"><a href="reading.html" style="color:var(--text3);text-decoration:none">shelf →</a></span></h2><div id="shelves"><div class="wip"><p>Loading...</p></div></div></section>
+  <section class="section" id="reading"><h2 class="section-title">Reading Shelf <span style="font-size:.75rem;font-weight:400;color:var(--text3)"><a href="reading.html" style="color:var(--text3);text-decoration:none">View shelf →</a></span></h2><div id="shelves"><div class="wip"><p>Loading...</p></div></div></section>
   <section class="section" id="writing"><h2 class="section-title">Writing & Thoughts</h2><div id="writing-list"><div class="wip"><p>Loading...</p></div></div></section>
-  <footer class="footer"><p>Built with Claude Code · <a href="https://github.com/Cobb04">GitHub</a> · <a href="wiki.html">Wiki Graph</a></p><p style="margin-top:.3rem">© 2026 Cobb — AI product builder</p></footer>
+  <footer class="footer"><p>Built with Claude Code · <a href="https://github.com/Cobb04">GitHub</a> · <a href="wiki.html">Wiki Graph</a></p><p style="margin-top:.3rem">© 2026 Cobb - AI product builder</p></footer>
 </div>
 <script>
 (function(){
   var courses=[{date:"2026-07-08",title:"AI认知债：思考被外包",podcast:"产品思考集·方大业",slug:"2026-07-08-ai-cognitive-debt",accent:"#E06B56"},{date:"2026-07-19",title:"AI 发展了 4 年，把应用发展没了？",podcast:"42章经·曲凯",slug:"2026-07-19-ai-midyear-app-is-dead",accent:"#2D8B55"},{date:"2026-07-08",title:"为什么支付宝和微信的 AI，打开一次就不想再打开",podcast:"哇哦产品·Link",slug:"2026-07-08-super-app-ai-paradox",accent:"#D94F30"},{date:"2026-05-19",title:"AI 时代人应该有两个自己",podcast:"以鹅传鹅FM·Jason&王博源",slug:"2026-05-19-ai-two-selves-workbuddy",accent:"#2A7B9B"},{date:"2026-05-15",title:"硅谷00后AI产品经理入行靠的竟是狗运",podcast:"OtherWise·Harry",slug:"2026-05-15-doubao-ai-pm-dog-luck",accent:"#D4A843"}];
-  var g=document.getElementById("cg");courses.forEach(function(x){var d=document.createElement("a");d.className="c-card";d.href="https://cobb04.github.io/podcast-to-course/courses/"+x.slug+"/";d.style.borderLeftColor=x.accent;d.innerHTML='<span class="cmeta">'+x.date+'</span><h4>'+x.title+'</h4><span class="cpod">🎙️ '+x.podcast+'</span>';g.appendChild(d)});
+  var g=document.getElementById("cg");courses.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,3).forEach(function(x){var d=document.createElement("a");d.className="podcast-item";d.href="https://cobb04.github.io/podcast-to-course/courses/"+x.slug+"/";d.innerHTML='<span class="podcast-date">'+x.date+'</span><span class="podcast-copy"><h4>'+x.title+'</h4><span class="podcast-source">'+x.podcast+'</span></span>';g.appendChild(d)});
   var b=document.getElementById("ts"),h=document.documentElement;
   function u(t){b.innerHTML=t==="warm"?'🖥️ terminal':'📖 warm notebook';var l=document.getElementById("logo");if(l)l.innerHTML=t==="warm"?'C<span style="color:var(--accent)">·</span>bb':'cobb@web:<span style="color:var(--accent)">~</span>$ '}
   b.addEventListener("click",function(){var n=h.getAttribute("data-theme")==="warm"?"terminal":"warm";h.setAttribute("data-theme",n);u(n);try{localStorage.setItem("theme",n)}catch(e){}});
@@ -145,13 +154,11 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
   links.forEach(function(a){var id=a.getAttribute("href").replace("#","");var el=document.getElementById(id)||(id==="top"?document.querySelector(".hero"):null);if(el)secs.push({el:el,link:a})});
   window.addEventListener("scroll",function(){var sy=window.scrollY+window.innerHeight/3;links.forEach(function(l){l.classList.remove("active")});for(var i=secs.length-1;i>=0;i--){if(sy>=secs[i].el.offsetTop){secs[i].link.classList.add("active");break}}if(window.scrollY<200){links.forEach(function(l){l.classList.remove("active")});if(links[0])links[0].classList.add("active")}});
   function tick(){var n=new Date;document.getElementById("clock").textContent=n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false})+" · "+n.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}tick();setInterval(tick,1000);
-  // podcasts from course sources
-  var podcasts=["42章经","哇哦产品","以鹅传鹅FM","OtherWise他山之玉"];var pl=document.getElementById("podcast-list");pl.innerHTML="";pl.className="skill-row";podcasts.forEach(function(p){var s=document.createElement("span");s.className="skill-chip";s.textContent="🎧 "+p;pl.appendChild(s)});
   // writing
   fetch("writing/posts.json").then(function(r){return r.json()}).then(function(posts){var w=document.getElementById("writing-list");if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}w.innerHTML="";if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}posts.reverse().forEach(function(p){var a=document.createElement("a");a.className="c-card";a.href="writing/"+p.slug+".html";a.style.borderLeftColor="var(--accent)";a.innerHTML='<span class="cmeta">'+p.date+'</span><h4>'+p.title+'</h4>';w.appendChild(a)})}).catch(function(){document.getElementById("writing-list").innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>'});
   // reading shelf
   var shelfColors=["#D94F30","#2A7B9B","#D4A843","#2D8B55","#8B5CF6","#E06B56","#3B82F6","#EC4899","#1E40AF","#7C3AED"];
-  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){var root=document.getElementById("shelves");root.innerHTML="";if(!posts.length){root.innerHTML='<div class="wip"><p>Nothing yet.</p></div>';return}var themes={};posts.reverse().forEach(function(p){var t=p.theme||"Other";if(!themes[t])themes[t]=[];themes[t].push(p)});Object.keys(themes).forEach(function(theme,ti){var w=document.createElement("div");w.style.marginBottom="1rem";w.innerHTML='<div class="shelf-theme">'+theme+'</div><div class="shelf-row"></div>';var row=w.querySelector(".shelf-row");themes[theme].forEach(function(p,i){var d=document.createElement("a");d.className="book";d.href=p.link;d.target="_blank";d.style.background=shelfColors[(ti*10+i)%shelfColors.length];d.innerHTML='<span class="spine-title">'+p.title+'</span><span class="book-tooltip"><span class="tt-title">'+p.title+'</span><span class="tt-author">'+p.author+' · '+p.date+'</span></span>';row.appendChild(d)});root.appendChild(w)})}).catch(function(){document.getElementById("shelves").innerHTML='<div class="wip"><p>Loading failed.</p></div>'});
+  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){var root=document.getElementById("shelves");root.innerHTML="";if(!posts.length){root.innerHTML='<div class="wip"><p>Nothing yet.</p></div>';return}var w=document.createElement("div");w.innerHTML='<div class="shelf-row" aria-label="Latest reading"></div>';var row=w.querySelector(".shelf-row");posts.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,8).forEach(function(p,i){var d=document.createElement("a");d.className="book";d.href=p.link;d.target="_blank";d.rel="noopener";d.setAttribute("aria-label",p.title+" by "+p.author);d.style.background=shelfColors[i%shelfColors.length];d.style.minHeight=(110+(i%3)*12)+"px";d.innerHTML='<span class="spine-title">'+p.title+'</span><span class="book-tooltip"><span class="tt-title">'+p.title+'</span><span class="tt-author">'+p.author+' · '+p.date+'</span></span>';row.appendChild(d)});root.appendChild(w)}).catch(function(){document.getElementById("shelves").innerHTML='<div class="wip"><p>Loading failed.</p></div>'});
 })();
 </script>
 </body>

@@ -96,10 +96,17 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .wip p{color:var(--text3);font-size:.95rem;line-height:1.7}.wip p strong{color:var(--text2)}
 @media(max-width:639px){.podcast-item{grid-template-columns:1fr;gap:.15rem}.podcast-date{padding-top:0}.reading-deck-title{font-size:1.18rem}.reading-deck-card{min-height:155px}}
 /* side toc */
-.side-nav{position:fixed;left:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;z-index:50;font-family:var(--font-body)}
-.side-nav a{font-size:.78rem;color:var(--text3);text-decoration:none;padding:4px 12px;border-radius:6px;transition:all .25s;letter-spacing:.01em;font-family:var(--font-body)}
+.side-nav{position:fixed;left:max(.75rem,calc((100vw - 1080px)/2 - 6.75rem));top:50%;transform:translateY(-50%);display:flex;flex-direction:column;z-index:50;padding:.65rem .55rem;border:1px solid color-mix(in srgb,var(--border) 76%,transparent);border-radius:14px;background:color-mix(in srgb,var(--bg) 90%,transparent);box-shadow:0 10px 30px rgba(64,48,33,.07);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:var(--font-body)}
+.side-nav-track{position:absolute;left:1.05rem;top:1.12rem;bottom:1.12rem;width:2px;overflow:hidden;border-radius:2px;background:var(--border);pointer-events:none}
+.side-nav-fill{position:absolute;inset:0;background:var(--accent);transform:scaleY(0);transform-origin:top;animation:side-nav-progress linear both;animation-timeline:scroll(root block)}
+@keyframes side-nav-progress{to{transform:scaleY(1)}}
+.side-nav a{position:relative;display:flex;min-height:30px;align-items:center;padding:.2rem .55rem .2rem 1.55rem;border-radius:8px;color:var(--text3);font-size:.68rem;letter-spacing:.01em;text-decoration:none;transition:color .2s var(--ease),background .2s var(--ease)}
+.side-nav a::before{content:"";position:absolute;left:.18rem;z-index:1;width:7px;height:7px;border:1.5px solid var(--border-strong);border-radius:50%;background:var(--bg);transition:transform .2s var(--ease),border-color .2s var(--ease),background .2s var(--ease)}
 .side-nav a:hover{color:var(--text);background:var(--bg-card)}
-.side-nav a.active{color:var(--accent);font-weight:600}
+.side-nav a.active,.side-nav a[aria-current="location"]{color:var(--accent);font-weight:600}
+.side-nav a.active::before,.side-nav a[aria-current="location"]::before{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 3px var(--bg);transform:scale(1.12)}
+[data-theme="terminal"] .side-nav{border-radius:0;box-shadow:none;backdrop-filter:none}[data-theme="terminal"] .side-nav a,[data-theme="terminal"] .side-nav a::before{border-radius:0}
+@media(max-width:1320px){.side-nav{display:none}}
 @media(max-width:768px){.side-nav{display:none}.nav{align-items:flex-start;flex-direction:column;gap:.65rem}.nav-links{width:100%;max-width:100%;min-width:0;gap:1rem;overflow-x:auto;padding-bottom:.35rem;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.nav-links a,.nav-links button{flex:0 0 auto}.hero{grid-template-columns:1fr;gap:1.5rem;padding:.5rem 0 3rem}.hero-reading{width:100%;max-width:none;justify-self:center}}
 .footer{text-align:center;padding:1.5rem 0 3rem;border-top:1px solid var(--border);color:var(--text3);font-size:.8rem}
 .footer a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}.footer a:hover{text-decoration-thickness:2px}
@@ -122,7 +129,7 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 </style>
 </head>
 <body>
-<div class="side-nav" id="sideNav"><a href="#top">Top</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="#writing">Writing</a></div>
+<nav class="side-nav" id="sideNav" aria-label="Page progress"><span class="side-nav-track" aria-hidden="true"><span class="side-nav-fill" id="sideNavFill"></span></span><a class="active" aria-current="location" href="#top">Top</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="#writing">Writing</a></nav>
 <div class="wrap">
   <nav class="nav">
     <div class="nav-brand"><a href="/" class="nav-logo"><span id="logo">C<span style="color:var(--accent)">·</span>bb</span></a><span class="nav-motto">Do · Learn · Repeat.</span></div>
@@ -174,9 +181,11 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
   try{var s=localStorage.getItem("theme");if(s){h.setAttribute("data-theme",s);u(s)}}catch(e){}
   (function(){var h=(new Date).getHours();document.getElementById("greeting").textContent=(h<12?"Morning":h<18?"Afternoon":"Evening")+"!"})();
   // toc scroll spy
-  var links=document.querySelectorAll(".side-nav a");var secs=[];
-  links.forEach(function(a){var id=a.getAttribute("href").replace("#","");var el=document.getElementById(id)||(id==="top"?document.querySelector(".hero"):null);if(el)secs.push({el:el,link:a})});
-  window.addEventListener("scroll",function(){var sy=window.scrollY+window.innerHeight/3;links.forEach(function(l){l.classList.remove("active")});for(var i=secs.length-1;i>=0;i--){if(sy>=secs[i].el.offsetTop){secs[i].link.classList.add("active");break}}if(window.scrollY<200){links.forEach(function(l){l.classList.remove("active")});if(links[0])links[0].classList.add("active")}});
+  var links=document.querySelectorAll(".side-nav a"),secs=[];
+  links.forEach(function(a){var id=a.getAttribute("href").replace("#","");var el=document.getElementById(id)||(id==="top"?document.querySelector(".hero"):null);if(el){var marker=id==="top"?(el.querySelector("h1")||el):(el.querySelector(".section-title")||el);secs.push({el:el,marker:marker,link:a})}});
+  function activateSideNav(link){links.forEach(function(l){l.classList.remove("active");l.removeAttribute("aria-current")});if(link){link.classList.add("active");link.setAttribute("aria-current","location")}}
+  function syncSideNavMarker(){var markerLine=window.innerHeight/3,active=secs[0];secs.forEach(function(item){if(item.marker.getBoundingClientRect().top<=markerLine)active=item});if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-30&&secs.length)active=secs[secs.length-1];if(active)activateSideNav(active.link)}
+  if("IntersectionObserver" in window){var sectionObserver=new IntersectionObserver(function(){syncSideNavMarker()},{rootMargin:"0px 0px -66% 0px"});secs.forEach(function(item){sectionObserver.observe(item.marker)});var footer=document.querySelector(".footer");if(footer){var footerObserver=new IntersectionObserver(function(entries){if(entries[0].isIntersecting&&secs.length)activateSideNav(secs[secs.length-1].link);else syncSideNavMarker()},{threshold:.1});footerObserver.observe(footer)}}else if(document.addEventListener)document.addEventListener("scrollend",syncSideNavMarker,{passive:true});window.addEventListener("load",syncSideNavMarker);
   function tick(){var n=new Date;document.getElementById("clock").textContent=n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false})+" · "+n.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}tick();setInterval(tick,1000);
   // writing
   fetch("writing/posts.json").then(function(r){return r.json()}).then(function(posts){var w=document.getElementById("writing-list");if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}w.innerHTML="";if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}posts.reverse().forEach(function(p){var a=document.createElement("a");a.className="c-card";a.href="writing/"+p.slug+".html";a.style.borderLeftColor="var(--accent)";a.innerHTML='<span class="cmeta">'+p.date+'</span><h4>'+p.title+'</h4>';w.appendChild(a)})}).catch(function(){document.getElementById("writing-list").innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>'});

@@ -145,6 +145,27 @@ test("hero keeps its compact introduction while moving the motto into navigation
   assert.doesNotMatch(html, /\.hero h1\{[^}]*font-size:clamp\(3\.6rem,5\.4vw,5\.1rem\)/);
 });
 
+test("side progress rail tracks only sections on the current page", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const sideNav = html.match(/<nav class="side-nav"[\s\S]*?<\/nav>/)?.[0] || "";
+
+  assert.match(sideNav, /aria-label="Page progress"/);
+  assert.match(sideNav, /class="side-nav-track"/);
+  assert.match(sideNav, /class="side-nav-fill" id="sideNavFill"/);
+  assert.match(sideNav, /class="active" aria-current="location" href="#top"/);
+  assert.doesNotMatch(sideNav, /href="reading\.html"/);
+  assert.match(html, /\.side-nav\{[^}]*left:max\(\.75rem,calc\(\(100vw - 1080px\)\/2 - 6\.75rem\)\)/);
+  assert.match(html, /@media\(max-width:1320px\)\{\.side-nav\{display:none\}\}/);
+  assert.match(html, /animation-timeline:scroll\(root block\)/);
+  assert.match(html, /new IntersectionObserver/);
+  assert.match(html, /el\.querySelector\("\.section-title"\)/);
+  assert.match(html, /setAttribute\("aria-current","location"\)/);
+  assert.match(html, /window\.innerHeight\+window\.scrollY>=document\.documentElement\.scrollHeight-30/);
+  assert.match(html, /addEventListener\("scrollend",syncSideNavMarker/);
+  assert.match(html, /addEventListener\("load",syncSideNavMarker/);
+  assert.doesNotMatch(html, /addEventListener\("scroll"/);
+});
+
 test("homepage podcast section shows only the three newest notes", async () => {
   const elements = await runHomepage();
   const podcasts = elements.get("cg").children;

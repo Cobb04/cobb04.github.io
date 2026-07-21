@@ -55,6 +55,7 @@ async function runHomepage() {
     ["clock", new FakeElement("clock")],
     ["writing-list", new FakeElement("writing-list")],
     ["shelves", new FakeElement("shelves")],
+    ["shelfTooltip", new FakeElement("shelfTooltip")],
   ]);
   const documentElement = new FakeElement("html");
   documentElement.setAttribute("data-theme", "warm");
@@ -106,8 +107,20 @@ test("books expose reading status and tactile page details", async () => {
 
   assert.match(books[0].className, /book-status-reading/);
   assert.match(books[0].innerHTML, /book-page-edge/);
-  assert.equal(books[0].getAttribute("title"), "Book A by Author A");
+  assert.equal(books[0].getAttribute("title"), "");
+  assert.doesNotMatch(books[0].innerHTML, /book-tooltip/);
   assert.match(books[1].className, /book-status-want/);
+});
+
+test("books use one viewport-level tooltip without native tooltip duplication", () => {
+  ["index.html", "reading.html"].forEach((filename) => {
+    const html = fs.readFileSync(path.join(__dirname, "..", filename), "utf8");
+    assert.match(html, /class="shelf-tooltip" id="shelfTooltip"/);
+    assert.match(html, /\.shelf-tooltip\{position:fixed/);
+    assert.match(html, /function positionBookTooltip/);
+    assert.doesNotMatch(html, /setAttribute\("title"/);
+    assert.doesNotMatch(html, /class="book-tooltip"/);
+  });
 });
 
 test("full bookshelf uses the same tactile shelf system", () => {

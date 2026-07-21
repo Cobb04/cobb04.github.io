@@ -9,7 +9,7 @@ class FakeElement {
     this.id = id;
     this.children = [];
     this.className = "";
-    this.style = {};
+    this.style = { setProperty(name, value) { this[name] = value; } };
     this.attributes = {};
     this._innerHTML = "";
   }
@@ -66,8 +66,8 @@ async function runHomepage() {
     querySelectorAll: () => [],
   };
   const readingPosts = [
-    { title: "Book A", author: "Author A", date: "2026-07-20", theme: "AI", link: "https://example.com/a" },
-    { title: "Book B", author: "Author B", date: "2026-07-19", theme: "AI", link: "https://example.com/b" },
+    { title: "Book A", author: "Author A", date: "2026-07-20", status: "reading", theme: "AI", link: "https://example.com/a" },
+    { title: "Book B", author: "Author B", date: "2026-07-19", status: "want", theme: "AI", link: "https://example.com/b" },
   ];
   const fetch = async (url) => ({
     json: async () => url.includes("reading/") ? readingPosts : [],
@@ -96,4 +96,24 @@ test("homepage podcast section shows only the three newest notes", async () => {
   const podcasts = elements.get("cg").children;
   assert.equal(podcasts.length, 3);
   assert.match(podcasts[0].innerHTML, /2026-07-19/);
+});
+
+test("books expose reading status and tactile page details", async () => {
+  const elements = await runHomepage();
+  const shelfWrapper = elements.get("shelves").children[0];
+  const shelf = shelfWrapper.children[0];
+  const books = shelf.children;
+
+  assert.match(books[0].className, /book-status-reading/);
+  assert.match(books[0].innerHTML, /book-page-edge/);
+  assert.equal(books[0].getAttribute("title"), "Book A by Author A");
+  assert.match(books[1].className, /book-status-want/);
+});
+
+test("full bookshelf uses the same tactile shelf system", () => {
+  const readingHtml = fs.readFileSync(path.join(__dirname, "..", "reading.html"), "utf8");
+  assert.match(readingHtml, /\.book::before/);
+  assert.match(readingHtml, /\.shelf::before/);
+  assert.match(readingHtml, /book-page-edge/);
+  assert.match(readingHtml, /book-status-/);
 });

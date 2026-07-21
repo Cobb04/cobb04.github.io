@@ -3,47 +3,54 @@
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Reading · Cobb</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root,[data-theme="warm"]{--bg:#FDFAF5;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--border:#E8E0D5;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--spine-bg:#f0ebe0}
-[data-theme="terminal"]{--bg:#0a0a0a;--text:#c0c0c0;--text2:#888;--text3:#555;--accent:#0f0;--border:#1a1a1a;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;--spine-bg:#111}
+:root,[data-theme="warm"]{--bg:#FDFAF5;--text:#2C2C2C;--text2:#6B6B6B;--text3:#8A867F;--accent:#D94F30;--border:#E2D9CC;--shelf-back:#EEE9DF;--shelf-edge:#A98B68;--shelf-edge-dark:#775F46;--page-edge:#E9E1D2;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.16,1,.3,1)}
+[data-theme="terminal"]{--bg:#0a0a0a;--text:#c0c0c0;--text2:#888;--text3:#666;--accent:#0f0;--border:#242824;--shelf-back:#101210;--shelf-edge:#343A35;--shelf-edge-dark:#181B19;--page-edge:#C8C8B8;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.16,1,.3,1)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
 [data-theme="terminal"] body{-webkit-font-smoothing:none}
-.wrap{max-width:720px;margin:0 auto;padding:2.5rem 1.5rem}
-.back{font-size:.8rem;color:var(--text3);margin-bottom:2rem}.back a{color:var(--accent);text-decoration:none}
-h1{font-family:var(--font-display);font-weight:800;font-size:2.2rem;letter-spacing:-.02em}.sub{color:var(--text3);font-size:.85rem;margin:.2rem 0 2rem}
+.wrap{max-width:880px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+.back{font-size:.8rem;color:var(--text3);margin-bottom:2.5rem}.back a{color:var(--accent);text-decoration:none}
+.reading-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:2.5rem}.reading-title h1{font-family:var(--font-display);font-weight:800;font-size:clamp(2.4rem,7vw,4rem);line-height:1;letter-spacing:-.045em}.sub{color:var(--text2);font-size:.9rem;margin-top:.65rem;max-width:40ch}
+.legend{display:flex;gap:1rem;color:var(--text3);font-family:var(--font-mono);font-size:.62rem;white-space:nowrap}.legend span{display:flex;align-items:center;gap:.35rem}.legend i{display:block;width:8px;height:14px;border-radius:2px;background:#F1C15E}.legend span+span i{background:transparent;border:1px solid var(--text3)}
 /* shelf */
-.shelf{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;padding-bottom:1rem;margin-bottom:1.5rem;border-bottom:2px solid var(--border);position:relative}
-.shelf::after{content:"";position:absolute;bottom:-8px;left:0;right:0;height:6px;background:linear-gradient(to bottom,var(--border),transparent);border-radius:2px}
-.book{position:relative;cursor:pointer;transition:transform .3s cubic-bezier(.4,0,.2,1);writing-mode:vertical-rl;text-orientation:mixed;padding:.6rem .35rem;border-radius:3px 5px 5px 3px;min-height:140px;font-family:var(--font-display);font-size:.7rem;font-weight:700;letter-spacing:.04em;line-height:1.3;color:#fff;display:flex;align-items:flex-start;box-shadow:1px 2px 6px rgba(0,0,0,.12),inset -1px 0 0 rgba(255,255,255,.1)}
-.book:hover{transform:translateY(-6px) scale(1.05);box-shadow:3px 6px 14px rgba(0,0,0,.16),inset -1px 0 0 rgba(255,255,255,.15);z-index:2}
-.book .spine-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:100%}
+.shelf-group{margin-bottom:3.25rem}.shelf-heading{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.65rem}.shelf-heading h2{font-family:var(--font-display);font-size:1rem;letter-spacing:-.015em}.shelf-heading span{font-family:var(--font-mono);font-size:.62rem;color:var(--text3)}
+.shelf{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;min-height:230px;padding:3.5rem 1.25rem 1.25rem;margin-bottom:1.5rem;position:relative;isolation:isolate;border:1px solid var(--border);border-bottom:0;border-radius:14px 14px 2px 2px;background:linear-gradient(180deg,color-mix(in srgb,var(--shelf-back) 68%,var(--bg)),var(--shelf-back))}
+.shelf::before{content:"";position:absolute;z-index:4;left:-7px;right:-7px;bottom:-12px;height:17px;border-radius:2px 2px 6px 6px;background:linear-gradient(180deg,var(--shelf-edge),var(--shelf-edge-dark));box-shadow:0 9px 16px rgba(70,52,34,.2),inset 0 1px rgba(255,255,255,.3)}
+.shelf::after{content:"";position:absolute;z-index:-1;left:1.5rem;right:1.5rem;bottom:-21px;height:14px;background:rgba(75,55,36,.15);filter:blur(8px)}
+.book{--lean:0deg;position:relative;z-index:1;width:38px;cursor:pointer;transform:rotate(var(--lean));transform-origin:center bottom;transition:transform .3s var(--ease),box-shadow .3s var(--ease);writing-mode:vertical-rl;text-orientation:mixed;padding:.72rem .48rem;border-radius:3px 7px 6px 2px;font-family:var(--font-display);font-size:.66rem;font-weight:700;letter-spacing:.028em;line-height:1.22;color:#fff;display:flex;align-items:center;gap:.5rem;text-decoration:none;box-shadow:2px 4px 8px rgba(40,30,20,.22),inset 3px 0 rgba(255,255,255,.12),inset -2px 0 rgba(0,0,0,.13)}
+.book::before{content:"";position:absolute;left:5px;right:5px;top:8px;height:1px;background:rgba(255,255,255,.48);box-shadow:0 calc(var(--book-height,150px) - 17px) rgba(0,0,0,.22)}
+.book:hover{transform:translateY(-9px) rotate(0deg) scale(1.035);box-shadow:5px 10px 18px rgba(40,30,20,.25),inset 3px 0 rgba(255,255,255,.15),inset -2px 0 rgba(0,0,0,.13);z-index:5}
+.book .spine-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:calc(100% - 2.2rem)}
+.book-page-edge{position:absolute;top:6px;right:-4px;bottom:6px;width:4px;border-radius:0 3px 3px 0;background:repeating-linear-gradient(180deg,var(--page-edge) 0 2px,color-mix(in srgb,var(--page-edge) 76%,#777) 2px 3px);box-shadow:1px 0 1px rgba(0,0,0,.12)}
+.book-status{margin-top:auto;padding:.23rem .1rem;border-radius:2px;background:rgba(255,255,255,.16);font-family:var(--font-mono);font-size:.47rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase}.book-status-reading .book-status{background:#F1C15E;color:#3D2B12}.book-status-want .book-status{background:rgba(255,255,255,.18);color:#fff}
 .book-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.5rem .75rem;font-size:.75rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;font-family:var(--font-body);writing-mode:horizontal-tb;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:3}
 .book:hover .book-tooltip{opacity:1}
+.book:focus-visible{outline:2px solid var(--accent);outline-offset:3px;transform:translateY(-6px) rotate(0deg)}
 .book-tooltip .tt-title{font-weight:700;display:block}.book-tooltip .tt-author{font-size:.7rem;color:var(--text2)}
 .annotation{margin-top:-.5rem;font-size:.82rem;color:var(--text2);padding:.4rem 0;border-top:1px dashed var(--border)}
 .annotation a{color:var(--accent);text-decoration:none;font-weight:600}
 .annotation a:hover{text-decoration:underline}
-.theme-btn{position:fixed;top:1rem;right:1.5rem;border:1px solid var(--border);border-radius:20px;padding:.3rem .8rem;cursor:pointer;font-size:.75rem;color:var(--text2);background:var(--bg);font-family:var(--font-body)}.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.theme-btn{position:fixed;top:1rem;right:1.5rem;border:1px solid var(--border);border-radius:20px;padding:.38rem .78rem;cursor:pointer;font-size:.7rem;color:var(--text2);background:var(--bg);font-family:var(--font-mono)}.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:640px){.wrap{padding:1.5rem 1rem 4rem}.reading-head{align-items:flex-start;flex-direction:column;gap:1rem}.shelf{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;min-height:215px;padding:1.5rem 1rem 1.25rem;scrollbar-width:thin}.book{flex:0 0 auto;transform:none}.book-tooltip{display:none}.theme-btn{position:absolute;right:1rem}}
 </style></head><body>
 <div class="wrap">
 <button class="theme-btn" id="t">🌙</button>
 <p class="back"><a href="/">← Cobb</a></p>
-<h1>书架 <span style="font-size:.85rem;font-weight:400;color:var(--text3)">Bookshelf</span></h1>
-<p class="sub">Books I'm reading and have on my shelf.</p>
+<header class="reading-head"><div class="reading-title"><h1>Reading Shelf</h1><p class="sub">正在读的、想读的，以及值得反复回来的文字。</p></div><div class="legend" aria-label="阅读状态"><span><i></i>Reading</span><span><i></i>Want to read</span></div></header>
 <div id="shelves"></div>
 </div>
 <script>
 (function(){
-  var colors=["#D94F30","#2A7B9B","#D4A843","#2D8B55","#8B5CF6","#E06B56","#3B82F6","#EC4899","#1E40AF","#7C3AED"];
+  var colors=["#B74A35","#376F82","#AD873D","#3F765B","#6B5B84","#A95750","#3F628D","#97566F"];
   fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){
     var root=document.getElementById("shelves");root.innerHTML="";if(!posts.length){root.innerHTML='<p style="color:var(--text3);padding:2rem 0">书架是空的。</p>';return}
     // group by theme
     var themes={};posts.reverse().forEach(function(p){var t=p.theme||"Other";if(!themes[t])themes[t]=[];themes[t].push(p)});
     Object.keys(themes).forEach(function(theme,tmIdx){
-      var wrap=document.createElement("div");wrap.style.marginBottom="2rem";
-      wrap.innerHTML='<h3 style="font-family:var(--font-display);font-weight:700;font-size:.9rem;color:var(--text2);margin-bottom:.6rem;letter-spacing:-.01em">'+theme+'</h3><div class="shelf"></div>';
+      var wrap=document.createElement("section");wrap.className="shelf-group";
+      wrap.innerHTML='<div class="shelf-heading"><h2>'+theme+'</h2><span>'+themes[theme].length+' books</span></div><div class="shelf"></div>';
       var shelf=wrap.querySelector(".shelf");
-      themes[theme].forEach(function(p,i){var d=document.createElement("a");d.className="book";d.href=p.link;d.target="_blank";d.style.background=colors[(tmIdx*10+i)%colors.length];d.innerHTML='<span class="spine-title">'+p.title+'</span><span class="book-tooltip"><span class="tt-title">'+p.title+'</span><span class="tt-author">'+p.author+' · '+p.date+'</span></span>';shelf.appendChild(d)});
+      themes[theme].forEach(function(p,i){var status=p.status||"want";var height=145+(i%4)*13;var d=document.createElement("a");d.className="book book-status-"+status;d.href=p.link;d.target="_blank";d.rel="noopener";d.setAttribute("aria-label",p.title+" by "+p.author);d.setAttribute("title",p.title+" by "+p.author);d.style.background=colors[(tmIdx*8+i)%colors.length];d.style.minHeight=height+"px";d.style.setProperty("--book-height",height+"px");d.style.setProperty("--lean",[-1.4,.8,-.5,1.1][i%4]+"deg");d.innerHTML='<span class="book-page-edge" aria-hidden="true"></span><span class="spine-title">'+p.title+'</span><span class="book-status">'+(status==="reading"?"Reading":"Want")+'</span><span class="book-tooltip"><span class="tt-title">'+p.title+'</span><span class="tt-author">'+p.author+' · '+p.date+'</span></span>';shelf.appendChild(d)});
       root.appendChild(wrap)
     });
       }).catch(function(){document.getElementById("shelves").innerHTML='<p style="color:var(--text3)">Failed to load.</p>'});

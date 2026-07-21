@@ -9,9 +9,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root,[data-theme="warm"]{--bg:#FDFAF5;--bg-card:#F8F4EC;--bg-warm:#F3EDE2;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--border:#E8E0D5;--border-strong:#d4c8b8;--shelf-back:#EEE9DF;--shelf-edge:#A98B68;--shelf-edge-dark:#775F46;--page-edge:#E9E1D2;--r:16px;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow:2px 2px 0 rgba(0,0,0,.06);--shadow-h:4px 4px 0 rgba(0,0,0,.1);--ease:cubic-bezier(.16,1,.3,1)}
+:root,[data-theme="warm"]{--bg:#FDFAF5;--bg-card:#F8F4EC;--bg-warm:#F3EDE2;--text:#2C2C2C;--text2:#6B6B6B;--text3:#716B63;--accent:#C54229;--border:#E8E0D5;--border-strong:#d4c8b8;--shelf-back:#EEE9DF;--shelf-edge:#A98B68;--shelf-edge-dark:#775F46;--page-edge:#E9E1D2;--r:16px;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow:2px 2px 0 rgba(0,0,0,.06);--shadow-h:4px 4px 0 rgba(0,0,0,.1);--ease:cubic-bezier(.16,1,.3,1)}
 body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
-[data-theme="terminal"]{--bg:#0a0a0a;--bg-card:#0d0d0d;--bg-warm:#0d0d0d;--text:#c0c0c0;--text2:#888;--text3:#555;--accent:#0f0;--border:#1a1a1a;--shelf-back:#101210;--shelf-edge:#343A35;--shelf-edge-dark:#181B19;--page-edge:#C8C8B8;--r:0px;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;--shadow:none;--shadow-h:none}
+[data-theme="terminal"]{--bg:#0a0a0a;--bg-card:#0d0d0d;--bg-warm:#0d0d0d;--text:#c0c0c0;--text2:#aaa;--text3:#888;--accent:#0f0;--border:#1a1a1a;--shelf-back:#101210;--shelf-edge:#343A35;--shelf-edge-dark:#181B19;--page-edge:#C8C8B8;--r:0px;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;--shadow:none;--shadow-h:none}
 [data-theme="terminal"] *::selection{background:#0f0;color:#000}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:17px;scroll-behavior:smooth}
@@ -28,7 +28,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-he
 .theme-switch:hover{border-color:var(--accent)!important}
 [data-theme="terminal"] .theme-switch:hover{background:rgba(0,255,0,.05)}
 [data-theme="terminal"] body::before{display:none}
-.hero{padding:1rem 0 2rem}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);align-items:center;gap:2.5rem;padding:1.5rem 0 3rem}
+.hero-copy{min-width:0}
 .hero h1{font-family:var(--font-display);font-weight:800;font-size:2.6rem;line-height:1.12;letter-spacing:-.02em;margin-bottom:.5rem}
 .hero h1 .hl{color:var(--accent)}
 .hero .tagline{font-size:1.1rem;color:var(--text2);max-width:560px;line-height:1.5;margin-bottom:.75rem}
@@ -37,6 +38,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-he
 .hero .socials a{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;color:var(--text2);text-decoration:none;padding:.45rem 1rem;border:1.5px solid var(--border-strong);border-radius:24px;transition:all .2s;font-weight:500}
 .hero .socials a:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-l)}
 .hero-clock{font-family:var(--font-mono);font-size:.82rem;color:var(--text3);margin-top:.5rem}
+.hero-reading{width:100%;max-width:300px;min-width:0;justify-self:end;align-self:center;display:flex;flex-direction:column;justify-content:center}
+.hero-reading-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.6rem}.hero-reading-head h2{font-family:var(--font-display);font-size:.95rem;letter-spacing:-.01em}.hero-reading-head a{flex:0 0 auto;color:var(--text3);font-size:.72rem;text-decoration:none}.hero-reading-head a:hover{color:var(--accent)}
+.hero-reading .shelf-row{width:100%;min-height:172px;margin:0;padding:1.4rem .7rem 1.15rem;justify-content:center}.hero-reading .wip{min-height:172px;display:grid;place-items:center;padding:1rem}
 .section{margin-bottom:2.5rem}
 .section-title{font-family:var(--font-display);font-weight:800;font-size:1.25rem;letter-spacing:-.02em;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem;color:var(--text)}
 [data-theme="terminal"] .section-title{font-weight:400;font-size:1rem}.section-title::after{content:"";flex:1;height:1px;background:var(--border)}[data-theme="terminal"] .section-title::after{display:none}
@@ -59,9 +63,9 @@ a.skill-chip:hover{border-color:var(--accent);background:var(--accent-l);color:v
 .podcast-item{display:grid;grid-template-columns:92px minmax(0,1fr);gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border);color:var(--text);text-decoration:none;transition:color .2s var(--ease),padding-left .2s var(--ease)}
 .podcast-item:hover{color:var(--accent);padding-left:.25rem}
 .podcast-date{font-family:var(--font-mono);font-size:.68rem;color:var(--text3);padding-top:.18rem}
-.podcast-copy{min-width:0}.podcast-copy h4{font-family:var(--font-display);font-size:.95rem;line-height:1.35;letter-spacing:-.01em}
+.podcast-copy{min-width:0}.podcast-copy h3{font-family:var(--font-display);font-size:.95rem;line-height:1.35;letter-spacing:-.01em}
 .podcast-source{display:block;margin-top:.18rem;font-size:.75rem;color:var(--text3)}
-[data-theme="terminal"] .podcast-copy h4{font-weight:400;font-size:.85rem}
+[data-theme="terminal"] .podcast-copy h3{font-weight:400;font-size:.85rem}
 [data-theme="terminal"] .podcast-source{font-size:.65rem}
 .c-card{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r);padding:1rem 1.2rem;transition:all .25s;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:.3rem;box-shadow:var(--shadow)}
 [data-theme="terminal"] .c-card{border-left-width:2px;border-radius:0}
@@ -78,22 +82,22 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .book{--lean:0deg;position:relative;z-index:1;width:34px;cursor:pointer;transform:rotate(var(--lean));transform-origin:center bottom;transition:transform .3s var(--ease),box-shadow .3s var(--ease);writing-mode:vertical-rl;text-orientation:mixed;padding:.62rem .42rem;border-radius:3px 6px 5px 2px;font-family:var(--font-display);font-size:.62rem;font-weight:700;letter-spacing:.025em;line-height:1.22;color:#fff;display:flex;align-items:center;gap:.45rem;box-shadow:2px 3px 7px rgba(40,30,20,.2),inset 3px 0 0 rgba(255,255,255,.11),inset -2px 0 0 rgba(0,0,0,.12);text-decoration:none}
 .book::after{content:"";position:absolute;left:4px;right:4px;top:7px;height:1px;background:rgba(255,255,255,.48);box-shadow:0 calc(var(--book-height,120px) - 15px) rgba(0,0,0,.22)}
 .book:hover{transform:translateY(-8px) rotate(0deg) scale(1.035);box-shadow:5px 9px 16px rgba(40,30,20,.24),inset 3px 0 0 rgba(255,255,255,.14),inset -2px 0 0 rgba(0,0,0,.12);z-index:5}
-.book .spine-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:calc(100% - 2rem)}
+.book .spine-title{min-height:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:calc(100% - 2rem)}
 .book-page-edge{position:absolute;top:5px;right:-4px;bottom:5px;width:4px;border-radius:0 3px 3px 0;background:repeating-linear-gradient(180deg,var(--page-edge) 0 2px,color-mix(in srgb,var(--page-edge) 76%,#777) 2px 3px);box-shadow:1px 0 1px rgba(0,0,0,.12)}
 .book-status{margin-top:auto;padding:.22rem .1rem;border-radius:2px;background:rgba(255,255,255,.16);font-family:var(--font-mono);font-size:.45rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase}.book-status-reading .book-status{background:#F1C15E;color:#3D2B12}.book-status-want .book-status{background:rgba(255,255,255,.18);color:#fff}
 .book:focus-visible{outline:2px solid var(--accent);outline-offset:3px;transform:translateY(-5px) rotate(0deg)}
 .shelf-tooltip{position:fixed;z-index:10000;left:0;top:0;width:max-content;max-width:min(320px,calc(100vw - 24px));padding:.65rem .8rem;border:1px solid var(--border);border-radius:10px;background:color-mix(in srgb,var(--bg) 94%,transparent);color:var(--text);box-shadow:0 12px 32px rgba(40,30,20,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:none;font-family:var(--font-body);writing-mode:horizontal-tb;line-height:1.35}
 .shelf-tooltip[hidden]{display:none}.shelf-tooltip strong{display:block;font-size:.78rem}.shelf-tooltip span{display:block;margin-top:.2rem;font-size:.68rem;color:var(--text2)}
 .shelf-theme{font-family:var(--font-display);font-weight:700;font-size:.85rem;color:var(--text2);margin-bottom:.4rem;letter-spacing:-.01em}
-@media(max-width:639px){.shelf-row{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;min-height:178px;padding:1.2rem .8rem 1.15rem;scrollbar-width:thin}.book{flex:0 0 auto;transform:none}.podcast-item{grid-template-columns:1fr;gap:.15rem}.podcast-date{padding-top:0}}
+@media(max-width:639px){.shelf-row{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;min-height:178px;padding:1.2rem .8rem 1.15rem;scrollbar-width:thin}.hero-reading .shelf-row{overflow:visible}.book{flex:0 0 auto;transform:none}.podcast-item{grid-template-columns:1fr;gap:.15rem}.podcast-date{padding-top:0}}
 /* side toc */
 .side-nav{position:fixed;left:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;z-index:50;font-family:var(--font-body)}
 .side-nav a{font-size:.78rem;color:var(--text3);text-decoration:none;padding:4px 12px;border-radius:6px;transition:all .25s;letter-spacing:.01em;font-family:var(--font-body)}
 .side-nav a:hover{color:var(--text);background:var(--bg-card)}
 .side-nav a.active{color:var(--accent);font-weight:600}
-@media(max-width:768px){.side-nav{display:none}.nav{align-items:flex-start;flex-direction:column;gap:.65rem}.nav-links{width:100%;max-width:100%;min-width:0;gap:1rem;overflow-x:auto;padding-bottom:.35rem;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.nav-links a,.nav-links button{flex:0 0 auto}}
+@media(max-width:768px){.side-nav{display:none}.nav{align-items:flex-start;flex-direction:column;gap:.65rem}.nav-links{width:100%;max-width:100%;min-width:0;gap:1rem;overflow-x:auto;padding-bottom:.35rem;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.nav-links a,.nav-links button{flex:0 0 auto}.hero{grid-template-columns:1fr;gap:1.5rem;padding:.5rem 0 3rem}.hero-reading{width:100%;justify-self:center}}
 .footer{text-align:center;padding:1.5rem 0 3rem;border-top:1px solid var(--border);color:var(--text3);font-size:.8rem}
-.footer a{color:var(--accent);text-decoration:none}.footer a:hover{text-decoration:underline}
+.footer a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}.footer a:hover{text-decoration-thickness:2px}
 .card-side{flex-direction:row!important;align-items:center;gap:1rem}.card-side-text{flex:1;display:flex;flex-direction:column;gap:.4rem}.card-side-img{width:120px;border-radius:8px}
 .bar-cdx{border-left-color:#2A7B9B!important}[data-theme="terminal"] .bar-cdx{border-left-color:#0f0!important}
 .bar-mbti{border-left-color:#D4A843!important}[data-theme="terminal"] .bar-mbti{border-left-color:#0f0!important}
@@ -119,17 +123,24 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
     <a href="/" class="nav-logo"><span id="logo">C<span style="color:var(--accent)">·</span>bb</span></a>
     <div class="nav-links"><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="wiki.html">Wiki</a><a href="#writing">Writing</a><a href="editor.html" style="font-size:.75rem;opacity:.5">✎</a><button class="theme-switch" id="ts">🖥️ terminal</button></div>
   </nav>
+  <main>
   <header class="hero" id="top">
-    <p style="font-size:.85rem;color:var(--accent);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Cobb · AI Product Builder</p>
-    <h1><span id="greeting"></span> I'm <span class="hl">Cxn</span>.</h1>
-    <p class="tagline">Do · Learn · Repeat.</p>
-    <div class="socials"><a href="https://github.com/Cobb04">🐙 GitHub</a><a href="mailto:chenxnovo49@gmail.com">📧 Email</a></div>
-    <div class="hero-clock" id="clock"></div>
+    <div class="hero-copy">
+      <p style="font-size:.85rem;color:var(--accent);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Cobb · AI Product Builder</p>
+      <h1><span id="greeting"></span> I'm <span class="hl">Cxn</span>.</h1>
+      <p class="tagline">Do · Learn · Repeat.</p>
+      <div class="socials"><a href="https://github.com/Cobb04">🐙 GitHub</a><a href="mailto:chenxnovo49@gmail.com">📧 Email</a></div>
+      <div class="hero-clock" id="clock"></div>
+    </div>
+    <aside class="hero-reading" aria-labelledby="heroReadingTitle">
+      <div class="hero-reading-head"><h2 id="heroReadingTitle">Recent reading</h2><a href="reading.html">View all →</a></div>
+      <div id="shelves"><div class="wip"><p>Loading...</p></div></div>
+    </aside>
   </header>
   <section class="section" id="projects"><h2 class="section-title">Projects</h2><p class="section-desc">Standalone products and apps I've built.</p>
     <div class="grid2">
       <a class="card bar-cdx card-side" href="https://github.com/Cobb04/Codex-Level"><div class="card-side-text"><span class="meta">macOS · SwiftUI</span><h3>Codex Level</h3><p class="desc">Menu bar app that turns lifetime Codex usage into QQ-style levels and progress.</p><div class="tags"><span class="tag">SwiftUI</span><span class="tag">macOS</span><span class="tag">Menu Bar</span></div></div><img class="card-side-img" src="codex-preview.png" alt="Codex Level"></a>
-      <a class="card bar-mbti card-pet" href="https://github.com/Cobb04/MBTI-clawd-on-desk"><span class="meta">Desktop Pet · SwiftUI</span><h3>MBTI Clawd on Desk</h3><p class="desc">A pixel pet that watches your AI agents code. So you don't have to.</p><div class="tags"><span class="tag">Desktop Pet</span><span class="tag">AI Agents</span></div><object class="card-pet-object" data="infj-working.svg" type="image/svg+xml"></object></a>
+      <a class="card bar-mbti card-pet" href="https://github.com/Cobb04/MBTI-clawd-on-desk"><span class="meta">Desktop Pet · SwiftUI</span><h3>MBTI Clawd on Desk</h3><p class="desc">A pixel pet that watches your AI agents code. So you don't have to.</p><div class="tags"><span class="tag">Desktop Pet</span><span class="tag">AI Agents</span></div><object class="card-pet-object" data="infj-working.svg" type="image/svg+xml" aria-label="INFJ desktop pet working"></object></a>
     </div>
   </section>
   <section class="section" id="skills"><h2 class="section-title">Skills</h2><p class="section-desc">Claude Code skills I've built - each one does one thing well.</p>
@@ -139,15 +150,15 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
     <div class="podcast-list" id="cg"></div>
     <p style="margin-top:1rem;font-size:.85rem;color:var(--text3)"><a href="https://cobb04.github.io/podcast-to-course/" style="color:var(--accent)">View all notes →</a></p>
   </section>
-  <section class="section" id="reading"><h2 class="section-title">Reading Shelf <span style="font-size:.75rem;font-weight:400;color:var(--text3)"><a href="reading.html" style="color:var(--text3);text-decoration:none">View shelf →</a></span></h2><div id="shelves"><div class="wip"><p>Loading...</p></div></div></section>
   <section class="section" id="writing"><h2 class="section-title">Writing & Thoughts</h2><div id="writing-list"><div class="wip"><p>Loading...</p></div></div></section>
+  </main>
   <footer class="footer"><p>Built with Claude Code · <a href="https://github.com/Cobb04">GitHub</a> · <a href="wiki.html">Wiki Graph</a></p><p style="margin-top:.3rem">© 2026 Cobb - AI product builder</p></footer>
 </div>
 <div class="shelf-tooltip" id="shelfTooltip" role="tooltip" hidden><strong id="shelfTooltipTitle"></strong><span id="shelfTooltipMeta"></span></div>
 <script>
 (function(){
   var courses=[{date:"2026-07-08",title:"AI认知债：思考被外包",podcast:"产品思考集·方大业",slug:"2026-07-08-ai-cognitive-debt",accent:"#E06B56"},{date:"2026-07-19",title:"AI 发展了 4 年，把应用发展没了？",podcast:"42章经·曲凯",slug:"2026-07-19-ai-midyear-app-is-dead",accent:"#2D8B55"},{date:"2026-07-08",title:"为什么支付宝和微信的 AI，打开一次就不想再打开",podcast:"哇哦产品·Link",slug:"2026-07-08-super-app-ai-paradox",accent:"#D94F30"},{date:"2026-05-19",title:"AI 时代人应该有两个自己",podcast:"以鹅传鹅FM·Jason&王博源",slug:"2026-05-19-ai-two-selves-workbuddy",accent:"#2A7B9B"},{date:"2026-05-15",title:"硅谷00后AI产品经理入行靠的竟是狗运",podcast:"OtherWise·Harry",slug:"2026-05-15-doubao-ai-pm-dog-luck",accent:"#D4A843"}];
-  var g=document.getElementById("cg");courses.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,3).forEach(function(x){var d=document.createElement("a");d.className="podcast-item";d.href="https://cobb04.github.io/podcast-to-course/courses/"+x.slug+"/";d.innerHTML='<span class="podcast-date">'+x.date+'</span><span class="podcast-copy"><h4>'+x.title+'</h4><span class="podcast-source">'+x.podcast+'</span></span>';g.appendChild(d)});
+  var g=document.getElementById("cg");courses.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,3).forEach(function(x){var d=document.createElement("a");d.className="podcast-item";d.href="https://cobb04.github.io/podcast-to-course/courses/"+x.slug+"/";d.innerHTML='<span class="podcast-date">'+x.date+'</span><span class="podcast-copy"><h3>'+x.title+'</h3><span class="podcast-source">'+x.podcast+'</span></span>';g.appendChild(d)});
   var b=document.getElementById("ts"),h=document.documentElement;
   function u(t){b.innerHTML=t==="warm"?'🖥️ terminal':'📖 warm notebook';var l=document.getElementById("logo");if(l)l.innerHTML=t==="warm"?'C<span style="color:var(--accent)">·</span>bb':'cobb@web:<span style="color:var(--accent)">~</span>$ '}
   b.addEventListener("click",function(){var n=h.getAttribute("data-theme")==="warm"?"terminal":"warm";h.setAttribute("data-theme",n);u(n);try{localStorage.setItem("theme",n)}catch(e){}});
@@ -167,7 +178,7 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
   function positionBookTooltip(book,p){activeBook=book;shelfTooltipTitle.textContent=p.title;shelfTooltipMeta.textContent=p.author+" · "+p.date;shelfTooltip.hidden=false;var rect=book.getBoundingClientRect(),tip=shelfTooltip.getBoundingClientRect();var left=Math.max(12,Math.min(window.innerWidth-tip.width-12,rect.left+rect.width/2-tip.width/2));var top=rect.top-tip.height-12;if(top<12)top=rect.bottom+12;top=Math.max(12,Math.min(window.innerHeight-tip.height-12,top));shelfTooltip.style.left=left+"px";shelfTooltip.style.top=top+"px";book.setAttribute("aria-describedby","shelfTooltip")}
   function bindBookTooltip(book,p){book.addEventListener("mouseenter",function(){positionBookTooltip(book,p)});book.addEventListener("mouseleave",hideBookTooltip);book.addEventListener("focus",function(){positionBookTooltip(book,p)});book.addEventListener("blur",hideBookTooltip)}
   window.addEventListener("scroll",hideBookTooltip,{passive:true});window.addEventListener("resize",hideBookTooltip);
-  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){var root=document.getElementById("shelves");root.innerHTML="";if(!posts.length){root.innerHTML='<div class="wip"><p>Nothing yet.</p></div>';return}var w=document.createElement("div");w.innerHTML='<div class="shelf-row" aria-label="Latest reading"></div>';var row=w.querySelector(".shelf-row");posts.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,8).forEach(function(p,i){var status=p.status||"want";var height=118+(i%3)*12;var d=document.createElement("a");d.className="book book-status-"+status;d.href=p.link;d.target="_blank";d.rel="noopener";d.setAttribute("aria-label",p.title+" by "+p.author);d.style.background=shelfColors[i%shelfColors.length];d.style.minHeight=height+"px";d.style.setProperty("--book-height",height+"px");d.style.setProperty("--lean",[-1.5,.7,-.4,1.2][i%4]+"deg");d.innerHTML='<span class="book-page-edge" aria-hidden="true"></span><span class="spine-title">'+p.title+'</span><span class="book-status">'+(status==="reading"?"Reading":"Want")+'</span>';bindBookTooltip(d,p);row.appendChild(d)});root.appendChild(w)}).catch(function(){document.getElementById("shelves").innerHTML='<div class="wip"><p>Loading failed.</p></div>'});
+  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){var root=document.getElementById("shelves");root.innerHTML="";if(!posts.length){root.innerHTML='<div class="wip"><p>Nothing yet.</p></div>';return}var w=document.createElement("div");w.innerHTML='<div class="shelf-row" aria-label="Latest reading"></div>';var row=w.querySelector(".shelf-row");posts.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,4).forEach(function(p,i){var status=p.status||"want";var height=108+(i%3)*10;var d=document.createElement("a");d.className="book book-status-"+status;d.href=p.link;d.target="_blank";d.rel="noopener";d.setAttribute("aria-label",p.title+" by "+p.author);d.style.background=shelfColors[i%shelfColors.length];d.style.height=height+"px";d.style.setProperty("--book-height",height+"px");d.style.setProperty("--lean",[-1.5,.7,-.4,1.2][i%4]+"deg");d.innerHTML='<span class="book-page-edge" aria-hidden="true"></span><span class="spine-title">'+p.title+'</span><span class="book-status">'+(status==="reading"?"Reading":"Want")+'</span>';bindBookTooltip(d,p);row.appendChild(d)});root.appendChild(w)}).catch(function(){document.getElementById("shelves").innerHTML='<div class="wip"><p>Loading failed.</p></div>'});
 })();
 </script>
 </body>

@@ -92,11 +92,36 @@ test("reading shelf still renders when optional podcast source list is absent", 
   assert.ok(elements.get("shelves").children.length > 0);
 });
 
+test("reading shelf occupies the hero visual column instead of a duplicate section", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const hero = html.match(/<header class="hero"[\s\S]*?<\/header>/)?.[0] || "";
+
+  assert.match(hero, /class="hero-copy"/);
+  assert.match(hero, /class="hero-reading"/);
+  assert.match(hero, />Recent reading</);
+  assert.match(hero, /id="shelves"/);
+  assert.match(hero, /href="reading\.html"/);
+  assert.doesNotMatch(html, /<section class="section" id="reading"/);
+  assert.match(html, /\.hero\{display:grid/);
+  assert.match(html, /\.slice\(0,4\)/);
+  assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero\{grid-template-columns:1fr/);
+  assert.match(html, /@media\(max-width:639px\)[\s\S]*?\.hero-reading \.shelf-row\{overflow:visible\}/);
+});
+
 test("homepage podcast section shows only the three newest notes", async () => {
   const elements = await runHomepage();
   const podcasts = elements.get("cg").children;
   assert.equal(podcasts.length, 3);
   assert.match(podcasts[0].innerHTML, /2026-07-19/);
+});
+
+test("homepage keeps semantic structure and readable contrast", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  assert.match(html, /<main>[\s\S]*?<header class="hero"[\s\S]*?<\/main>/);
+  assert.match(html, /podcast-copy"><h3>/);
+  assert.match(html, /<object[^>]+aria-label="INFJ desktop pet working"/);
+  assert.match(html, /--text3:#716B63/);
+  assert.match(html, /\.footer a\{[^}]*text-decoration:underline/);
 });
 
 test("books expose reading status and tactile page details", async () => {
@@ -107,6 +132,7 @@ test("books expose reading status and tactile page details", async () => {
 
   assert.match(books[0].className, /book-status-reading/);
   assert.match(books[0].innerHTML, /book-page-edge/);
+  assert.equal(books[0].style.height, "108px");
   assert.equal(books[0].getAttribute("title"), "");
   assert.doesNotMatch(books[0].innerHTML, /book-tooltip/);
   assert.match(books[1].className, /book-status-want/);

@@ -64,17 +64,16 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .c-card .cpod{font-size:.78rem;color:var(--text3)}[data-theme="terminal"] .c-card .cpod{font-size:.65rem}
 .wip{background:var(--bg-card);border:2px dashed var(--border);border-radius:var(--r);padding:3rem 2rem;text-align:center}[data-theme="terminal"] .wip{border-radius:0;border:1px dashed var(--border)}
 .wip p{color:var(--text3);font-size:.95rem;line-height:1.7}.wip p strong{color:var(--text2)}
-/* reading cards */
-.reading-grid{display:grid;grid-template-columns:1fr;gap:.6rem}@media(min-width:640px){.reading-grid{grid-template-columns:1fr 1fr}}
-.r-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.3rem;text-decoration:none;color:var(--text);transition:all .25s;box-shadow:var(--shadow);border-left:3px solid var(--border)}
-a.r-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
-[data-theme="terminal"] a.r-card:hover{transform:none;background:rgba(0,255,0,.03)}
-.r-card .r-status{font-family:var(--font-mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.06em}
-.r-card .r-title{font-family:var(--font-display);font-weight:700;font-size:.95rem;line-height:1.3;letter-spacing:-.01em}[data-theme="terminal"] .r-card .r-title{font-weight:400;font-size:.85rem}
-.r-card .r-meta{font-size:.75rem;color:var(--text3)}
-.r-card .r-meta span{margin-right:.5rem}
-.r-status.reading{color:#2D8B55}.r-status.done{color:#2A7B9B}.r-status.want{color:#D4A843}
-.r-card.reading{border-left-color:#2D8B55!important}.r-card.done{border-left-color:#2A7B9B!important}.r-card.want{border-left-color:#D4A843!important}
+/* shelf */
+.shelf-row{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;padding-bottom:.8rem;margin-bottom:.3rem;position:relative}
+.shelf-row::after{content:"";position:absolute;bottom:2px;left:0;right:0;height:4px;background:linear-gradient(to bottom,var(--border),transparent);border-radius:2px}
+.book{position:relative;cursor:pointer;transition:transform .3s var(--ease);writing-mode:vertical-rl;text-orientation:mixed;padding:.5rem .3rem;border-radius:3px 5px 5px 3px;min-height:110px;font-family:var(--font-display);font-size:.65rem;font-weight:700;letter-spacing:.03em;line-height:1.3;color:#fff;display:flex;align-items:flex-start;box-shadow:1px 2px 6px rgba(0,0,0,.1),inset -1px 0 0 rgba(255,255,255,.1);text-decoration:none}
+.book:hover{transform:translateY(-6px) scale(1.05);box-shadow:3px 6px 14px rgba(0,0,0,.16),inset -1px 0 0 rgba(255,255,255,.15);z-index:2}
+.book .spine-title{white-space:nowrap;overflow:hidden}
+.book-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.45rem .7rem;font-size:.72rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;font-family:var(--font-body);writing-mode:horizontal-tb;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:3}
+.book:hover .book-tooltip{opacity:1}
+.book-tooltip .tt-title{font-weight:700;display:block}.book-tooltip .tt-author{font-size:.65rem;color:var(--text2)}
+.shelf-theme{font-family:var(--font-display);font-weight:700;font-size:.85rem;color:var(--text2);margin-bottom:.4rem;letter-spacing:-.01em}
 /* side toc */
 .side-nav{position:fixed;left:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;z-index:50;font-family:var(--font-body)}
 .side-nav a{font-size:.78rem;color:var(--text3);text-decoration:none;padding:4px 12px;border-radius:6px;transition:all .25s;letter-spacing:.01em;font-family:var(--font-body)}
@@ -128,7 +127,7 @@ a.r-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
     <div class="c-grid" id="cg"></div>
     <p style="margin-top:1rem;font-size:.85rem;color:var(--text3)"><a href="https://cobb04.github.io/podcast-to-course/" style="color:var(--accent)">All episodes →</a></p>
   </section>
-  <section class="section" id="reading"><h2 class="section-title">Reading</h2><p class="section-desc">Articles and papers I'm reading. <a href="reading.html" style="color:var(--accent)">See all →</a></p><div id="reading-list"><div class="wip"><p>Loading...</p></div></div></section>
+  <section class="section" id="reading"><h2 class="section-title">Reading <span style="font-size:.75rem;font-weight:400;color:var(--text3)"><a href="reading.html" style="color:var(--text3);text-decoration:none">shelf →</a></span></h2><div id="shelves"><div class="wip"><p>Loading...</p></div></div></section>
   <section class="section" id="writing"><h2 class="section-title">Writing & Thoughts</h2><div id="writing-list"><div class="wip"><p>Loading...</p></div></div></section>
   <footer class="footer"><p>Built with Claude Code · <a href="https://github.com/Cobb04">GitHub</a> · <a href="wiki.html">Wiki Graph</a></p><p style="margin-top:.3rem">© 2026 Cobb — AI product builder</p></footer>
 </div>
@@ -150,8 +149,9 @@ a.r-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
   var podcasts=["42章经","哇哦产品","以鹅传鹅FM","OtherWise他山之玉"];var pl=document.getElementById("podcast-list");pl.innerHTML="";pl.className="skill-row";podcasts.forEach(function(p){var s=document.createElement("span");s.className="skill-chip";s.textContent="🎧 "+p;pl.appendChild(s)});
   // writing
   fetch("writing/posts.json").then(function(r){return r.json()}).then(function(posts){var w=document.getElementById("writing-list");if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}w.innerHTML="";if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}posts.reverse().forEach(function(p){var a=document.createElement("a");a.className="c-card";a.href="writing/"+p.slug+".html";a.style.borderLeftColor="var(--accent)";a.innerHTML='<span class="cmeta">'+p.date+'</span><h4>'+p.title+'</h4>';w.appendChild(a)})}).catch(function(){document.getElementById("writing-list").innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>'});
-  // reading
-  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){var w=document.getElementById("reading-list");if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Nothing yet.</strong><br>Books and articles I am reading.</p></div>';return}var s2t={reading:"📖 Reading",done:"✅ Finished",want:"🔖 To Read"};w.innerHTML="";if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Nothing yet.</strong></p></div>';return}w.className="reading-grid";posts.reverse().forEach(function(p){var a=document.createElement("a");a.className="r-card "+p.status;a.href=p.link;a.target="_blank";a.innerHTML='<span class="r-status '+p.status+'">'+(s2t[p.status]||p.status)+'</span><span class="r-title">'+p.title+'</span><span class="r-meta"><span>'+p.author+'</span>'+p.date+'</span>';w.appendChild(a)})}).catch(function(){document.getElementById("reading-list").innerHTML='<div class="wip"><p><strong>Nothing yet.</strong></p></div>'});
+  // reading shelf
+  var shelfColors=["#D94F30","#2A7B9B","#D4A843","#2D8B55","#8B5CF6","#E06B56","#3B82F6","#EC4899","#1E40AF","#7C3AED"];
+  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){var root=document.getElementById("shelves");root.innerHTML="";if(!posts.length){root.innerHTML='<div class="wip"><p>Nothing yet.</p></div>';return}var themes={};posts.reverse().forEach(function(p){var t=p.theme||"Other";if(!themes[t])themes[t]=[];themes[t].push(p)});Object.keys(themes).forEach(function(theme,ti){var w=document.createElement("div");w.style.marginBottom="1rem";w.innerHTML='<div class="shelf-theme">'+theme+'</div><div class="shelf-row"></div>';var row=w.querySelector(".shelf-row");themes[theme].forEach(function(p,i){var d=document.createElement("a");d.className="book";d.href=p.link;d.target="_blank";d.style.background=shelfColors[(ti*10+i)%shelfColors.length];d.innerHTML='<span class="spine-title">'+p.title+'</span><span class="book-tooltip"><span class="tt-title">'+p.title+'</span><span class="tt-author">'+p.author+' · '+p.date+'</span></span>';row.appendChild(d)});root.appendChild(w)})}).catch(function(){document.getElementById("shelves").innerHTML='<div class="wip"><p>Loading failed.</p></div>'});
 })();
 </script>
 </body>

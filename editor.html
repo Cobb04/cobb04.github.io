@@ -1,58 +1,184 @@
 <!DOCTYPE html>
 <html lang="zh" data-theme="warm">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Editor · Cobb</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Editor · Cobb</title>
+<meta name="description" content="Local tools for managing Cobb's writing and reading library.">
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#FDFAF5;--bg-card:#F8F4EC;--text:#2C2C2C;--text2:#6B6B6B;--text3:#999;--accent:#D94F30;--border:#E8E0D5;--r:10px}
+:root,[data-theme="warm"]{--bg:#FDFAF5;--surface:#F8F4EC;--surface-2:#F1EADF;--text:#2C2C2C;--text2:#625E58;--text3:#76716A;--accent:#C54229;--border:#DED4C6;--focus:#98301D;--ok-bg:#E4F0E5;--ok:#285D32;--err-bg:#F8E4DF;--err:#9A2D1B;--r:10px;--shadow:0 12px 36px rgba(70,52,34,.08)}
+[data-theme="terminal"]{--bg:#0A0A0A;--surface:#101110;--surface-2:#171917;--text:#D0D0D0;--text2:#B0B0B0;--text3:#929292;--accent:#00D95A;--border:#303630;--focus:#6BFF99;--ok-bg:#102619;--ok:#7BF0A1;--err-bg:#2B1613;--err:#FF9C8E;--r:0;--shadow:none}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:720px;margin:0 auto;padding:2rem 1.5rem}
-h1{font-size:1.5rem;font-weight:700;margin-bottom:.25rem}h1 span{color:var(--accent)}
-.sub{color:var(--text3);font-size:.85rem;margin-bottom:1.5rem}
-.row{display:flex;gap:.75rem;margin-bottom:1.5rem;align-items:center}
-.row label{font-size:.8rem;font-weight:600;color:var(--text2);min-width:50px}
-.row input{flex:1;padding:.55rem .75rem;border:1px solid var(--border);border-radius:var(--r);font-family:inherit;font-size:.9rem;background:var(--bg-card);color:var(--text);outline:none;transition:border-color .2s}
-.row input:focus{border-color:var(--accent)}
-#content{width:100%;min-height:300px;padding:.75rem;border:1px solid var(--border);border-radius:var(--r);font-family:inherit;font-size:.9rem;background:var(--bg-card);color:var(--text);resize:vertical;outline:none;line-height:1.7;margin-bottom:1.5rem}
-#content:focus{border-color:var(--accent)}
-.btn-row{display:flex;gap:.5rem;flex-wrap:wrap}
-.btn{padding:.55rem 1.2rem;border:none;border-radius:var(--r);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
-.btn.primary{background:var(--accent);color:#fff}.btn.primary:hover{opacity:.85}
-.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
-#preview{margin-top:2rem;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);min-height:100px;line-height:1.7;font-size:.9rem}
-#preview h1,#preview h2,#preview h3{margin:.8rem 0 .3rem}#preview p{margin-bottom:.5rem}#preview code{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:#eee;padding:.1rem .3rem;border-radius:4px}
-.msg{font-size:.8rem;padding:.5rem .75rem;border-radius:var(--r);margin-top:.5rem;display:none}.msg.ok{display:block;background:#e8f5e9;color:#2e7d32}.msg.err{display:block;background:#fdecea;color:#c62828}
-</style></head><body><div class="wrap">
-<h1>Write a <span>post</span></h1><p class="sub">Write in Markdown. Live preview. One click to publish.</p>
-<div class="row"><label>Slug</label><input id="slug" placeholder="my-post-slug"></div>
-<div class="row"><label>Title</label><input id="title" placeholder="Post title"></div>
-<div class="row"><label>Date</label><input id="date" type="date"></div>
-<textarea id="content" placeholder="Write your post in Markdown..."></textarea>
-<div class="btn-row">
-  <button class="btn primary" onclick="publish()">Publish</button>
-  <button class="btn ghost" onclick="saveDraft()">Save Draft</button>
-  <button class="btn ghost" onclick="loadDraft()">Load Draft</button>
-  <button class="btn ghost" onclick="togglePreview()">Preview</button>
-</div>
-<div id="msg" class="msg"></div>
-<div id="preview" style="display:none"></div>
-</div>
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.wrap{max-width:1040px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.4rem}
+h1{font-size:1.55rem;line-height:1.2;margin-bottom:.25rem}h1 span{color:var(--accent)}
+.sub{color:var(--text3);font-size:.85rem}
+.theme-btn{border:1px solid var(--border);border-radius:var(--r);background:transparent;color:var(--text2);padding:.45rem .7rem;font-size:.78rem;white-space:nowrap}
+.tabs{display:flex;gap:.35rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.tab{border:0;border-bottom:2px solid transparent;background:transparent;color:var(--text2);padding:.65rem .85rem;font-weight:600}
+.tab[aria-selected="true"]{border-color:var(--accent);color:var(--accent)}
+.panel[hidden]{display:none}
+.writing-wrap{max-width:720px}
+.field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem}
+.field label{font-size:.76rem;font-weight:600;color:var(--text2)}
+.field .help{font-size:.7rem;color:var(--text3)}
+.field-error{min-height:1rem;font-size:.7rem;color:var(--err)}
+.writing-meta{display:grid;grid-template-columns:1fr 2fr 1fr;gap:.8rem}
+input,select,textarea{width:100%;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);padding:.58rem .7rem;outline:none}
+input::placeholder,textarea::placeholder{color:var(--text3)}
+input:focus,select:focus,textarea:focus{border-color:var(--focus);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}
+[aria-invalid="true"]{border-color:var(--err)!important}
+#content{min-height:300px;resize:vertical;line-height:1.7}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid transparent;border-radius:var(--r);padding:.55rem .9rem;font-size:.8rem;font-weight:600;white-space:nowrap;transition:transform .15s,border-color .15s,color .15s,background .15s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);color:#FFF8F2}.btn.primary:hover{background:color-mix(in srgb,var(--accent) 88%,#000)}
+[data-theme="terminal"] .btn.primary{color:#061208}
+.btn.ghost{background:transparent;border-color:var(--border);color:var(--text2)}.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn.danger{background:transparent;border-color:var(--border);color:var(--err)}.btn.danger:hover{border-color:var(--err)}
+.btn:focus-visible,.tab:focus-visible,.theme-btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+#preview{margin-top:1.5rem;padding:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);min-height:100px;line-height:1.7;font-size:.9rem}
+#preview h1,#preview h2,#preview h3{margin:.8rem 0 .3rem}#preview p{margin-bottom:.5rem}#preview code{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:var(--surface-2);padding:.1rem .3rem;border-radius:4px}
+.msg{font-size:.78rem;padding:.6rem .75rem;border-radius:var(--r);margin-top:.75rem;display:none}.msg.ok{display:block;background:var(--ok-bg);color:var(--ok)}.msg.err{display:block;background:var(--err-bg);color:var(--err)}
+.manager-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) 180px auto auto;gap:.6rem;align-items:end;margin-bottom:1rem}
+.manager-toolbar .field{margin:0}
+.manager-grid{display:grid;grid-template-columns:minmax(280px,.82fr) minmax(360px,1.18fr);gap:1rem;align-items:start}
+.manager-pane{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);min-width:0}
+.pane-head{padding:.8rem 1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:1rem;align-items:center}
+.pane-head h2{font-size:.92rem}.pane-head span{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3)}
+.reading-list{max-height:620px;overflow:auto;padding:.45rem}
+.reading-item{width:100%;text-align:left;border:1px solid transparent;border-radius:calc(var(--r) - 2px);background:transparent;color:var(--text);padding:.72rem;display:grid;gap:.3rem}
+.reading-item:hover{background:var(--surface-2)}.reading-item.active{border-color:var(--accent);background:var(--surface-2)}
+.reading-item strong{font-size:.83rem;line-height:1.3}.reading-item-meta{font-size:.68rem;color:var(--text3);display:flex;flex-wrap:wrap;gap:.35rem}.reading-item-status{color:var(--accent);font-weight:600}
+.state{padding:2rem 1rem;text-align:center;color:var(--text3);font-size:.8rem}.state.error{color:var(--err)}
+.form-wrap{padding:1rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 .8rem}.field.wide{grid-column:1/-1}
+.form-actions{display:flex;justify-content:space-between;gap:.75rem;align-items:center;border-top:1px solid var(--border);padding-top:.9rem;margin-top:.2rem}.form-actions .btn-row{justify-content:flex-end}
+.workflow{margin-top:1rem;padding:1rem;border-left:3px solid var(--accent);background:var(--surface);font-size:.78rem;color:var(--text2)}.workflow strong{display:block;color:var(--text);margin-bottom:.25rem}.workflow code{font-family:'JetBrains Mono',monospace;color:var(--accent)}
+@media(max-width:720px){.wrap{padding:1.25rem 1rem 3rem}.writing-meta,.form-grid{grid-template-columns:1fr}.manager-toolbar{grid-template-columns:1fr 1fr}.manager-grid{grid-template-columns:1fr}.reading-list{max-height:360px}.form-actions{align-items:flex-start;flex-direction:column}.form-actions .btn-row{justify-content:flex-start}.field.wide{grid-column:auto}}
+@media(max-width:480px){.manager-toolbar{grid-template-columns:1fr}.topbar{align-items:flex-start}.tabs{overflow-x:auto}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div><h1>Cobb <span>Editor</span></h1><p class="sub">Writing and reading data, managed locally.</p></div>
+    <button class="theme-btn" id="editor-theme" type="button">Terminal theme</button>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Editor mode">
+    <button class="tab" id="writing-tab" role="tab" aria-selected="true" aria-controls="writing-panel" type="button">Writing</button>
+    <button class="tab" id="reading-tab" role="tab" aria-selected="false" aria-controls="reading-panel" type="button">Reading</button>
+  </div>
+
+  <section class="panel writing-wrap" id="writing-panel" role="tabpanel" aria-labelledby="writing-tab">
+    <div class="writing-meta">
+      <div class="field"><label for="slug">Slug</label><input id="slug" placeholder="my-post-slug"></div>
+      <div class="field"><label for="title">Title</label><input id="title" placeholder="Post title"></div>
+      <div class="field"><label for="date">Date</label><input id="date" type="date"></div>
+    </div>
+    <div class="field"><label for="content">Markdown</label><textarea id="content" placeholder="Write your post in Markdown..."></textarea></div>
+    <div class="btn-row">
+      <button class="btn primary" type="button" onclick="publish()">Download post</button>
+      <button class="btn ghost" type="button" onclick="saveDraft()">Save draft</button>
+      <button class="btn ghost" type="button" onclick="loadDraft()">Load draft</button>
+      <button class="btn ghost" type="button" onclick="togglePreview()">Preview</button>
+    </div>
+    <div id="msg" class="msg" role="status" aria-live="polite"></div>
+    <div id="preview" hidden></div>
+  </section>
+
+  <section class="panel" id="reading-panel" role="tabpanel" aria-labelledby="reading-tab" hidden>
+    <div class="manager-toolbar">
+      <div class="field"><label for="reading-search">Search</label><input id="reading-search" type="search" placeholder="Title, creator, topic"></div>
+      <div class="field"><label for="reading-status-filter">Status</label><select id="reading-status-filter"><option value="all">All statuses</option><option value="want">Want to read</option><option value="reading">Reading</option><option value="read">Read</option><option value="stopped">Stopped</option></select></div>
+      <button class="btn ghost" id="restore-reading" type="button">Restore draft</button>
+      <button class="btn primary" type="button" onclick="downloadReadingJson()">Download JSON</button>
+    </div>
+
+    <div class="manager-grid">
+      <section class="manager-pane" aria-labelledby="reading-list-title">
+        <div class="pane-head"><h2 id="reading-list-title">Library</h2><span id="reading-count">Loading</span></div>
+        <div class="reading-list" id="reading-list" aria-live="polite"><div class="state">Loading reading data...</div></div>
+      </section>
+
+      <section class="manager-pane" aria-labelledby="reading-form-title">
+        <div class="pane-head"><h2 id="reading-form-title">Add item</h2><span id="reading-edit-state">New</span></div>
+        <form id="reading-form" class="form-wrap" novalidate>
+          <div class="form-grid">
+            <div class="field wide"><label for="reading-title">Title</label><input id="reading-title" autocomplete="off" required><p class="field-error" id="reading-title-error"></p></div>
+            <div class="field"><label for="reading-creator">Creator</label><input id="reading-creator" autocomplete="off" required><p class="field-error" id="reading-creator-error"></p></div>
+            <div class="field"><label for="reading-type">Type</label><select id="reading-type"><option value="article">Article</option><option value="book">Book</option><option value="paper">Paper</option><option value="podcast">Podcast</option><option value="video">Video</option></select><p class="field-error" id="reading-type-error"></p></div>
+            <div class="field wide"><label for="reading-url">URL</label><input id="reading-url" type="url" inputmode="url" required><p class="field-error" id="reading-url-error"></p></div>
+            <div class="field"><label for="reading-status">Status</label><select id="reading-status"><option value="want">Want to read</option><option value="reading">Reading</option><option value="read">Read</option><option value="stopped">Stopped</option></select><p class="field-error" id="reading-status-error"></p></div>
+            <div class="field"><label for="reading-topics">Topics</label><input id="reading-topics" placeholder="AI Agents, Product"><p class="help">Comma-separated. Topics do not change the reading state.</p><p class="field-error"></p></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn danger" id="delete-reading" type="button" hidden>Delete</button>
+            <div class="btn-row"><button class="btn ghost" id="new-reading" type="button">New item</button><button class="btn primary" type="submit">Save item</button></div>
+          </div>
+          <div id="reading-msg" class="msg" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+    </div>
+
+    <p class="workflow"><strong>Publish workflow</strong>Download <code>posts.json</code>, replace <code>reading/posts.json</code> in the repository, then commit and push. The website never stores repository credentials.</p>
+  </section>
+</main>
+
+<script src="reading/reading-manager.js"></script>
 <script>
-var D=new Date();document.getElementById("date").value=D.toISOString().slice(0,10);
-document.getElementById("slug").value="post-"+D.toISOString().slice(0,10);
-function m(t,c){var el=document.getElementById("msg");el.textContent=t;el.className="msg "+c;setTimeout(function(){el.className="msg"},4000)}
-function saveDraft(){var d={slug:document.getElementById("slug").value,title:document.getElementById("title").value,date:document.getElementById("date").value,content:document.getElementById("content").value};localStorage.setItem("draft",JSON.stringify(d));m("Draft saved.","ok")}
-function loadDraft(){var d=JSON.parse(localStorage.getItem("draft")||"{}");document.getElementById("slug").value=d.slug||"";document.getElementById("title").value=d.title||"";document.getElementById("date").value=d.date||"";document.getElementById("content").value=d.content||"";m("Draft loaded.","ok")}
-function togglePreview(){var p=document.getElementById("preview");var c=document.getElementById("content").value;if(p.style.display==="none"){p.style.display="block";p.innerHTML=c.split("\n").map(function(l){if(l.match(/^### /))return"<h3>"+l.slice(4)+"</h3>";if(l.match(/^## /))return"<h2>"+l.slice(3)+"</h2>";if(l.match(/^# /))return"<h1>"+l.slice(2)+"</h1>";if(l.match(/^- /))return"<li>"+l.slice(2)+"</li>";if(l.match(/^> /))return"<blockquote style='border-left:3px solid var(--accent);padding-left:.8rem;color:var(--text2)'>"+l.slice(2)+"</blockquote>";return"<p>"+l+"</p>"}).join("")}else{p.style.display="none"}}
-function publish(){
-  var slug=document.getElementById("slug").value.trim();
-  var title=document.getElementById("title").value.trim();
-  var date=document.getElementById("date").value;
-  var content=document.getElementById("content").value;
-  if(!slug||!title){m("Slug and title are required.","err");return}
-  var html='<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>'+title+' · Cobb</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"><style>body{font-family:\'DM Sans\',sans-serif;max-width:680px;margin:3rem auto;padding:0 1.5rem;background:#FDFAF5;color:#2C2C2C;line-height:1.7;-webkit-font-smoothing:antialiased}h1{font-size:1.8rem;font-weight:700;margin-bottom:.3rem}h2{font-size:1.3rem;margin:1.5rem 0 .5rem}h3{font-size:1.1rem;margin:1rem 0 .3rem}p{margin-bottom:.6rem}code{font-family:\'JetBrains Mono\',monospace;font-size:.85rem;background:#eee;padding:.1rem .3rem;border-radius:4px}blockquote{border-left:3px solid #D94F30;padding-left:.8rem;color:#6B6B6B;margin:.8rem 0}a{color:#D94F30}.back{font-size:.85rem;color:#999;margin-bottom:1.5rem}.back a{color:#D94F30;text-decoration:none}.date{font-size:.8rem;color:#999;margin-bottom:1.5rem}</style></head><body><p class="back"><a href="/">← Cobb</a></p><h1>'+title+'</h1><p class="date">'+date+'</p><div class="content">'+content.split("\n").map(function(l){if(l.match(/^### /))return"<h3>"+l.slice(4)+"</h3>";if(l.match(/^## /))return"<h2>"+l.slice(3)+"</h2>";if(l.match(/^# /))return"<h1>"+l.slice(2)+"</h1>";if(l.match(/^- /))return"<li>"+l.slice(2)+"</li>";if(l.match(/^> /))return"<blockquote>"+l.slice(2)+"</blockquote>";if(l.trim()==="")return"";return"<p>"+l+"</p>"}).join("\n")+'</div></body></html>';
-  var blob=new Blob([html],{type:"text/html"});
-  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=slug+".html";a.click();
-  m("✅ Post HTML downloaded! Save it to writing/"+slug+".html in your repo, add {\"title\":\""+title+"\",\"date\":\""+date+"\",\"slug\":\""+slug+"\"} to writing/posts.json, git push.","ok");
-}
-</script></body></html>
+(function(){
+  "use strict";
+  var D=new Date(),today=D.toISOString().slice(0,10),model=window.ReadingManagerModel;
+  var dateInput=document.getElementById("date"),slugInput=document.getElementById("slug");
+  dateInput.value=today;slugInput.value="post-"+today;
+
+  function message(id,text,kind){var el=document.getElementById(id);el.textContent=text;el.className="msg "+kind;window.setTimeout(function(){el.className="msg"},5000)}
+  window.saveDraft=function(){var d={slug:slugInput.value,title:document.getElementById("title").value,date:dateInput.value,content:document.getElementById("content").value};localStorage.setItem("writing-draft",JSON.stringify(d));message("msg","Draft saved in this browser.","ok")};
+  window.loadDraft=function(){var d=JSON.parse(localStorage.getItem("writing-draft")||"{}");slugInput.value=d.slug||"";document.getElementById("title").value=d.title||"";dateInput.value=d.date||"";document.getElementById("content").value=d.content||"";message("msg","Draft loaded.","ok")};
+  function renderMarkdown(content){return content.split("\n").map(function(line){var text=line.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");if(/^### /.test(text))return"<h3>"+text.slice(4)+"</h3>";if(/^## /.test(text))return"<h2>"+text.slice(3)+"</h2>";if(/^# /.test(text))return"<h1>"+text.slice(2)+"</h1>";if(/^- /.test(text))return"<li>"+text.slice(2)+"</li>";if(/^> /.test(text))return"<blockquote>"+text.slice(2)+"</blockquote>";return text.trim()?"<p>"+text+"</p>":""}).join("\n")}
+  window.togglePreview=function(){var p=document.getElementById("preview");p.hidden=!p.hidden;if(!p.hidden)p.innerHTML=renderMarkdown(document.getElementById("content").value)};
+  window.publish=function(){var slug=slugInput.value.trim(),title=document.getElementById("title").value.trim(),date=dateInput.value,content=document.getElementById("content").value;if(!slug||!title){message("msg","Slug and title are required.","err");return}var html='<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>'+title.replace(/</g,"&lt;")+' · Cobb</title></head><body><p><a href="/">← Cobb</a></p><h1>'+title.replace(/</g,"&lt;")+'</h1><p>'+date+'</p>'+renderMarkdown(content)+'</body></html>';downloadFile(slug+".html",html,"text/html");message("msg","Post HTML downloaded. Add it to writing/ and update writing/posts.json.","ok")};
+
+  var tabs=[document.getElementById("writing-tab"),document.getElementById("reading-tab")];
+  function selectTab(name){tabs.forEach(function(tab){var selected=tab.id===name+"-tab";tab.setAttribute("aria-selected",String(selected));document.getElementById(tab.getAttribute("aria-controls")).hidden=!selected});if(name==="reading"&&!readingLoaded)loadReading()}
+  tabs.forEach(function(tab){tab.addEventListener("click",function(){selectTab(tab.id.replace("-tab",""))})});
+
+  var themeButton=document.getElementById("editor-theme"),root=document.documentElement;
+  function applyTheme(theme){root.setAttribute("data-theme",theme);themeButton.textContent=theme==="warm"?"Terminal theme":"Warm theme"}
+  themeButton.addEventListener("click",function(){var next=root.getAttribute("data-theme")==="warm"?"terminal":"warm";applyTheme(next);localStorage.setItem("theme",next)});
+  applyTheme(localStorage.getItem("theme")==="terminal"?"terminal":"warm");
+
+  var readingEntries=[],editingId=null,readingLoaded=false,draftKey="reading-manager-draft-v1";
+  var statusLabels={want:"Want to read",reading:"Reading",read:"Read",stopped:"Stopped"};
+  var typeLabels={article:"Article",book:"Book",paper:"Paper",podcast:"Podcast",video:"Video"};
+  var list=document.getElementById("reading-list"),form=document.getElementById("reading-form"),search=document.getElementById("reading-search"),statusFilter=document.getElementById("reading-status-filter");
+
+  function setReadingState(text,error){list.innerHTML="";var state=document.createElement("div");state.className="state"+(error?" error":"");state.textContent=text;list.appendChild(state);document.getElementById("reading-count").textContent=error?"Error":"0 items"}
+  function saveReadingDraft(){localStorage.setItem(draftKey,model.serializeEntries(readingEntries))}
+  function loadReading(){setReadingState("Loading reading data...",false);fetch("reading/posts.json",{cache:"no-store"}).then(function(response){if(!response.ok)throw new Error("HTTP "+response.status);return response.json()}).then(function(posts){readingEntries=posts.map(function(entry){return model.normalizeEntry(entry)});readingLoaded=true;renderReadingList();resetReadingForm()}).catch(function(){setReadingState("Could not load reading/posts.json. Serve this page through a local web server and retry.",true)})}
+  function matches(entry){var q=search.value.trim().toLowerCase(),status=statusFilter.value;var haystack=[entry.title,entry.creator,entry.type].concat(entry.topics).join(" ").toLowerCase();return(!q||haystack.indexOf(q)>=0)&&(status==="all"||entry.status===status)}
+  function renderReadingList(){var shown=readingEntries.filter(matches).sort(function(a,b){return b.updated_at.localeCompare(a.updated_at)||a.title.localeCompare(b.title)});list.innerHTML="";document.getElementById("reading-count").textContent=shown.length+" of "+readingEntries.length;if(!shown.length){setReadingState(readingEntries.length?"No items match these filters.":"No reading items yet. Add the first one on the right.",false);return}shown.forEach(function(entry){var button=document.createElement("button"),title=document.createElement("strong"),meta=document.createElement("span"),status=document.createElement("span");button.type="button";button.className="reading-item"+(entry.id===editingId?" active":"");button.setAttribute("aria-pressed",String(entry.id===editingId));title.textContent=entry.title;meta.className="reading-item-meta";status.className="reading-item-status";status.textContent=statusLabels[entry.status];meta.appendChild(status);meta.appendChild(document.createTextNode(typeLabels[entry.type]+" | "+entry.creator+(entry.topics.length?" · "+entry.topics.join(", "):"")));button.appendChild(title);button.appendChild(meta);button.addEventListener("click",function(){editReading(entry.id)});list.appendChild(button)})}
+  function value(id,value){document.getElementById(id).value=value==null?"":value}
+  function resetErrors(){["title","creator","url","type","status"].forEach(function(field){var input=document.getElementById("reading-"+field),error=document.getElementById("reading-"+field+"-error");input.removeAttribute("aria-invalid");if(error)error.textContent=""})}
+  function resetReadingForm(){editingId=null;form.reset();value("reading-type","article");value("reading-status","want");document.getElementById("reading-form-title").textContent="Add item";document.getElementById("reading-edit-state").textContent="New";document.getElementById("delete-reading").hidden=true;resetErrors();renderReadingList()}
+  function editReading(id){var entry=readingEntries.find(function(item){return item.id===id});if(!entry)return;editingId=id;value("reading-title",entry.title);value("reading-creator",entry.creator);value("reading-url",entry.url);value("reading-type",entry.type);value("reading-status",entry.status);value("reading-topics",entry.topics.join(", "));document.getElementById("reading-form-title").textContent="Edit item";document.getElementById("reading-edit-state").textContent=entry.updated_at;document.getElementById("delete-reading").hidden=false;resetErrors();renderReadingList();document.getElementById("reading-title").focus()}
+  function showErrors(errors){resetErrors();errors.forEach(function(error){var input=document.getElementById("reading-"+error.field),target=document.getElementById("reading-"+error.field+"-error");if(input)input.setAttribute("aria-invalid","true");if(target)target.textContent=error.message});var first=form.querySelector('[aria-invalid="true"]');if(first)first.focus()}
+  function collectReading(){var previous=readingEntries.find(function(entry){return entry.id===editingId});var raw={id:previous?previous.id:model.slugify(document.getElementById("reading-title").value),title:document.getElementById("reading-title").value,creator:document.getElementById("reading-creator").value,url:document.getElementById("reading-url").value,type:document.getElementById("reading-type").value,status:previous?previous.status:"want",topics:document.getElementById("reading-topics").value.split(","),added_at:previous?previous.added_at:today,started_at:previous?previous.started_at:null,finished_at:previous?previous.finished_at:null,updated_at:today};var entry=model.normalizeEntry(raw,today),nextStatus=document.getElementById("reading-status").value;if(entry.status!==nextStatus)entry=model.transitionEntry(entry,nextStatus,today);entry.updated_at=today;return entry}
+  form.addEventListener("submit",function(event){event.preventDefault();var entry=collectReading(),errors=model.validateEntry(entry);if(errors.length){showErrors(errors);message("reading-msg","Fix the highlighted fields.","err");return}var duplicate=readingEntries.find(function(item){return item.id===entry.id&&item.id!==editingId});if(duplicate){showErrors([{field:"title",message:"This title creates an existing ID. Change the title."}]);return}var index=readingEntries.findIndex(function(item){return item.id===editingId});if(index>=0)readingEntries[index]=entry;else readingEntries.push(entry);editingId=entry.id;saveReadingDraft();editReading(entry.id);message("reading-msg","Saved to the browser draft. Download JSON when ready.","ok")});
+  document.getElementById("new-reading").addEventListener("click",resetReadingForm);
+  document.getElementById("delete-reading").addEventListener("click",function(){if(!editingId)return;var entry=readingEntries.find(function(item){return item.id===editingId});if(!window.confirm('Delete "'+entry.title+'" from this draft?'))return;readingEntries=readingEntries.filter(function(item){return item.id!==editingId});saveReadingDraft();resetReadingForm();message("reading-msg","Item deleted from the browser draft.","ok")});
+  search.addEventListener("input",renderReadingList);statusFilter.addEventListener("change",renderReadingList);
+  document.getElementById("restore-reading").addEventListener("click",function(){try{var saved=localStorage.getItem(draftKey);if(!saved){message("reading-msg","No browser draft found.","err");return}readingEntries=JSON.parse(saved).map(function(entry){return model.normalizeEntry(entry)});readingLoaded=true;resetReadingForm();message("reading-msg","Browser draft restored.","ok")}catch(error){message("reading-msg","The browser draft is invalid.","err")}});
+  function downloadFile(name,contents,type){var blob=new Blob([contents],{type:type}),link=document.createElement("a"),url=URL.createObjectURL(blob);link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();window.setTimeout(function(){URL.revokeObjectURL(url)},0)}
+  window.downloadReadingJson=function(){try{var json=model.serializeEntries(readingEntries);downloadFile("posts.json",json,"application/json");saveReadingDraft();message("reading-msg","posts.json downloaded. Replace reading/posts.json, then commit and push.","ok")}catch(error){message("reading-msg",error.message,"err")}};
+})();
+</script>
+</body>
+</html>

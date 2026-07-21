@@ -1,4 +1,32 @@
 [
-  {"title":"Demystifying Evals for AI Agents","author":"Anthropic Engineering","date":"2026-07-20","status":"reading","theme":"AI Evals","link":"https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"},
-  {"title":"A Practical Guide to Building AI Agents","author":"OpenAI","date":"2026-07-20","status":"want","theme":"AI Evals","link":"https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/"}
+  {
+    "id": "demystifying-evals-for-ai-agents",
+    "title": "Demystifying Evals for AI Agents",
+    "creator": "Anthropic Engineering",
+    "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+    "type": "article",
+    "status": "reading",
+    "topics": [
+      "AI Evals"
+    ],
+    "added_at": "2026-07-20",
+    "started_at": "2026-07-20",
+    "finished_at": null,
+    "updated_at": "2026-07-20"
+  },
+  {
+    "id": "a-practical-guide-to-building-ai-agents",
+    "title": "A Practical Guide to Building AI Agents",
+    "creator": "OpenAI",
+    "url": "https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/",
+    "type": "article",
+    "status": "want",
+    "topics": [
+      "AI Evals"
+    ],
+    "added_at": "2026-07-20",
+    "started_at": null,
+    "finished_at": null,
+    "updated_at": "2026-07-20"
+  }
 ]

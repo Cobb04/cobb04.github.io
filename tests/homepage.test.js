@@ -3,6 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
 const vm = require("node:vm");
+const readingModel = require("../reading/reading-manager.js");
 
 class FakeElement {
   constructor(id = "") {
@@ -67,8 +68,8 @@ async function runHomepage() {
     querySelectorAll: () => [],
   };
   const readingPosts = [
-    { title: "Book A", author: "Author A", date: "2026-07-20", status: "reading", theme: "AI", link: "https://example.com/a" },
-    { title: "Book B", author: "Author B", date: "2026-07-19", status: "want", theme: "AI", link: "https://example.com/b" },
+    { id: "book-a", title: "Book A", creator: "Author A", added_at: "2026-07-20", updated_at: "2026-07-20", status: "reading", type: "book", topics: ["AI"], url: "https://example.com/a" },
+    { id: "book-b", title: "Book B", creator: "Author B", added_at: "2026-07-19", updated_at: "2026-07-19", status: "want", type: "book", topics: ["AI"], url: "https://example.com/b" },
   ];
   const fetch = async (url) => ({
     json: async () => url.includes("reading/") ? readingPosts : [],
@@ -79,6 +80,7 @@ async function runHomepage() {
     localStorage: { getItem: () => null, setItem: () => {} },
     setInterval: () => 0,
     window: { addEventListener: () => {}, scrollY: 0, innerHeight: 800 },
+    ReadingManagerModel: readingModel,
   };
 
   vm.runInNewContext(homepageScript(), context);
@@ -103,7 +105,7 @@ test("reading shelf occupies the hero visual column instead of a duplicate secti
   assert.match(hero, /href="reading\.html"/);
   assert.doesNotMatch(html, /<section class="section" id="reading"/);
   assert.match(html, /\.hero\{display:grid/);
-  assert.match(html, /\.slice\(0,4\)/);
+  assert.match(html, /selectHomepageEntries\(posts,4\)/);
   assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero\{grid-template-columns:1fr/);
   assert.match(html, /@media\(max-width:639px\)[\s\S]*?\.hero-reading \.shelf-row\{overflow:visible\}/);
 });
@@ -131,7 +133,7 @@ test("books expose reading status and tactile page details", async () => {
   const books = shelf.children;
 
   assert.match(books[0].className, /book-status-reading/);
-  assert.match(books[0].innerHTML, /book-page-edge/);
+  assert.match(books[0].children[0].className, /book-page-edge/);
   assert.equal(books[0].style.height, "108px");
   assert.equal(books[0].getAttribute("title"), "");
   assert.doesNotMatch(books[0].innerHTML, /book-tooltip/);
@@ -155,4 +157,48 @@ test("full bookshelf uses the same tactile shelf system", () => {
   assert.match(readingHtml, /\.shelf::before/);
   assert.match(readingHtml, /book-page-edge/);
   assert.match(readingHtml, /book-status-/);
+});
+
+test("editor reuses one page for writing and reading management", () => {
+  const editor = fs.readFileSync(path.join(__dirname, "..", "editor.html"), "utf8");
+
+  assert.match(editor, /<script src="reading\/reading-manager\.js"><\/script>/);
+  assert.match(editor, /role="tablist"/);
+  assert.match(editor, /id="writing-tab"/);
+  assert.match(editor, /id="reading-tab"/);
+  assert.match(editor, /id="writing-panel"/);
+  assert.match(editor, /id="reading-panel"/);
+  assert.match(editor, /id="reading-form"/);
+  assert.match(editor, /id="reading-list"/);
+  assert.match(editor, /id="reading-status-filter"/);
+  assert.match(editor, /id="reading-search"/);
+  assert.match(editor, /downloadReadingJson/);
+  assert.doesNotMatch(editor, /github[_ -]?token/i);
+  assert.match(editor, /@media\(max-width:720px\)[\s\S]*?\.manager-grid\{grid-template-columns:1fr\}/);
+});
+
+test("public shelves share the mixed-media reading model", () => {
+  const homepage = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const reading = fs.readFileSync(path.join(__dirname, "..", "reading.html"), "utf8");
+
+  assert.match(homepage, /<script src="reading\/reading-manager\.js"><\/script>/);
+  assert.match(homepage, /selectHomepageEntries\(posts,4\)/);
+  assert.match(homepage, /p\.creator/);
+  assert.match(homepage, /p\.updated_at/);
+  assert.match(homepage, /p\.url/);
+  assert.match(homepage, /spine\.textContent=p\.title/);
+  assert.doesNotMatch(homepage, /d\.innerHTML='<span class="book-page-edge"/);
+  assert.match(homepage, /book-status-read/);
+  assert.match(homepage, /book-status-stopped/);
+
+  assert.match(reading, /<script src="reading\/reading-manager\.js"><\/script>/);
+  assert.match(reading, /id="statusFilters"/);
+  assert.match(reading, /id="typeFilter"/);
+  assert.match(reading, /id="topicFilter"/);
+  assert.match(reading, /data-status="read"/);
+  assert.match(reading, /data-status="stopped"/);
+  assert.match(reading, /p\.topics/);
+  assert.match(reading, /p\.type/);
+  assert.match(reading, /shelf-compact/);
+  assert.match(reading, /groups\[topic\]\.length<=4/);
 });

@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh" data-theme="warm">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Reading · Cobb</title>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reading · Cobb</title>
+<meta name="description" content="Books, articles, papers, podcasts, and videos in Cobb's reading library.">
+<link rel="icon" href="data:,">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root,[data-theme="warm"]{--bg:#FDFAF5;--text:#2C2C2C;--text2:#6B6B6B;--text3:#8A867F;--accent:#D94F30;--border:#E2D9CC;--shelf-back:#EEE9DF;--shelf-edge:#A98B68;--shelf-edge-dark:#775F46;--page-edge:#E9E1D2;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.16,1,.3,1)}
-[data-theme="terminal"]{--bg:#0a0a0a;--text:#c0c0c0;--text2:#888;--text3:#666;--accent:#0f0;--border:#242824;--shelf-back:#101210;--shelf-edge:#343A35;--shelf-edge-dark:#181B19;--page-edge:#C8C8B8;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.16,1,.3,1)}
+:root,[data-theme="warm"]{--bg:#FDFAF5;--surface:#F8F4EC;--text:#2C2C2C;--text2:#625E58;--text3:#756F67;--accent:#C54229;--border:#DED4C6;--shelf-back:#EEE9DF;--shelf-edge:#A98B68;--shelf-edge-dark:#775F46;--page-edge:#E9E1D2;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.16,1,.3,1);--r:10px}
+[data-theme="terminal"]{--bg:#0A0A0A;--surface:#101110;--text:#D0D0D0;--text2:#B0B0B0;--text3:#929292;--accent:#00D95A;--border:#303630;--shelf-back:#101210;--shelf-edge:#343A35;--shelf-edge-dark:#181B19;--page-edge:#C8C8B8;--font-display:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--font-mono:'JetBrains Mono',monospace;--r:0}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
-[data-theme="terminal"] body{-webkit-font-smoothing:none}
+button,select{font:inherit}
 .wrap{max-width:880px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
-.back{font-size:.8rem;color:var(--text3);margin-bottom:2.5rem}.back a{color:var(--accent);text-decoration:none}
-.reading-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:2.5rem}.reading-title h1{font-family:var(--font-display);font-weight:800;font-size:clamp(2.4rem,7vw,4rem);line-height:1;letter-spacing:-.045em}.sub{color:var(--text2);font-size:.9rem;margin-top:.65rem;max-width:40ch}
-.legend{display:flex;gap:1rem;color:var(--text3);font-family:var(--font-mono);font-size:.62rem;white-space:nowrap}.legend span{display:flex;align-items:center;gap:.35rem}.legend i{display:block;width:8px;height:14px;border-radius:2px;background:#F1C15E}.legend span+span i{background:transparent;border:1px solid var(--text3)}
-/* shelf */
-.shelf-group{margin-bottom:3.25rem}.shelf-heading{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.65rem}.shelf-heading h2{font-family:var(--font-display);font-size:1rem;letter-spacing:-.015em}.shelf-heading span{font-family:var(--font-mono);font-size:.62rem;color:var(--text3)}
+.back{font-size:.8rem;color:var(--text3);margin-bottom:2.5rem}.back a{color:var(--accent);text-decoration:none}.back a:hover{text-decoration:underline}
+.reading-head{margin-bottom:1.5rem}.reading-title h1{font-family:var(--font-display);font-weight:800;font-size:clamp(2.4rem,7vw,4rem);line-height:1;letter-spacing:-.045em}.sub{color:var(--text2);font-size:.9rem;margin-top:.65rem;max-width:48ch}
+.filters{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:2.5rem;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.status-filters{display:flex;gap:.35rem;flex-wrap:wrap}.status-filters button{border:1px solid transparent;border-radius:var(--r);background:transparent;color:var(--text2);padding:.42rem .62rem;font-size:.73rem;cursor:pointer}.status-filters button:hover{border-color:var(--border)}.status-filters button[aria-pressed="true"]{background:var(--accent);color:#FFF8F2;border-color:var(--accent)}[data-theme="terminal"] .status-filters button[aria-pressed="true"]{color:#061208}
+.select-filters{display:flex;gap:.55rem}.filter-field{display:flex;flex-direction:column;gap:.25rem}.filter-field label{font-size:.62rem;color:var(--text3);font-family:var(--font-mono)}.filter-field select{min-width:126px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);padding:.42rem .55rem;font-size:.72rem}
+button:focus-visible,select:focus-visible,.book:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.shelf-group{margin-bottom:3.25rem}.shelf-group.shelf-compact{max-width:480px}.shelf-heading{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.65rem}.shelf-heading h2{font-family:var(--font-display);font-size:1rem;letter-spacing:-.015em}.shelf-heading span{font-family:var(--font-mono);font-size:.62rem;color:var(--text3)}
 .shelf{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;min-height:230px;padding:3.5rem 1.25rem 1.25rem;margin-bottom:1.5rem;position:relative;isolation:isolate;border:1px solid var(--border);border-bottom:0;border-radius:14px 14px 2px 2px;background:linear-gradient(180deg,color-mix(in srgb,var(--shelf-back) 68%,var(--bg)),var(--shelf-back))}
+.shelf-group.shelf-compact .shelf{min-height:210px;padding-top:2.25rem}
 .shelf::before{content:"";position:absolute;z-index:4;left:-7px;right:-7px;bottom:-12px;height:17px;border-radius:2px 2px 6px 6px;background:linear-gradient(180deg,var(--shelf-edge),var(--shelf-edge-dark));box-shadow:0 9px 16px rgba(70,52,34,.2),inset 0 1px rgba(255,255,255,.3)}
 .shelf::after{content:"";position:absolute;z-index:-1;left:1.5rem;right:1.5rem;bottom:-21px;height:14px;background:rgba(75,55,36,.15);filter:blur(8px)}
 .book{--lean:0deg;position:relative;z-index:1;width:38px;cursor:pointer;transform:rotate(var(--lean));transform-origin:center bottom;transition:transform .3s var(--ease),box-shadow .3s var(--ease);writing-mode:vertical-rl;text-orientation:mixed;padding:.72rem .48rem;border-radius:3px 7px 6px 2px;font-family:var(--font-display);font-size:.66rem;font-weight:700;letter-spacing:.028em;line-height:1.22;color:#fff;display:flex;align-items:center;gap:.5rem;text-decoration:none;box-shadow:2px 4px 8px rgba(40,30,20,.22),inset 3px 0 rgba(255,255,255,.12),inset -2px 0 rgba(0,0,0,.13)}
@@ -22,46 +29,51 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-he
 .book:hover{transform:translateY(-9px) rotate(0deg) scale(1.035);box-shadow:5px 10px 18px rgba(40,30,20,.25),inset 3px 0 rgba(255,255,255,.15),inset -2px 0 rgba(0,0,0,.13);z-index:5}
 .book .spine-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:calc(100% - 2.2rem)}
 .book-page-edge{position:absolute;top:6px;right:-4px;bottom:6px;width:4px;border-radius:0 3px 3px 0;background:repeating-linear-gradient(180deg,var(--page-edge) 0 2px,color-mix(in srgb,var(--page-edge) 76%,#777) 2px 3px);box-shadow:1px 0 1px rgba(0,0,0,.12)}
-.book-status{margin-top:auto;padding:.23rem .1rem;border-radius:2px;background:rgba(255,255,255,.16);font-family:var(--font-mono);font-size:.47rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase}.book-status-reading .book-status{background:#F1C15E;color:#3D2B12}.book-status-want .book-status{background:rgba(255,255,255,.18);color:#fff}
-.book:focus-visible{outline:2px solid var(--accent);outline-offset:3px;transform:translateY(-6px) rotate(0deg)}
-.shelf-tooltip{position:fixed;z-index:1000;left:0;top:0;width:max-content;max-width:min(320px,calc(100vw - 24px));padding:.65rem .8rem;border:1px solid var(--border);border-radius:10px;background:color-mix(in srgb,var(--bg) 94%,transparent);color:var(--text);box-shadow:0 12px 32px rgba(40,30,20,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:none;font-family:var(--font-body);writing-mode:horizontal-tb;line-height:1.35}
-.shelf-tooltip[hidden]{display:none}.shelf-tooltip strong{display:block;font-size:.78rem}.shelf-tooltip span{display:block;margin-top:.2rem;font-size:.68rem;color:var(--text2)}
-.annotation{margin-top:-.5rem;font-size:.82rem;color:var(--text2);padding:.4rem 0;border-top:1px dashed var(--border)}
-.annotation a{color:var(--accent);text-decoration:none;font-weight:600}
-.annotation a:hover{text-decoration:underline}
-.theme-btn{position:fixed;top:1rem;right:1.5rem;border:1px solid var(--border);border-radius:20px;padding:.38rem .78rem;cursor:pointer;font-size:.7rem;color:var(--text2);background:var(--bg);font-family:var(--font-mono)}.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
-@media(max-width:640px){.wrap{padding:1.5rem 1rem 4rem}.reading-head{align-items:flex-start;flex-direction:column;gap:1rem}.shelf{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;min-height:215px;padding:1.5rem 1rem 1.25rem;scrollbar-width:thin}.book{flex:0 0 auto;transform:none}.theme-btn{position:absolute;right:1rem}}
-</style></head><body>
+.book-status{margin-top:auto;padding:.23rem .1rem;border-radius:2px;background:rgba(255,255,255,.16);font-family:var(--font-mono);font-size:.47rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase}.book-status-reading .book-status{background:#F1C15E;color:#3D2B12}.book-status-want .book-status{background:rgba(255,255,255,.2);color:#fff}.book-status-read .book-status{background:#D2E5D6;color:#21472B}.book-status-stopped .book-status{background:#D9D5CF;color:#4C4843}
+.shelf-tooltip{position:fixed;z-index:1000;left:0;top:0;width:max-content;max-width:min(320px,calc(100vw - 24px));padding:.65rem .8rem;border:1px solid var(--border);border-radius:var(--r);background:color-mix(in srgb,var(--bg) 94%,transparent);color:var(--text);box-shadow:0 12px 32px rgba(40,30,20,.18);backdrop-filter:blur(12px);pointer-events:none;line-height:1.35}.shelf-tooltip[hidden]{display:none}.shelf-tooltip strong{display:block;font-size:.78rem}.shelf-tooltip span{display:block;margin-top:.2rem;font-size:.68rem;color:var(--text2)}
+.empty{padding:3rem 0;color:var(--text3);font-size:.85rem;text-align:center}.theme-btn{position:fixed;top:1rem;right:1.5rem;border:1px solid var(--border);border-radius:var(--r);padding:.38rem .65rem;cursor:pointer;font-size:.7rem;color:var(--text2);background:var(--bg)}
+@media(max-width:640px){.wrap{padding:1.5rem 1rem 4rem}.filters{align-items:stretch;flex-direction:column}.select-filters{display:grid;grid-template-columns:1fr 1fr}.filter-field select{width:100%;min-width:0}.shelf{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;min-height:215px;padding:1.5rem 1rem 1.25rem;scrollbar-width:thin}.book{flex:0 0 auto;transform:none}.theme-btn{position:absolute;right:1rem}}
+</style>
+</head>
+<body>
 <div class="wrap">
-<button class="theme-btn" id="t">🌙</button>
-<p class="back"><a href="/">← Cobb</a></p>
-<header class="reading-head"><div class="reading-title"><h1>Reading Shelf</h1><p class="sub">正在读的、想读的，以及值得反复回来的文字。</p></div><div class="legend" aria-label="阅读状态"><span><i></i>Reading</span><span><i></i>Want to read</span></div></header>
-<div id="shelves"></div>
+  <button class="theme-btn" id="t" type="button">Terminal theme</button>
+  <p class="back"><a href="/">← Cobb</a></p>
+  <header class="reading-head"><div class="reading-title"><h1>Reading Shelf</h1><p class="sub">文章、书、论文、播客和视频。状态记录进度，主题负责归类。</p></div></header>
+  <section class="filters" aria-label="筛选书架">
+    <div class="status-filters" id="statusFilters" aria-label="阅读状态">
+      <button type="button" data-status="all" aria-pressed="true">All</button>
+      <button type="button" data-status="reading" aria-pressed="false">Reading</button>
+      <button type="button" data-status="want" aria-pressed="false">Want</button>
+      <button type="button" data-status="read" aria-pressed="false">Read</button>
+      <button type="button" data-status="stopped" aria-pressed="false">Stopped</button>
+    </div>
+    <div class="select-filters">
+      <div class="filter-field"><label for="typeFilter">Type</label><select id="typeFilter"><option value="all">All types</option></select></div>
+      <div class="filter-field"><label for="topicFilter">Topic</label><select id="topicFilter"><option value="all">All topics</option></select></div>
+    </div>
+  </section>
+  <main id="shelves"><p class="empty">Loading reading data...</p></main>
 </div>
 <div class="shelf-tooltip" id="shelfTooltip" role="tooltip" hidden><strong id="shelfTooltipTitle"></strong><span id="shelfTooltipMeta"></span></div>
+<script src="reading/reading-manager.js"></script>
 <script>
 (function(){
-  var colors=["#B74A35","#376F82","#AD873D","#3F765B","#6B5B84","#A95750","#3F628D","#97566F"];
+  "use strict";
+  var colors=["#B74A35","#376F82","#AD873D","#3F765B","#6B5B84","#A95750","#3F628D","#97566F"],statusLabels={want:"Want",reading:"Reading",read:"Read",stopped:"Stopped"},typeLabels={article:"Article",book:"Book",paper:"Paper",podcast:"Podcast",video:"Video"};
+  var posts=[],activeStatus="all",typeFilter=document.getElementById("typeFilter"),topicFilter=document.getElementById("topicFilter"),root=document.getElementById("shelves");
   var shelfTooltip=document.getElementById("shelfTooltip"),shelfTooltipTitle=document.getElementById("shelfTooltipTitle"),shelfTooltipMeta=document.getElementById("shelfTooltipMeta"),activeBook=null;
   function hideBookTooltip(){shelfTooltip.hidden=true;if(activeBook)activeBook.removeAttribute("aria-describedby");activeBook=null}
-  function positionBookTooltip(book,p){activeBook=book;shelfTooltipTitle.textContent=p.title;shelfTooltipMeta.textContent=p.author+" · "+p.date;shelfTooltip.hidden=false;var rect=book.getBoundingClientRect(),tip=shelfTooltip.getBoundingClientRect();var left=Math.max(12,Math.min(window.innerWidth-tip.width-12,rect.left+rect.width/2-tip.width/2));var top=rect.top-tip.height-12;if(top<12)top=rect.bottom+12;top=Math.max(12,Math.min(window.innerHeight-tip.height-12,top));shelfTooltip.style.left=left+"px";shelfTooltip.style.top=top+"px";book.setAttribute("aria-describedby","shelfTooltip")}
+  function positionBookTooltip(book,p){activeBook=book;shelfTooltipTitle.textContent=p.title;shelfTooltipMeta.textContent=p.creator+" · "+typeLabels[p.type]+", updated "+p.updated_at;shelfTooltip.hidden=false;var rect=book.getBoundingClientRect(),tip=shelfTooltip.getBoundingClientRect();var left=Math.max(12,Math.min(window.innerWidth-tip.width-12,rect.left+rect.width/2-tip.width/2));var top=rect.top-tip.height-12;if(top<12)top=rect.bottom+12;top=Math.max(12,Math.min(window.innerHeight-tip.height-12,top));shelfTooltip.style.left=left+"px";shelfTooltip.style.top=top+"px";book.setAttribute("aria-describedby","shelfTooltip")}
   function bindBookTooltip(book,p){book.addEventListener("mouseenter",function(){positionBookTooltip(book,p)});book.addEventListener("mouseleave",hideBookTooltip);book.addEventListener("focus",function(){positionBookTooltip(book,p)});book.addEventListener("blur",hideBookTooltip)}
   window.addEventListener("scroll",hideBookTooltip,{passive:true});window.addEventListener("resize",hideBookTooltip);
-  fetch("reading/posts.json").then(function(r){return r.json()}).then(function(posts){
-    var root=document.getElementById("shelves");root.innerHTML="";if(!posts.length){root.innerHTML='<p style="color:var(--text3);padding:2rem 0">书架是空的。</p>';return}
-    // group by theme
-    var themes={};posts.reverse().forEach(function(p){var t=p.theme||"Other";if(!themes[t])themes[t]=[];themes[t].push(p)});
-    Object.keys(themes).forEach(function(theme,tmIdx){
-      var wrap=document.createElement("section");wrap.className="shelf-group";
-      wrap.innerHTML='<div class="shelf-heading"><h2>'+theme+'</h2><span>'+themes[theme].length+' books</span></div><div class="shelf"></div>';
-      var shelf=wrap.querySelector(".shelf");
-      themes[theme].forEach(function(p,i){var status=p.status||"want";var height=145+(i%4)*13;var d=document.createElement("a");d.className="book book-status-"+status;d.href=p.link;d.target="_blank";d.rel="noopener";d.setAttribute("aria-label",p.title+" by "+p.author);d.style.background=colors[(tmIdx*8+i)%colors.length];d.style.minHeight=height+"px";d.style.setProperty("--book-height",height+"px");d.style.setProperty("--lean",[-1.4,.8,-.5,1.1][i%4]+"deg");d.innerHTML='<span class="book-page-edge" aria-hidden="true"></span><span class="spine-title">'+p.title+'</span><span class="book-status">'+(status==="reading"?"Reading":"Want")+'</span>';bindBookTooltip(d,p);shelf.appendChild(d)});
-      root.appendChild(wrap)
-    });
-      }).catch(function(){document.getElementById("shelves").innerHTML='<p style="color:var(--text3)">Failed to load.</p>'});
-  var b=document.getElementById("t"),h=document.documentElement;
-  b.addEventListener("click",function(){var n=h.getAttribute("data-theme")==="warm"?"terminal":"warm";h.setAttribute("data-theme",n);b.textContent=n==="warm"?"🌙":"☀️";try{localStorage.setItem("theme",n)}catch(e){}});
-  try{var s=localStorage.getItem("theme");if(s){h.setAttribute("data-theme",s);b.textContent=s==="warm"?"🌙":"☀️"}}catch(e){}
+  function option(value,label){var item=document.createElement("option");item.value=value;item.textContent=label;return item}
+  function populateFilters(){ReadingManagerModel.TYPES.forEach(function(type){typeFilter.appendChild(option(type,typeLabels[type]))});var topics=[];posts.forEach(function(p){p.topics.forEach(function(topic){if(topics.indexOf(topic)<0)topics.push(topic)})});topics.sort().forEach(function(topic){topicFilter.appendChild(option(topic,topic))})}
+  function visiblePosts(){return posts.filter(function(p){return(activeStatus==="all"||p.status===activeStatus)&&(typeFilter.value==="all"||p.type===typeFilter.value)&&(topicFilter.value==="all"||p.topics.indexOf(topicFilter.value)>=0)})}
+  function render(){var filtered=visiblePosts(),groups={};root.innerHTML="";if(!filtered.length){root.innerHTML='<p class="empty">No items match these filters.</p>';return}filtered.sort(function(a,b){return b.updated_at.localeCompare(a.updated_at)||a.title.localeCompare(b.title)}).forEach(function(p){var topic=p.topics[0]||"Other";if(!groups[topic])groups[topic]=[];groups[topic].push(p)});Object.keys(groups).sort().forEach(function(topic,groupIndex){var section=document.createElement("section"),heading=document.createElement("div"),title=document.createElement("h2"),count=document.createElement("span"),shelf=document.createElement("div");section.className="shelf-group"+(groups[topic].length<=4?" shelf-compact":"");heading.className="shelf-heading";title.textContent=topic;count.textContent=groups[topic].length+" items";heading.appendChild(title);heading.appendChild(count);shelf.className="shelf";groups[topic].forEach(function(p,index){var height=145+(index%4)*13,book=document.createElement("a"),page=document.createElement("span"),spine=document.createElement("span"),status=document.createElement("span");book.className="book book-status-"+p.status;book.href=p.url;book.target="_blank";book.rel="noopener";book.style.background=colors[(groupIndex*5+index)%colors.length];book.style.minHeight=height+"px";book.style.setProperty("--book-height",height+"px");book.style.setProperty("--lean",[-1.4,.8,-.5,1.1][index%4]+"deg");page.className="book-page-edge";page.setAttribute("aria-hidden","true");spine.className="spine-title";spine.textContent=p.title;status.className="book-status";status.textContent=statusLabels[p.status];book.appendChild(page);book.appendChild(spine);book.appendChild(status);bindBookTooltip(book,p);shelf.appendChild(book)});section.appendChild(heading);section.appendChild(shelf);root.appendChild(section)})}
+  document.getElementById("statusFilters").addEventListener("click",function(event){var button=event.target.closest("button[data-status]");if(!button)return;activeStatus=button.dataset.status;document.querySelectorAll("#statusFilters button").forEach(function(item){item.setAttribute("aria-pressed",String(item===button))});render()});typeFilter.addEventListener("change",render);topicFilter.addEventListener("change",render);
+  fetch("reading/posts.json").then(function(response){if(!response.ok)throw new Error("HTTP "+response.status);return response.json()}).then(function(data){posts=data.map(function(p){return ReadingManagerModel.normalizeEntry(p)}).filter(function(p){return ReadingManagerModel.validateEntry(p).length===0});populateFilters();render()}).catch(function(){root.innerHTML='<p class="empty">Failed to load reading data.</p>'});
+  var themeButton=document.getElementById("t"),html=document.documentElement;function applyTheme(theme){html.setAttribute("data-theme",theme);themeButton.textContent=theme==="warm"?"Terminal theme":"Warm theme"}themeButton.addEventListener("click",function(){var next=html.getAttribute("data-theme")==="warm"?"terminal":"warm";applyTheme(next);localStorage.setItem("theme",next)});applyTheme(localStorage.getItem("theme")==="terminal"?"terminal":"warm");
 })();
 </script>
 </body>

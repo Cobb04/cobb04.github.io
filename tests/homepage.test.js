@@ -130,7 +130,7 @@ test("reading deck occupies the hero visual column instead of a duplicate sectio
   assert.doesNotMatch(hero, /shelf-row|class="book/);
 });
 
-test("hero gives the introduction priority and moves the motto into navigation", () => {
+test("hero keeps its compact introduction while moving the motto into navigation", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
   const nav = html.match(/<nav class="nav">[\s\S]*?<\/nav>/)?.[0] || "";
   const hero = html.match(/<header class="hero"[\s\S]*?<\/header>/)?.[0] || "";
@@ -139,8 +139,10 @@ test("hero gives the introduction priority and moves the motto into navigation",
   assert.match(nav, /class="nav-motto">Do · Learn · Repeat\.<\/span>/);
   assert.doesNotMatch(hero, /AI Product Builder/i);
   assert.doesNotMatch(hero, /class="tagline"/);
-  assert.match(html, /\.hero h1\{[^}]*font-size:clamp\(3\.6rem,5\.4vw,5\.1rem\)/);
-  assert.match(html, /@media\(max-width:639px\)[\s\S]*?\.hero h1\{font-size:clamp\(3rem,13vw,3\.6rem\)/);
+  assert.match(html, /\.hero h1\{[^}]*font-size:2\.6rem/);
+  assert.match(html, /\.hero\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(440px,1fr\)/);
+  assert.match(html, /\.hero-reading\{[^}]*max-width:480px/);
+  assert.doesNotMatch(html, /\.hero h1\{[^}]*font-size:clamp\(3\.6rem,5\.4vw,5\.1rem\)/);
 });
 
 test("homepage podcast section shows only the three newest notes", async () => {

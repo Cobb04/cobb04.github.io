@@ -66,13 +66,7 @@ async function runHomepage() {
     ["writing-list", new FakeElement("writing-list")],
     ["shelves", new FakeElement("shelves")],
     ["readingDeckStage", new FakeElement("readingDeckStage")],
-    ["readingTab", new FakeElement("readingTab")],
-    ["upNextTab", new FakeElement("upNextTab")],
-    ["readingCount", new FakeElement("readingCount")],
-    ["upNextCount", new FakeElement("upNextCount")],
   ]);
-  elements.get("readingTab").setAttribute("data-reading-status", "reading");
-  elements.get("upNextTab").setAttribute("data-reading-status", "want");
   const documentElement = new FakeElement("html");
   documentElement.setAttribute("data-theme", "warm");
   const document = {
@@ -109,7 +103,7 @@ test("reading deck still renders when optional podcast source list is absent", a
   assert.ok(elements.get("readingDeckStage").children.length > 0);
 });
 
-test("reading deck occupies the hero visual column instead of a duplicate section", () => {
+test("reading card occupies the hero visual column instead of a duplicate section", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
   const hero = html.match(/<header class="hero"[\s\S]*?<\/header>/)?.[0] || "";
 
@@ -117,20 +111,18 @@ test("reading deck occupies the hero visual column instead of a duplicate sectio
   assert.match(hero, /class="hero-reading"/);
   assert.match(hero, />Currently reading</);
   assert.match(hero, /class="reading-deck"/);
-  assert.match(hero, /role="tablist"/);
-  assert.match(hero, /id="readingTab"/);
-  assert.match(hero, /id="upNextTab"/);
   assert.match(hero, /id="readingDeckStage"/);
   assert.match(hero, /href="reading\.html"/);
+  assert.doesNotMatch(hero, /role="tablist"|reading-deck-tab|readingCount|upNextCount|Up next|Now reading|reading-deck-preview/);
   assert.doesNotMatch(html, /<section class="section" id="reading"/);
-  assert.match(html, /\.wrap\{max-width:1240px/);
+  assert.match(html, /--page-max-width:1400px/);
   assert.match(html, /\.hero\{display:grid/);
   assert.match(html, /selectHomepageEntries\(posts,posts\.length\)/);
   assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero\{grid-template-columns:1fr/);
   assert.doesNotMatch(hero, /shelf-row|class="book/);
 });
 
-test("hero keeps its compact introduction while moving the motto into navigation", () => {
+test("hero keeps its compact introduction and real navigation", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
   const nav = html.match(/<nav class="nav">[\s\S]*?<\/nav>/)?.[0] || "";
   const hero = html.match(/<header class="hero"[\s\S]*?<\/header>/)?.[0] || "";
@@ -142,10 +134,18 @@ test("hero keeps its compact introduction while moving the motto into navigation
   assert.match(hero, /class="hero-title"/);
   assert.match(hero, /id="greeting"/);
   assert.match(hero, /I'm <span class="hero-name">Cobb<\/span>\./);
-  assert.match(hero, /class="hero-tagline"[\s\S]*?I build things, write thoughts,[\s\S]*?and keep learning\./);
+  assert.match(hero, /class="hero-tagline"[\s\S]*?One day, you’ll use something I made\./);
   assert.match(html, /\.hero-title\{[^}]*font-size:clamp\(/);
-  assert.match(html, /\.hero\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(360px,\.95fr\)/);
+  assert.match(html, /\.hero-title\{[^}]*letter-spacing:-\.035em/);
+  assert.match(html, /\.hero-tagline\{[^}]*letter-spacing:0/);
+  assert.match(html, /fonts\.googleapis\.com\/css2\?[^\"]*family=IBM\+Plex\+Mono:wght@300;400;500/);
+  assert.match(html, /\.hero-tagline\{[^}]*font:400[^}]*'IBM Plex Mono',var\(--font-mono\),monospace/);
+  assert.match(html, /\[data-theme="terminal"\] \.hero-tagline\{font-family:var\(--font-mono\);letter-spacing:0\}/);
+  assert.match(html, /\.hero-clock\{[^}]*display:none/);
+  assert.match(html, /\.hero\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(0,1fr\)/);
   assert.match(html, /\.hero-reading\{[^}]*position:absolute/);
+  assert.match(html, /class="nav-links"[\s\S]*class="nav-actions"/);
+  assert.match(html, /--page-max-width:1400px/);
 });
 
 test("hero actions use the selected GitHub mark and postal emoji", () => {
@@ -184,6 +184,11 @@ test("side navigation waits until the hero leaves the viewport", () => {
   assert.doesNotMatch(html, /window\.addEventListener\("scroll"/);
 });
 
+test("mobile hero keeps the next section below the first viewport", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero\{[^}]*min-height:calc\(100svh - 133px\)/);
+});
+
 test("homepage podcast section shows only the three newest notes", async () => {
   const elements = await runHomepage();
   const podcasts = elements.get("cg").children;
@@ -200,12 +205,10 @@ test("homepage keeps semantic structure and readable contrast", () => {
   assert.match(html, /\.footer a\{[^}]*text-decoration:underline/);
 });
 
-test("reading deck exposes status, metadata, and a queue preview", async () => {
+test("homepage reading card renders one real currently-reading entry", async () => {
   const elements = await runHomepage();
   const stage = elements.get("readingDeckStage");
-  const stack = stage.children[0];
-  const activeCard = stack.children[0];
-  const queuePreview = stack.children[1];
+  const activeCard = stage.children[0];
 
   assert.match(activeCard.className, /reading-deck-card/);
   assert.equal(activeCard.href, "https://example.com/a");
@@ -213,23 +216,7 @@ test("reading deck exposes status, metadata, and a queue preview", async () => {
   assert.equal(activeCard.getAttribute("aria-label"), "Book A by Author A, open book");
   assert.equal(activeCard.children[1].textContent, "Book A");
   assert.equal(activeCard.children[2].textContent, "Author A");
-  assert.match(queuePreview.className, /reading-deck-preview/);
-  assert.match(queuePreview.children[0].textContent, /Up next: Book B/);
-  assert.equal(elements.get("readingCount").textContent, "1");
-  assert.equal(elements.get("upNextCount").textContent, "1");
-});
-
-test("reading deck tabs switch the active product surface", async () => {
-  const elements = await runHomepage();
-  elements.get("upNextTab").dispatch("click");
-
-  const stack = elements.get("readingDeckStage").children[0];
-  const activeCard = stack.children[0];
-  assert.equal(activeCard.href, "https://example.com/b");
-  assert.equal(activeCard.children[1].textContent, "Book B");
-  assert.equal(elements.get("readingTab").getAttribute("aria-selected"), "false");
-  assert.equal(elements.get("upNextTab").getAttribute("aria-selected"), "true");
-  assert.equal(elements.get("readingDeckStage").getAttribute("aria-labelledby"), "upNextTab");
+  assert.equal(activeCard.children[3].textContent, "Open book ↗");
 });
 
 test("the full bookshelf keeps its viewport tooltip without homepage duplication", () => {
@@ -242,9 +229,10 @@ test("the full bookshelf keeps its viewport tooltip without homepage duplication
   assert.doesNotMatch(homepage, /function positionBookTooltip/);
 });
 
-test("reading deck entrance motion releases transform control for hover", () => {
+test("reading card stays compact and has no queue animation", () => {
   const homepage = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-  assert.doesNotMatch(homepage, /animation:deck-(?:in|preview-in)[^}]*\sboth/);
+  assert.match(homepage, /\.reading-deck\{[^}]*min-height:260px/);
+  assert.doesNotMatch(homepage, /deck-preview-in|reading-deck-preview|reading-deck-tabs|reading-deck-tab/);
 });
 
 test("full bookshelf uses the same tactile shelf system", () => {
@@ -282,7 +270,7 @@ test("public shelves share the mixed-media reading model", () => {
   assert.match(homepage, /p\.creator/);
   assert.match(homepage, /p\.url/);
   assert.match(homepage, /title\.textContent=p\.title/);
-  assert.match(homepage, /data-reading-status/);
+  assert.match(homepage, /action\.textContent="Open "\+p\.type/);
   assert.doesNotMatch(homepage, /spine-title|book-page-edge|shelfColors/);
 
   assert.match(reading, /<script src="reading\/reading-manager\.js"><\/script>/);

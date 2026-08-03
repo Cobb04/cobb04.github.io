@@ -127,6 +127,7 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .theme-switch{min-height:44px;padding:.4rem .85rem!important}
 .hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(2rem,6vw,6rem);min-height:calc(100svh - 72px);padding:0;overflow:clip}
 .hero::before{content:"";position:absolute;z-index:1;top:0;right:0;left:35%;height:clamp(150px,28%,260px);pointer-events:none;background:linear-gradient(to bottom,var(--bg) 0%,color-mix(in srgb,var(--bg) 78%,transparent) 30%,transparent 100%)}
+.hero::after{content:"";position:absolute;z-index:1;top:0;right:0;bottom:0;width:clamp(90px,12vw,180px);pointer-events:none;background:linear-gradient(to right,transparent 0%,color-mix(in srgb,var(--bg) 72%,transparent) 48%,var(--bg) 100%)}
 .hero-copy{position:relative;z-index:2;align-self:center;width:min(520px,42vw);max-width:520px;transform:translateY(-30px)}
 .hero-title{font-family:var(--font-display);font-weight:800;font-size:clamp(3.6rem,6.7vw,7.1rem);line-height:.97;letter-spacing:-.035em;margin:0;max-width:none}
 .hero h1.hero-title{font-size:clamp(3.6rem,6.7vw,7.1rem);line-height:.97;letter-spacing:-.035em;margin-bottom:0;max-width:none}
@@ -164,7 +165,7 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .reading-deck-primary-link:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
 .reading-deck-creator{margin-top:.55rem;font-size:.67rem}
 .reading-deck-empty{min-height:0;padding:1.45rem 0 1.75rem;font-size:.66rem}
-.side-nav{left:1.15rem;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s var(--ease),visibility .28s var(--ease)}
+.side-nav{right:1.15rem;left:auto;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s var(--ease),visibility .28s var(--ease)}
 .side-nav.is-visible{opacity:1;visibility:visible;pointer-events:auto}
 .side-nav a{border-radius:999px;padding:5px 12px;transition:color .2s var(--ease),background-color .2s var(--ease)}
 [data-theme="terminal"] .hero-character{mix-blend-mode:screen;filter:grayscale(1) contrast(1.15);opacity:.05}

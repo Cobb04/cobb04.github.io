@@ -179,6 +179,7 @@ test("hero keeps the original character as a separate accessible-hidden asset", 
   assert.match(html, /\.hero-character\{[^}]*mask-image:linear-gradient\(90deg,transparent[^}]*linear-gradient\(180deg,transparent 0%,rgba\(0,0,0,\.35\) 10%[^}]*transparent 100%\)/);
   assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero-character\{[^}]*mask-image:linear-gradient\(90deg,transparent[^}]*linear-gradient\(180deg,transparent 0%,rgba\(0,0,0,\.35\) 10%[^}]*transparent 100%\)/);
   assert.match(html, /\.hero::before\{[^}]*left:35%[^}]*background:linear-gradient\(to bottom,var\(--bg\) 0%,color-mix\(in srgb,var\(--bg\) 78%,transparent\) 30%,transparent 100%\)/);
+  assert.match(html, /\.hero::after\{[^}]*right:0[^}]*width:clamp\(90px,12vw,180px\)[^}]*background:linear-gradient\(to right,transparent 0%,color-mix\(in srgb,var\(--bg\) 72%,transparent\) 48%,var\(--bg\) 100%\)/);
   assert.match(html, /\[data-theme="terminal"\] \.hero::before\{[^}]*background:linear-gradient\(to bottom,var\(--bg\) 0%,rgba\(10,10,10,\.72\) 30%,transparent 100%\)/);
   assert.doesNotMatch(hero, /data:image|ChatGPT Image/);
 });
@@ -188,6 +189,7 @@ test("side navigation waits until the hero leaves the viewport", () => {
 
   assert.match(html, /class="side-nav"[^>]*aria-label="Page sections"/);
   assert.match(html, /\.side-nav\{[^}]*opacity:0/);
+  assert.match(html, /\.side-nav\{[^}]*right:1\.15rem[^}]*left:auto/);
   assert.match(html, /\.side-nav\.is-visible\{[^}]*opacity:1/);
   assert.match(html, /new (?:window\.)?IntersectionObserver/);
   assert.doesNotMatch(html, /window\.addEventListener\("scroll"/);

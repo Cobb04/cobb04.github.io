@@ -115,7 +115,7 @@ test("reading deck occupies the hero visual column instead of a duplicate sectio
 
   assert.match(hero, /class="hero-copy"/);
   assert.match(hero, /class="hero-reading"/);
-  assert.match(hero, />Recent reading</);
+  assert.match(hero, />Currently reading</);
   assert.match(hero, /class="reading-deck"/);
   assert.match(hero, /role="tablist"/);
   assert.match(hero, /id="readingTab"/);
@@ -123,7 +123,7 @@ test("reading deck occupies the hero visual column instead of a duplicate sectio
   assert.match(hero, /id="readingDeckStage"/);
   assert.match(hero, /href="reading\.html"/);
   assert.doesNotMatch(html, /<section class="section" id="reading"/);
-  assert.match(html, /\.wrap\{max-width:1080px/);
+  assert.match(html, /\.wrap\{max-width:1240px/);
   assert.match(html, /\.hero\{display:grid/);
   assert.match(html, /selectHomepageEntries\(posts,posts\.length\)/);
   assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero\{grid-template-columns:1fr/);
@@ -136,13 +136,52 @@ test("hero keeps its compact introduction while moving the motto into navigation
   const hero = html.match(/<header class="hero"[\s\S]*?<\/header>/)?.[0] || "";
 
   assert.match(nav, /class="nav-brand"/);
-  assert.match(nav, /class="nav-motto">Do · Learn · Repeat\.<\/span>/);
+  assert.match(nav, /id="logo"[^>]*>Cobb[\s\S]*?nav-logo-dot/);
+  assert.doesNotMatch(nav, /Do · Learn · Repeat\./);
   assert.doesNotMatch(hero, /AI Product Builder/i);
-  assert.doesNotMatch(hero, /class="tagline"/);
-  assert.match(html, /\.hero h1\{[^}]*font-size:2\.6rem/);
-  assert.match(html, /\.hero\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(440px,1fr\)/);
-  assert.match(html, /\.hero-reading\{[^}]*max-width:480px/);
-  assert.doesNotMatch(html, /\.hero h1\{[^}]*font-size:clamp\(3\.6rem,5\.4vw,5\.1rem\)/);
+  assert.match(hero, /class="hero-title"/);
+  assert.match(hero, /id="greeting"/);
+  assert.match(hero, /I'm <span class="hero-name">Cobb<\/span>\./);
+  assert.match(hero, /class="hero-tagline"[\s\S]*?I build things, write thoughts,[\s\S]*?and keep learning\./);
+  assert.match(html, /\.hero-title\{[^}]*font-size:clamp\(/);
+  assert.match(html, /\.hero\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(360px,\.95fr\)/);
+  assert.match(html, /\.hero-reading\{[^}]*position:absolute/);
+});
+
+test("hero actions use the selected GitHub mark and postal emoji", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const hero = html.match(/<header class="hero"[\s\S]*?<\/header>/)?.[0] || "";
+  const github = hero.match(/<a class="social-button" href="https:\/\/github\.com\/Cobb04"[\s\S]*?<\/a>/)?.[0] || "";
+  const email = hero.match(/<a class="social-button" href="mailto:chenxnovo49@gmail\.com"[\s\S]*?<\/a>/)?.[0] || "";
+
+  assert.match(github, /target="_blank"/);
+  assert.match(github, /rel="noopener noreferrer"/);
+  assert.match(github, /<svg[^>]+aria-hidden="true"[^>]+>[\s\S]*?fill="currentColor"/);
+  assert.match(github, />GitHub</);
+  assert.match(email, /<span class="social-emoji" aria-hidden="true">📮<\/span>/);
+  assert.match(email, />Email</);
+  assert.doesNotMatch(hero, /🐙|📧|Email me/);
+});
+
+test("hero keeps the original character as a separate accessible-hidden asset", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const characterPath = path.join(__dirname, "..", "assets", "hero-character.jpg");
+  const hero = html.match(/<header class="hero"[\s\S]*?<\/header>/)?.[0] || "";
+
+  assert.ok(fs.existsSync(characterPath));
+  assert.match(hero, /<img class="hero-character" src="assets\/hero-character\.jpg" alt="" aria-hidden="true" width="1260" height="1226"/);
+  assert.match(html, /\.hero-character\{[\s\S]*?mix-blend-mode:multiply/);
+  assert.doesNotMatch(hero, /data:image|ChatGPT Image/);
+});
+
+test("side navigation waits until the hero leaves the viewport", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+
+  assert.match(html, /class="side-nav"[^>]*aria-label="Page sections"/);
+  assert.match(html, /\.side-nav\{[^}]*opacity:0/);
+  assert.match(html, /\.side-nav\.is-visible\{[^}]*opacity:1/);
+  assert.match(html, /new (?:window\.)?IntersectionObserver/);
+  assert.doesNotMatch(html, /window\.addEventListener\("scroll"/);
 });
 
 test("homepage podcast section shows only the three newest notes", async () => {
@@ -170,6 +209,7 @@ test("reading deck exposes status, metadata, and a queue preview", async () => {
 
   assert.match(activeCard.className, /reading-deck-card/);
   assert.equal(activeCard.href, "https://example.com/a");
+  assert.equal(activeCard.rel, "noopener noreferrer");
   assert.equal(activeCard.getAttribute("aria-label"), "Book A by Author A, open book");
   assert.equal(activeCard.children[1].textContent, "Book A");
   assert.equal(activeCard.children[2].textContent, "Author A");

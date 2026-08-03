@@ -119,25 +119,94 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 @keyframes pulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
 .funnel-label{font-family:var(--font-display);font-size:.85rem;color:var(--text2);font-weight:600;letter-spacing:.03em;margin-bottom:.3rem}
 [data-theme="terminal"] .funnel-label{font-family:var(--font-mono);font-size:.72rem}
+/* first-screen redesign */
+:root,[data-theme="warm"]{--accent-soft:#F5E4DE;--hero-image-opacity:.13}
+[data-theme="terminal"]{--accent-soft:rgba(0,255,0,.06);--hero-image-opacity:.06}
+.wrap{max-width:1240px;padding:0 clamp(1.25rem,4vw,4.5rem)}
+.nav{position:relative;z-index:4;min-height:72px;padding:1.2rem 0;margin-bottom:0;border-bottom:0}
+.nav-brand{gap:0}
+.nav-logo{font-size:1.4rem;letter-spacing:-.035em}
+.nav-logo>span#logo{color:var(--text)}
+.nav-logo .nav-logo-dot{color:var(--accent)}
+.nav-motto{display:none}
+.nav-links{gap:clamp(.85rem,2vw,2rem);min-width:0}
+.nav-links a,.nav-links button{display:inline-flex;align-items:center;min-height:44px;white-space:nowrap;font-size:.76rem;letter-spacing:.02em}
+.nav-links a[style]{font-size:.7rem!important;opacity:.52}
+.theme-switch{min-height:44px;padding:.4rem .85rem!important}
+.hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.95fr);align-items:start;gap:clamp(2rem,7vw,7rem);min-height:clamp(620px,calc(100dvh - 96px),820px);padding:clamp(4rem,11vh,6rem) 0 5rem;overflow:clip}
+.hero-copy{position:relative;z-index:2;max-width:650px;padding-top:clamp(1rem,6vh,4rem)}
+.hero-title{font-family:var(--font-display);font-weight:800;font-size:clamp(3.6rem,6.7vw,7.1rem);line-height:.97;letter-spacing:-.065em;margin:0;max-width:none}
+.hero h1.hero-title{font-size:clamp(3.6rem,6.7vw,7.1rem);line-height:.97;letter-spacing:-.065em;margin-bottom:0;max-width:none}
+.hero-title #greeting{display:inline-block}
+.hero-name{color:var(--accent)}
+.hero-tagline{margin-top:2rem;color:var(--text3);font:400 clamp(.9rem,1.25vw,1.12rem)/1.72 var(--font-mono);letter-spacing:-.035em}
+.hero .socials{gap:.9rem;margin-top:2rem}
+.hero .socials .social-button{display:inline-flex;align-items:center;justify-content:center;gap:.7rem;min-height:54px;padding:0 1.45rem;border:1.5px solid var(--border-strong);border-radius:999px;background:transparent;color:var(--text);font-size:.9rem;text-decoration:none;transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease),color .2s var(--ease);font-weight:500}
+.hero .socials .social-button:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 8px 18px rgba(92,52,35,.09);transform:translateY(-2px)}
+.hero .socials .social-button:active{transform:translateY(-1px)}
+.hero .socials .social-button:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.social-mark{display:block;width:22px;height:22px;flex:0 0 22px}
+.social-emoji{font-size:1.22rem;line-height:1}
+.hero-clock{margin-top:2.2rem;font-size:clamp(.78rem,1vw,.9rem);letter-spacing:.015em}
+.hero-character{position:absolute;z-index:0;right:-4%;top:0;width:min(66%,820px);height:100%;object-fit:cover;object-position:54% 22%;opacity:var(--hero-image-opacity);mix-blend-mode:multiply;filter:grayscale(1) contrast(.84) brightness(1.04);pointer-events:none;user-select:none;mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%)}
+.hero .hero-reading{position:absolute;z-index:3;right:0;bottom:clamp(1.25rem,3vh,2.5rem);width:min(430px,42%);max-width:none;min-width:0}
+.reading-deck{margin:0;overflow:hidden;border:1px solid var(--border-strong);border-radius:18px;background:color-mix(in srgb,var(--bg-card) 88%,var(--bg) 12%);box-shadow:0 18px 48px rgba(78,57,35,.11)}
+.hero-reading-head{align-items:center;padding:1.15rem 1.3rem .8rem}
+.reading-card-heading{display:flex;align-items:center;gap:.6rem;min-width:0}
+.hero-reading-head h2{font-size:.8rem;letter-spacing:.045em;text-transform:uppercase}
+.reading-card-icon{display:grid;place-items:center;width:22px;height:22px;color:var(--accent);font:700 1.12rem/1 var(--font-body)}
+.hero-reading-head a{font:400 .63rem var(--font-mono);white-space:nowrap}
+.reading-deck-tabs{display:flex;gap:.25rem;padding:0 1.15rem;border-bottom:1px solid var(--border)}
+.reading-deck-tab{min-height:40px;padding:0 .3rem;font-size:.62rem;letter-spacing:.03em}
+.reading-deck-tab::after{left:0;right:0;height:2px}
+.reading-deck-stage{min-height:210px}
+.reading-deck-card{min-height:185px;padding:1.2rem 1.35rem 1.1rem;border-left:0;border-top:2px solid var(--accent);background:transparent;box-shadow:none}
+.reading-deck-card:hover{box-shadow:none;transform:translateY(-1px)}
+.reading-deck-meta{margin-bottom:.8rem;font-size:.59rem}
+.reading-deck-title{max-width:24ch;font-size:clamp(1.2rem,2vw,1.55rem);line-height:1.12}
+.reading-deck-creator{margin-top:.55rem;font-size:.67rem}
+.reading-deck-action{padding-top:.8rem;font-size:.62rem}
+.reading-deck-preview{margin:-.35rem .65rem .85rem 1.35rem;padding:.9rem .85rem .55rem;border-radius:0 0 12px 12px;background:color-mix(in srgb,var(--bg-card) 72%,var(--bg-warm));box-shadow:0 8px 18px rgba(78,57,35,.06);font-size:.58rem}
+.reading-deck-empty{min-height:210px;font-size:.66rem}
+.reading-deck-tab:disabled{cursor:default;opacity:.42}
+.side-nav{left:1.15rem;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s var(--ease),visibility .28s var(--ease)}
+.side-nav.is-visible{opacity:1;visibility:visible;pointer-events:auto}
+.side-nav a{border-radius:999px;padding:5px 12px;transition:color .2s var(--ease),background-color .2s var(--ease)}
+[data-theme="terminal"] .hero-character{mix-blend-mode:screen;filter:grayscale(1) contrast(1.15);opacity:.05}
+[data-theme="terminal"] .hero .socials .social-button,[data-theme="terminal"] .theme-switch{border-radius:0}
+[data-theme="terminal"] .theme-switch{transition:color .12s,border-color .12s!important}
+[data-theme="terminal"] .hero .socials .social-button:hover{background:var(--accent-soft);box-shadow:none;transform:none}
+[data-theme="terminal"] .reading-deck{border-radius:0;background:var(--bg-card);box-shadow:none}
+[data-theme="terminal"] .reading-deck-card{background:transparent;box-shadow:none}
+[data-theme="terminal"] .reading-deck-card:hover{transform:none;background:rgba(0,255,0,.025);box-shadow:none}
+[data-theme="terminal"] .reading-deck-preview{border-radius:0;background:var(--bg-card);box-shadow:none}
+[data-theme="terminal"] .side-nav a{border-radius:0}
+@media(max-width:768px){.wrap{padding:0 1rem}.nav{align-items:flex-start;flex-direction:column;gap:.55rem;padding:1rem 0}.nav-links{width:100%;max-width:100%;overflow-x:auto;padding-bottom:.2rem;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.hero{grid-template-columns:1fr;gap:0;min-height:auto;padding:3rem 0 4rem;overflow:hidden}.hero-copy{max-width:none;padding-top:1rem}.hero h1.hero-title{font-size:clamp(3rem,15vw,5.1rem);max-width:none}.hero-tagline{margin-top:1.6rem;font-size:.82rem}.hero .socials{margin-top:1.7rem;gap:.65rem}.hero .socials .social-button{min-height:50px;padding:0 1.05rem;font-size:.82rem}.hero-clock{margin-top:1.65rem;font-size:.72rem}.hero-character{top:3rem;right:-48%;width:150%;height:54%;opacity:.08;object-position:52% 16%;mask-image:linear-gradient(90deg,transparent 0%,#000 35%,#000 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 35%,#000 100%)}.hero .hero-reading{position:relative;right:auto;bottom:auto;width:100%;margin-top:3.3rem}.reading-deck-title{font-size:1.18rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.side-nav{transition:none}.hero .socials .social-button{transition:none}.reading-deck-card,.reading-deck-preview{animation:none!important;transition:none}.hero-character{transition:none}}
 </style>
 </head>
 <body>
-<div class="side-nav" id="sideNav"><a href="#top">Top</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="#writing">Writing</a></div>
+<nav class="side-nav" id="sideNav" aria-label="Page sections"><a href="#top">Top</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="#writing">Writing</a></nav>
 <div class="wrap">
   <nav class="nav">
-    <div class="nav-brand"><a href="/" class="nav-logo"><span id="logo">C<span style="color:var(--accent)">·</span>bb</span></a><span class="nav-motto">Do · Learn · Repeat.</span></div>
-    <div class="nav-links"><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="wiki.html">Wiki</a><a href="#writing">Writing</a><a href="editor.html" style="font-size:.75rem;opacity:.5">✎</a><button class="theme-switch" id="ts">🖥️ terminal</button></div>
+    <div class="nav-brand"><a href="/" class="nav-logo"><span id="logo">Cobb<span class="nav-logo-dot" aria-hidden="true">.</span></span></a></div>
+    <div class="nav-links"><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="wiki.html">Wiki</a><a href="#writing">Writing</a><a href="editor.html" style="font-size:.75rem;opacity:.5">✎</a><button class="theme-switch" id="ts" type="button">🖥️ terminal</button></div>
   </nav>
   <main>
   <header class="hero" id="top">
+    <img class="hero-character" src="assets/hero-character.jpg" alt="" aria-hidden="true" width="1260" height="1226" fetchpriority="high" decoding="async">
     <div class="hero-copy">
-      <h1><span id="greeting"></span> I'm <span class="hl">Cxn</span>.</h1>
-      <div class="socials"><a href="https://github.com/Cobb04">🐙 GitHub</a><a href="mailto:chenxnovo49@gmail.com">📧 Email</a></div>
+      <h1 class="hero-title"><span id="greeting">Morning!</span><br>I'm <span class="hero-name">Cobb</span>.</h1>
+      <p class="hero-tagline">I build things, write thoughts,<br>and keep learning.</p>
+      <div class="socials">
+        <a class="social-button" href="https://github.com/Cobb04" target="_blank" rel="noopener noreferrer"><svg class="social-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.42-4.04-1.42-.55-1.4-1.33-1.77-1.33-1.77-1.09-.74.08-.72.08-.72 1.2.09 1.84 1.23 1.84 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.6-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .3Z"/></svg><span>GitHub</span></a>
+        <a class="social-button" href="mailto:chenxnovo49@gmail.com"><span class="social-emoji" aria-hidden="true">📮</span><span>Email</span></a>
+      </div>
       <div class="hero-clock" id="clock"></div>
     </div>
     <aside class="hero-reading" aria-labelledby="heroReadingTitle">
       <div class="reading-deck">
-        <div class="hero-reading-head"><h2 id="heroReadingTitle">Recent reading</h2><a href="reading.html">View library ↗</a></div>
+        <div class="hero-reading-head"><div class="reading-card-heading"><span class="reading-card-icon" aria-hidden="true">▥</span><h2 id="heroReadingTitle">Currently reading</h2></div><a href="reading.html">View library ↗</a></div>
         <div class="reading-deck-tabs" role="tablist" aria-label="Reading status">
           <button class="reading-deck-tab" id="readingTab" type="button" role="tab" aria-selected="true" aria-controls="readingDeckStage" data-reading-status="reading">Reading <span id="readingCount">0</span></button>
           <button class="reading-deck-tab" id="upNextTab" type="button" role="tab" aria-selected="false" aria-controls="readingDeckStage" data-reading-status="want" tabindex="-1">Up next <span id="upNextCount">0</span></button>
@@ -169,14 +238,19 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
   var courses=[{date:"2026-07-08",title:"AI认知债：思考被外包",podcast:"产品思考集·方大业",slug:"2026-07-08-ai-cognitive-debt",accent:"#E06B56"},{date:"2026-07-19",title:"AI 发展了 4 年，把应用发展没了？",podcast:"42章经·曲凯",slug:"2026-07-19-ai-midyear-app-is-dead",accent:"#2D8B55"},{date:"2026-07-08",title:"为什么支付宝和微信的 AI，打开一次就不想再打开",podcast:"哇哦产品·Link",slug:"2026-07-08-super-app-ai-paradox",accent:"#D94F30"},{date:"2026-05-19",title:"AI 时代人应该有两个自己",podcast:"以鹅传鹅FM·Jason&王博源",slug:"2026-05-19-ai-two-selves-workbuddy",accent:"#2A7B9B"},{date:"2026-05-15",title:"硅谷00后AI产品经理入行靠的竟是狗运",podcast:"OtherWise·Harry",slug:"2026-05-15-doubao-ai-pm-dog-luck",accent:"#D4A843"}];
   var g=document.getElementById("cg");courses.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,3).forEach(function(x){var d=document.createElement("a");d.className="podcast-item";d.href="https://cobb04.github.io/podcast-to-course/courses/"+x.slug+"/";d.innerHTML='<span class="podcast-date">'+x.date+'</span><span class="podcast-copy"><h3>'+x.title+'</h3><span class="podcast-source">'+x.podcast+'</span></span>';g.appendChild(d)});
   var b=document.getElementById("ts"),h=document.documentElement;
-  function u(t){b.innerHTML=t==="warm"?'🖥️ terminal':'📖 warm notebook';var l=document.getElementById("logo");if(l)l.innerHTML=t==="warm"?'C<span style="color:var(--accent)">·</span>bb':'cobb@web:<span style="color:var(--accent)">~</span>$ '}
+  function u(t){b.textContent=t==="warm"?'🖥️ terminal':'📖 warm notebook';var l=document.getElementById("logo");if(l)l.innerHTML=t==="warm"?'Cobb<span class="nav-logo-dot" aria-hidden="true">.</span>':'cobb@web:<span class="nav-logo-dot" aria-hidden="true">~</span>$ '}
   b.addEventListener("click",function(){var n=h.getAttribute("data-theme")==="warm"?"terminal":"warm";h.setAttribute("data-theme",n);u(n);try{localStorage.setItem("theme",n)}catch(e){}});
   try{var s=localStorage.getItem("theme");if(s){h.setAttribute("data-theme",s);u(s)}}catch(e){}
   (function(){var h=(new Date).getHours();document.getElementById("greeting").textContent=(h<12?"Morning":h<18?"Afternoon":"Evening")+"!"})();
-  // toc scroll spy
-  var links=document.querySelectorAll(".side-nav a");var secs=[];
+  // IntersectionObserver keeps the side nav out of the hero and drives the scroll spy without per-frame scroll work.
+  var sideNav=document.getElementById("sideNav"),links=document.querySelectorAll(".side-nav a"),secs=[];
   links.forEach(function(a){var id=a.getAttribute("href").replace("#","");var el=document.getElementById(id)||(id==="top"?document.querySelector(".hero"):null);if(el)secs.push({el:el,link:a})});
-  window.addEventListener("scroll",function(){var sy=window.scrollY+window.innerHeight/3;links.forEach(function(l){l.classList.remove("active")});for(var i=secs.length-1;i>=0;i--){if(sy>=secs[i].el.offsetTop){secs[i].link.classList.add("active");break}}if(window.scrollY<200){links.forEach(function(l){l.classList.remove("active")});if(links[0])links[0].classList.add("active")}});
+  if(typeof window.IntersectionObserver==="function"){
+    var heroElement=document.querySelector(".hero");
+    if(sideNav&&heroElement){new window.IntersectionObserver(function(entries){entries.forEach(function(entry){sideNav.classList.toggle("is-visible",!entry.isIntersecting)})},{threshold:0}).observe(heroElement)}
+    var spyObserver=new window.IntersectionObserver(function(entries){entries.forEach(function(entry){if(!entry.isIntersecting)return;links.forEach(function(link){link.classList.remove("active")});var match=secs.find(function(section){return section.el===entry.target});if(match)match.link.classList.add("active")})},{rootMargin:"-20% 0px -60% 0px",threshold:0});
+    secs.forEach(function(section){spyObserver.observe(section.el)});
+  }
   function tick(){var n=new Date;document.getElementById("clock").textContent=n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false})+" · "+n.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}tick();setInterval(tick,1000);
   // writing
   fetch("writing/posts.json").then(function(r){return r.json()}).then(function(posts){var w=document.getElementById("writing-list");if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}w.innerHTML="";if(!posts.length){w.innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>';return}posts.reverse().forEach(function(p){var a=document.createElement("a");a.className="c-card";a.href="writing/"+p.slug+".html";a.style.borderLeftColor="var(--accent)";a.innerHTML='<span class="cmeta">'+p.date+'</span><h4>'+p.title+'</h4>';w.appendChild(a)})}).catch(function(){document.getElementById("writing-list").innerHTML='<div class="wip"><p><strong>Coming soon.</strong></p></div>'});
@@ -190,8 +264,8 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
     readingDeckStage.innerHTML="";
     if(!active.length){var empty=document.createElement("div");empty.className="reading-deck-empty";empty.textContent=status==="reading"?"Nothing in progress right now.":"Your queue is clear.";readingDeckStage.appendChild(empty);return}
     var p=active[0],stack=document.createElement("div"),card=document.createElement("a"),meta=document.createElement("div"),state=document.createElement("span"),type=document.createElement("span"),title=document.createElement("h3"),creator=document.createElement("p"),action=document.createElement("span");
-    stack.className="reading-deck-stack";card.className="reading-deck-card";card.href=p.url;card.target="_blank";card.rel="noopener";card.setAttribute("aria-label",p.title+" by "+p.creator+", open "+p.type);meta.className="reading-deck-meta";state.className="reading-deck-state";state.textContent=status==="reading"?"Now reading":"Up next";type.className="reading-deck-type";type.textContent=readingTypeLabel(p.type);meta.appendChild(state);meta.appendChild(type);title.className="reading-deck-title";title.textContent=p.title;creator.className="reading-deck-creator";creator.textContent=p.creator;action.className="reading-deck-action";action.textContent="Open "+p.type+" ↗";card.appendChild(meta);card.appendChild(title);card.appendChild(creator);card.appendChild(action);stack.appendChild(card);
-    if(other.length){var q=other[0],preview=document.createElement("a"),previewText=document.createElement("span");preview.className="reading-deck-preview";preview.href=q.url;preview.target="_blank";preview.rel="noopener";previewText.textContent=(otherStatus==="want"?"Up next: ":"Reading: ")+q.title;preview.appendChild(previewText);stack.appendChild(preview)}
+    stack.className="reading-deck-stack";card.className="reading-deck-card";card.href=p.url;card.target="_blank";card.rel="noopener noreferrer";card.setAttribute("aria-label",p.title+" by "+p.creator+", open "+p.type);meta.className="reading-deck-meta";state.className="reading-deck-state";state.textContent=status==="reading"?"Now reading":"Up next";type.className="reading-deck-type";type.textContent=readingTypeLabel(p.type);meta.appendChild(state);meta.appendChild(type);title.className="reading-deck-title";title.textContent=p.title;creator.className="reading-deck-creator";creator.textContent=p.creator;action.className="reading-deck-action";action.textContent="Open "+p.type+" ↗";card.appendChild(meta);card.appendChild(title);card.appendChild(creator);card.appendChild(action);stack.appendChild(card);
+    if(other.length){var q=other[0],preview=document.createElement("a"),previewText=document.createElement("span");preview.className="reading-deck-preview";preview.href=q.url;preview.target="_blank";preview.rel="noopener noreferrer";previewText.textContent=(otherStatus==="want"?"Up next: ":"Reading: ")+q.title;preview.appendChild(previewText);stack.appendChild(preview)}
     readingDeckStage.appendChild(stack)
   }
   function switchReadingDeck(status,focusTab){if(!readingGroups[status].length)return;renderReadingDeck(status);if(focusTab)(status==="reading"?readingTab:upNextTab).focus()}

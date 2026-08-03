@@ -148,7 +148,7 @@ test("hero keeps its compact introduction and real navigation", () => {
   assert.match(html, /\.hero-clock\{[^}]*display:none/);
   assert.match(html, /\.hero\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(0,1fr\)/);
   assert.match(html, /\.hero-reading\{[^}]*position:absolute/);
-  assert.match(html, /\.hero-character\{[^}]*top:clamp\(-90px,calc\(-6vw \+ \(100svh - 720px\)\*\.55\),32px\)/);
+  assert.match(html, /\.hero-character\{[^}]*top:clamp\(-150px,-10vw,-82px\)/);
   assert.match(html, /class="nav-links"[\s\S]*class="nav-actions"/);
   assert.match(html, /--page-max-width:1400px/);
 });
@@ -224,18 +224,17 @@ test("homepage reading card renders one real currently-reading entry", async () 
   assert.equal(activeCard.children.length, 1);
   const body = activeCard.children[0];
   assert.match(body.className, /reading-deck-body/);
-  assert.equal(body.children[0].children[0].textContent, "BOOK");
-  assert.equal(body.children[1].tagName, "H3");
-  const titleLink = body.children[1].children[0];
+  assert.equal(body.children.length, 2);
+  assert.equal(body.children[0].tagName, "H3");
+  const titleLink = body.children[0].children[0];
   assert.match(titleLink.className, /reading-deck-primary-link/);
   assert.equal(titleLink.href, "https://example.com/a");
   assert.equal(titleLink.target, "_blank");
   assert.equal(titleLink.rel, "noopener noreferrer");
   assert.equal(titleLink.textContent, "Book A");
-  assert.equal(titleLink.children[0].textContent, "↗");
-  assert.equal(titleLink.children[0].getAttribute("aria-hidden"), "true");
-  assert.equal(body.children[2].textContent, "Author A");
-  assert.doesNotMatch(body.children.map((child) => child.className).join(" "), /reading-deck-action/);
+  assert.equal(titleLink.children.length, 0);
+  assert.equal(body.children[1].textContent, "Author A");
+  assert.doesNotMatch(body.children.map((child) => child.className).join(" "), /reading-deck-action|reading-deck-meta|reading-deck-type/);
 });
 
 test("homepage reading card falls back to want and labels the next entry", async () => {
@@ -244,8 +243,7 @@ test("homepage reading card falls back to want and labels the next entry", async
 
   assert.equal(elements.get("heroReadingTitle").textContent, "Up next");
   assert.equal(activeCard.tagName, "ARTICLE");
-  assert.equal(activeCard.children[0].children[0].children[0].textContent, "ARTICLE");
-  assert.equal(activeCard.children[0].children[1].children[0].textContent, "Next item");
+  assert.equal(activeCard.children[0].children[0].children[0].textContent, "Next item");
 });
 
 test("homepage reading card preserves empty and fetch failure states", async () => {
@@ -277,8 +275,7 @@ test("reading card stays compact and has no queue animation", () => {
   assert.match(homepage, /\.hero-reading-library\{[^}]*position:relative[^}]*z-index:2/);
   assert.match(homepage, /\.reading-deck-primary-link:focus-visible\{[^}]*outline:2px solid var\(--accent\)/);
   assert.match(homepage, /\.hero-reading-head a:focus-visible\{[^}]*outline:2px solid var\(--accent\)/);
-  assert.match(homepage, /@media\(prefers-reduced-motion:reduce\)[\s\S]*?\.reading-deck-primary-link>span\{transition:none\}/);
-  assert.doesNotMatch(homepage, /Open article|Open book|reading-deck-action|deck-preview-in|reading-deck-preview|reading-deck-tabs|reading-deck-tab/);
+  assert.doesNotMatch(homepage, /Open article|Open book|reading-deck-action|deck-preview-in|reading-deck-preview|reading-deck-tabs|reading-deck-tab|reading-deck-meta|reading-deck-type|readingTypeLabel|arrow\.textContent="↗"/);
 });
 
 test("full bookshelf uses the same tactile shelf system", () => {

@@ -6,8 +6,9 @@ const vm = require("node:vm");
 const readingModel = require("../reading/reading-manager.js");
 
 class FakeElement {
-  constructor(id = "") {
+  constructor(id = "", tagName = "div") {
     this.id = id;
+    this.tagName = tagName.toUpperCase();
     this.children = [];
     this.className = "";
     this.style = { setProperty(name, value) { this[name] = value; } };
@@ -56,13 +57,14 @@ function homepageScript() {
   return scripts.at(-1)[1];
 }
 
-async function runHomepage() {
+async function runHomepage(options = {}) {
   const elements = new Map([
     ["cg", new FakeElement("cg")],
     ["ts", new FakeElement("ts")],
     ["logo", new FakeElement("logo")],
     ["greeting", new FakeElement("greeting")],
     ["clock", new FakeElement("clock")],
+    ["heroReadingTitle", new FakeElement("heroReadingTitle")],
     ["writing-list", new FakeElement("writing-list")],
     ["shelves", new FakeElement("shelves")],
     ["readingDeckStage", new FakeElement("readingDeckStage")],
@@ -71,7 +73,7 @@ async function runHomepage() {
   documentElement.setAttribute("data-theme", "warm");
   const document = {
     documentElement,
-    createElement: () => new FakeElement(),
+    createElement: (tagName) => new FakeElement("", tagName),
     getElementById: (id) => elements.get(id) || null,
     querySelector: () => null,
     querySelectorAll: () => [],
@@ -80,9 +82,10 @@ async function runHomepage() {
     { id: "book-a", title: "Book A", creator: "Author A", added_at: "2026-07-20", updated_at: "2026-07-20", status: "reading", type: "book", topics: ["AI"], url: "https://example.com/a" },
     { id: "book-b", title: "Book B", creator: "Author B", added_at: "2026-07-19", updated_at: "2026-07-19", status: "want", type: "book", topics: ["AI"], url: "https://example.com/b" },
   ];
-  const fetch = async (url) => ({
-    json: async () => url.includes("reading/") ? readingPosts : [],
-  });
+  const fetch = async (url) => {
+    if (options.readingFetchFails && url.includes("reading/")) throw new Error("reading unavailable");
+    return { json: async () => url.includes("reading/") ? (options.readingPosts || readingPosts) : [] };
+  };
   const context = {
     document,
     fetch,
@@ -112,8 +115,9 @@ test("reading card occupies the hero visual column instead of a duplicate sectio
   assert.match(hero, />Currently reading</);
   assert.match(hero, /class="reading-deck"/);
   assert.match(hero, /id="readingDeckStage"/);
-  assert.match(hero, /href="reading\.html"/);
+  assert.match(hero, /class="hero-reading-library" href="reading\.html"/);
   assert.doesNotMatch(hero, /role="tablist"|reading-deck-tab|readingCount|upNextCount|Up next|Now reading|reading-deck-preview/);
+  assert.doesNotMatch(hero, /Open article|Open book|reading-deck-action/);
   assert.doesNotMatch(html, /<section class="section" id="reading"/);
   assert.match(html, /--page-max-width:1400px/);
   assert.match(html, /\.hero\{display:grid/);
@@ -144,6 +148,7 @@ test("hero keeps its compact introduction and real navigation", () => {
   assert.match(html, /\.hero-clock\{[^}]*display:none/);
   assert.match(html, /\.hero\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(0,1fr\)/);
   assert.match(html, /\.hero-reading\{[^}]*position:absolute/);
+  assert.match(html, /\.hero-character\{[^}]*top:clamp\(-90px,calc\(-6vw \+ \(100svh - 720px\)\*\.55\),32px\)/);
   assert.match(html, /class="nav-links"[\s\S]*class="nav-actions"/);
   assert.match(html, /--page-max-width:1400px/);
 });
@@ -171,6 +176,10 @@ test("hero keeps the original character as a separate accessible-hidden asset", 
   assert.ok(fs.existsSync(characterPath));
   assert.match(hero, /<img class="hero-character" src="assets\/hero-character\.jpg" alt="" aria-hidden="true" width="1260" height="1226"/);
   assert.match(html, /\.hero-character\{[\s\S]*?mix-blend-mode:multiply/);
+  assert.match(html, /\.hero-character\{[^}]*mask-image:linear-gradient\(90deg,transparent[^}]*linear-gradient\(180deg,transparent 0%,rgba\(0,0,0,\.35\) 10%[^}]*transparent 100%\)/);
+  assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero-character\{[^}]*mask-image:linear-gradient\(90deg,transparent[^}]*linear-gradient\(180deg,transparent 0%,rgba\(0,0,0,\.35\) 10%[^}]*transparent 100%\)/);
+  assert.match(html, /\.hero::before\{[^}]*left:35%[^}]*background:linear-gradient\(to bottom,var\(--bg\) 0%,color-mix\(in srgb,var\(--bg\) 78%,transparent\) 30%,transparent 100%\)/);
+  assert.match(html, /\[data-theme="terminal"\] \.hero::before\{[^}]*background:linear-gradient\(to bottom,var\(--bg\) 0%,rgba\(10,10,10,\.72\) 30%,transparent 100%\)/);
   assert.doesNotMatch(hero, /data:image|ChatGPT Image/);
 });
 
@@ -211,12 +220,42 @@ test("homepage reading card renders one real currently-reading entry", async () 
   const activeCard = stage.children[0];
 
   assert.match(activeCard.className, /reading-deck-card/);
-  assert.equal(activeCard.href, "https://example.com/a");
-  assert.equal(activeCard.rel, "noopener noreferrer");
-  assert.equal(activeCard.getAttribute("aria-label"), "Book A by Author A, open book");
-  assert.equal(activeCard.children[1].textContent, "Book A");
-  assert.equal(activeCard.children[2].textContent, "Author A");
-  assert.equal(activeCard.children[3].textContent, "Open book ↗");
+  assert.equal(activeCard.tagName, "ARTICLE");
+  assert.equal(activeCard.children.length, 1);
+  const body = activeCard.children[0];
+  assert.match(body.className, /reading-deck-body/);
+  assert.equal(body.children[0].children[0].textContent, "BOOK");
+  assert.equal(body.children[1].tagName, "H3");
+  const titleLink = body.children[1].children[0];
+  assert.match(titleLink.className, /reading-deck-primary-link/);
+  assert.equal(titleLink.href, "https://example.com/a");
+  assert.equal(titleLink.target, "_blank");
+  assert.equal(titleLink.rel, "noopener noreferrer");
+  assert.equal(titleLink.textContent, "Book A");
+  assert.equal(titleLink.children[0].textContent, "↗");
+  assert.equal(titleLink.children[0].getAttribute("aria-hidden"), "true");
+  assert.equal(body.children[2].textContent, "Author A");
+  assert.doesNotMatch(body.children.map((child) => child.className).join(" "), /reading-deck-action/);
+});
+
+test("homepage reading card falls back to want and labels the next entry", async () => {
+  const elements = await runHomepage({ readingPosts: [{ id: "next", title: "Next item", creator: "Next author", added_at: "2026-07-20", updated_at: "2026-07-20", status: "want", type: "article", topics: [], url: "https://example.com/next" }] });
+  const activeCard = elements.get("readingDeckStage").children[0];
+
+  assert.equal(elements.get("heroReadingTitle").textContent, "Up next");
+  assert.equal(activeCard.tagName, "ARTICLE");
+  assert.equal(activeCard.children[0].children[0].children[0].textContent, "ARTICLE");
+  assert.equal(activeCard.children[0].children[1].children[0].textContent, "Next item");
+});
+
+test("homepage reading card preserves empty and fetch failure states", async () => {
+  const empty = await runHomepage({ readingPosts: [] });
+  assert.match(empty.get("readingDeckStage").children[0].className, /reading-deck-empty/);
+  assert.equal(empty.get("readingDeckStage").children[0].textContent, "Nothing in progress right now.");
+
+  const failed = await runHomepage({ readingFetchFails: true });
+  assert.match(failed.get("readingDeckStage").children[0].className, /reading-deck-empty/);
+  assert.equal(failed.get("readingDeckStage").children[0].textContent, "Reading list unavailable.");
 });
 
 test("the full bookshelf keeps its viewport tooltip without homepage duplication", () => {
@@ -231,8 +270,15 @@ test("the full bookshelf keeps its viewport tooltip without homepage duplication
 
 test("reading card stays compact and has no queue animation", () => {
   const homepage = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-  assert.match(homepage, /\.reading-deck\{[^}]*min-height:260px/);
-  assert.doesNotMatch(homepage, /deck-preview-in|reading-deck-preview|reading-deck-tabs|reading-deck-tab/);
+  assert.match(homepage, /\.reading-deck\{[^}]*min-height:0/);
+  assert.match(homepage, /\.reading-deck-card\{[^}]*min-height:0/);
+  assert.match(homepage, /\.reading-deck-stage\{[^}]*border-top:1px solid var\(--border\)/);
+  assert.match(homepage, /\.reading-deck-primary-link::after\{content:"";position:absolute;inset:0\}/);
+  assert.match(homepage, /\.hero-reading-library\{[^}]*position:relative[^}]*z-index:2/);
+  assert.match(homepage, /\.reading-deck-primary-link:focus-visible\{[^}]*outline:2px solid var\(--accent\)/);
+  assert.match(homepage, /\.hero-reading-head a:focus-visible\{[^}]*outline:2px solid var\(--accent\)/);
+  assert.match(homepage, /@media\(prefers-reduced-motion:reduce\)[\s\S]*?\.reading-deck-primary-link>span\{transition:none\}/);
+  assert.doesNotMatch(homepage, /Open article|Open book|reading-deck-action|deck-preview-in|reading-deck-preview|reading-deck-tabs|reading-deck-tab/);
 });
 
 test("full bookshelf uses the same tactile shelf system", () => {
@@ -269,8 +315,12 @@ test("public shelves share the mixed-media reading model", () => {
   assert.match(homepage, /selectHomepageEntries\(posts,posts\.length\)/);
   assert.match(homepage, /p\.creator/);
   assert.match(homepage, /p\.url/);
-  assert.match(homepage, /title\.textContent=p\.title/);
-  assert.match(homepage, /action\.textContent="Open "\+p\.type/);
+  assert.match(homepage, /titleLink\.textContent=p\.title/);
+  assert.match(homepage, /p\.status==="want"\?"Up next":"Currently reading"/);
+  assert.match(homepage, /titleLink\.href=p\.url/);
+  assert.match(homepage, /titleLink\.target="_blank"/);
+  assert.match(homepage, /titleLink\.rel="noopener noreferrer"/);
+  assert.doesNotMatch(homepage, /action\.textContent|Open article|Open book/);
   assert.doesNotMatch(homepage, /spine-title|book-page-edge|shelfColors/);
 
   assert.match(reading, /<script src="reading\/reading-manager\.js"><\/script>/);

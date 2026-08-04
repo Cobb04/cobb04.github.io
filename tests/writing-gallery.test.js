@@ -116,7 +116,9 @@ test("homepage presents writing as a two-column editorial gallery", () => {
   assert.match(homepage, /<script src="writing\/writing-gallery\.js"><\/script>/);
   assert.match(homepage, /WritingGallery\.selectHomepagePosts\(posts,4\)/);
   assert.match(homepage, /\.writing-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
-  assert.match(homepage, /\.writing-grid\{[^}]*max-width:720px[^}]*margin:0 auto/);
+  assert.match(homepage, /\.writing-intro\{[^}]*max-width:720px[^}]*margin:0 0 1\.45rem/);
+  assert.match(homepage, /\.writing-grid\{[^}]*max-width:720px[^}]*margin:0;/);
+  assert.match(homepage, /\.writing-actions\{[^}]*max-width:720px[^}]*justify-content:flex-start/);
   assert.match(homepage, /\.writing-heading\{[^}]*font-size:clamp\(1\.65rem,2\.5vw,2\.25rem\)/);
   assert.match(homepage, /@media\(max-width:639px\)[\s\S]*?\.writing-grid\{grid-template-columns:1fr/);
 });

@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   PROTOTYPE — throw away after the glyph-convergence decision is captured.
-  Question: can each glyph stay horizontal until it crosses a spatial node, turn smoothly into one shared centerline, then enter a glass bottle?
+  Question: can six full-width transcript bands continuously loop, turn glyph-by-glyph into shared centerlines, and keep all six bottles flowing at once?
   Three curvature variants via ?variant=A|B|C. Freeze with ?freeze=0.58. Show the threshold with ?debug=1.
   Run: python3 -m http.server 4173
 -->
@@ -17,22 +17,22 @@ html,body{min-height:100%;overflow:hidden}
 body{display:grid;place-items:center;background:#ede2d2;font-family:Arial,"Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased}
 .shell{display:grid;width:100vw;height:100dvh;place-items:center}
 .stage{position:relative;container-type:inline-size;width:min(100vw,calc(100dvh * 4 / 3));aspect-ratio:4/3;overflow:hidden;isolation:isolate;background:var(--stage) center/100% 100% no-repeat}
-.title{position:absolute;z-index:8;top:7.1%;color:var(--ink);font:400 4.45cqw/.9 Georgia,"Times New Roman",serif;letter-spacing:-.055em}
+.title{position:absolute;z-index:9;top:7.1%;color:var(--ink);font:400 4.45cqw/.9 Georgia,"Times New Roman",serif;letter-spacing:-.055em}
 .title-podcast{left:4.05%}.title-course{left:50.8%;opacity:0}
-.ambient{position:absolute;z-index:2;top:15%;bottom:5.5%;left:4%;width:42.4%;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));gap:1.5cqw;overflow:hidden;color:var(--cream);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 94%,transparent);opacity:.66}
+.left-panel-surface{position:absolute;z-index:6;inset:0;background:var(--stage) center/100% 100% no-repeat;clip-path:inset(4.05% 57.95% 4.05% 2.05% round 1.75cqw);pointer-events:none}
+.left-panel-outline{position:absolute;z-index:6;top:4.05%;right:57.95%;bottom:4.05%;left:2.05%;border:1px solid rgba(104,61,31,.2);border-radius:1.75cqw;pointer-events:none}
+.ambient{position:absolute;z-index:2;top:15%;bottom:5.5%;left:4%;width:42.4%;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));gap:1.5cqw;overflow:hidden;color:var(--cream);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 94%,transparent);opacity:0}
 .ambient-group{display:grid;align-content:center;gap:.28cqw;min-height:0}
 .ambient-line{white-space:nowrap;font:600 1.05cqw/1.14 Arial,"Helvetica Neue",sans-serif;letter-spacing:-.025em;text-shadow:0 1px 5px rgba(55,25,5,.25)}
 .ambient-group:first-child{opacity:.28}
-.foreground{position:absolute;z-index:4;inset:0;pointer-events:none;background:var(--stage) center/100% 100% no-repeat}
+.foreground{position:absolute;z-index:8;inset:0;pointer-events:none;background:var(--stage) center/100% 100% no-repeat}
 .person{clip-path:polygon(2.05% 42%,3.6% 39%,7% 36.9%,12% 36.8%,15.7% 38.8%,18.1% 43%,18.4% 48%,17.1% 54.3%,18.3% 57.4%,16.7% 59.7%,15.3% 61.2%,16.9% 63.8%,18.2% 69%,19.5% 76%,23% 82.5%,28% 87%,33.5% 90.5%,37.4% 96%,39.2% 100%,2.05% 100%)}
 .microphone{clip-path:polygon(15.4% 57.5%,17.3% 56.6%,19.4% 57.5%,22.8% 60.1%,25.8% 63.6%,29.1% 65.8%,31.4% 68.2%,32.4% 71.2%,30.7% 72.6%,28.8% 70.3%,25.5% 69.1%,22.2% 66.4%,19.6% 63.5%,17.2% 62.2%,15.8% 60.4%)}
-.target-right-png{position:absolute;z-index:5;inset:0;background:url("assets/podcast-to-course-sand-pile-concept-v2-aged.png") center/100% 100% no-repeat;clip-path:inset(0 0 0 40.8%);pointer-events:none}
+.target-right-png{position:absolute;z-index:5;inset:0;background:url("assets/podcast-to-course-sand-pile-concept-v3-aged-clean.png") center/100% 100% no-repeat;clip-path:polygon(42.05% 0,100% 0,100% 100%,42.05% 100%,42.05% 95.95%,40.8% 95.95%,40.8% 4.05%,42.05% 4.05%);pointer-events:none}
 .outcomes{position:absolute;z-index:7;top:17%;right:4.25%;bottom:1.9%;left:71.85%;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));color:var(--ink);opacity:0;pointer-events:none}
 .outcome{align-self:start}.outcome h2{font:700 1.82cqw/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.047em}.outcome p{max-width:20.4cqw;margin-top:.55cqw;font:400 1.28cqw/1.35 "Avenir Next",Avenir,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.038em}
-.motion-layer{position:absolute;z-index:6;inset:0;overflow:visible;pointer-events:none}
-.moving-group{position:absolute;left:17.8%;top:17.75%;display:flex;width:max-content;flex-direction:column;gap:.34cqw;transform:translate3d(0,0,0);will-change:transform;color:var(--cream);text-shadow:0 1px 5px rgba(55,25,5,.24)}
-.glyph-line{display:block;width:max-content;white-space:nowrap;font:650 1.18cqw/1.12 Arial,"Helvetica Neue",sans-serif;letter-spacing:-.028em}
-.glyph{display:inline-block;min-width:.13em;transform-origin:center center;will-change:transform;color:inherit}
+.motion-layer{position:absolute;z-index:7;inset:0;overflow:visible;pointer-events:none}
+.motion-canvas{position:absolute;inset:0;width:100%;height:100%}
 .debug-node,.debug-mouth,.debug-fade{position:absolute;z-index:10;top:13%;bottom:7%;display:none;width:1px}
 .debug-node{left:37%;background:rgba(169,82,44,.42)}
 .debug-node::before{content:"each glyph starts turning here";position:absolute;top:-17px;left:7px;width:max-content;color:#9b5f3c;font:600 9px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
@@ -41,18 +41,18 @@ body{display:grid;place-items:center;background:#ede2d2;font-family:Arial,"Helve
 .debug-fade{left:64.8%;background:rgba(31,25,20,.72)}
 .debug-fade::before{content:"fade after this line";position:absolute;top:-17px;right:7px;width:max-content;color:#302720;font:600 9px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
 body.debug .debug-node,body.debug .debug-mouth,body.debug .debug-fade{display:block}
-.prototype-note{position:absolute;z-index:12;top:2%;left:50%;transform:translateX(-50%);padding:.36rem .68rem;border:1px solid rgba(77,48,28,.16);border-radius:999px;background:rgba(255,249,239,.78);backdrop-filter:blur(7px);color:#6f4930;font:600 10px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
 .switcher{position:fixed;z-index:30;left:50%;bottom:18px;display:flex;align-items:center;gap:6px;transform:translateX(-50%);padding:7px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(24,20,17,.92);box-shadow:0 12px 35px rgba(29,18,9,.24);color:white;font:600 13px/1.1 Arial,sans-serif;backdrop-filter:blur(12px)}
 .switcher button{display:grid;width:30px;height:30px;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:white;font-size:17px;cursor:pointer}.switcher button:hover{background:rgba(255,255,255,.2)}
 .switcher-state{min-width:265px;padding:0 10px;text-align:center}.switcher-state small{display:block;margin-top:3px;color:#bdb3aa;font-size:10px;font-weight:500}
-body.capture .switcher,body.capture .prototype-note{display:none}
+body.capture .switcher{display:none}
 @media(max-aspect-ratio:4/3){.stage{width:100vw;height:auto}}@media(min-aspect-ratio:4/3){.stage{width:auto;height:100dvh}}
 </style>
 </head>
 <body>
 <main class="shell">
   <section class="stage" aria-label="Throwaway prototype of per-glyph transcript convergence">
-    <div class="prototype-note">Per-glyph bottle convergence prototype</div>
+    <div class="left-panel-surface" aria-hidden="true"></div>
+    <div class="left-panel-outline" aria-hidden="true"></div>
     <h1 class="title title-podcast">Podcast</h1>
     <div class="title title-course" aria-hidden="true">Course</div>
     <div class="ambient" aria-hidden="true">
@@ -75,7 +75,7 @@ body.capture .switcher,body.capture .prototype-note{display:none}
       <article class="outcome"><h2>From learning to action.</h2><p>Carry insights into your decisions, actions, and communication.</p></article>
     </div>
     <div class="motion-layer" aria-hidden="true">
-      <div class="moving-group"><span class="glyph-line" data-text="systems become autonomous"></span><span class="glyph-line" data-text="tools improve the model"></span><span class="glyph-line" data-text="GPU becomes the factory"></span></div>
+      <canvas class="motion-canvas"></canvas>
       <span class="debug-node"></span>
       <span class="debug-mouth"></span>
       <span class="debug-fade"></span>
@@ -90,9 +90,9 @@ body.capture .switcher,body.capture .prototype-note{display:none}
 <script>
 (function(){
   var variants={
-    A:{name:"Wide soft bend",note:"early turn · fully converged at bottle mouth · fade at sand marker",node:.37,mouth:.483,fade:.648,angle:7,travel:.50,middleArc:1},
-    B:{name:"Editorial S-curve",note:"middle turn · fully converged at bottle mouth · fade at sand marker",node:.395,mouth:.483,fade:.648,angle:10,travel:.505,middleArc:3},
-    C:{name:"Late tight funnel",note:"late turn · fully converged at bottle mouth · fade at sand marker",node:.425,mouth:.483,fade:.648,angle:13,travel:.51,middleArc:0}
+    A:{name:"Wide soft bend",note:"continuous six-stream flow · early turn · fade at sand marker",node:.37,mouth:.483,fade:.648,angle:7,middleArc:1},
+    B:{name:"Editorial S-curve",note:"continuous six-stream flow · middle turn · fade at sand marker",node:.395,mouth:.483,fade:.648,angle:10,middleArc:3},
+    C:{name:"Late tight funnel",note:"continuous six-stream flow · late turn · fade at sand marker",node:.425,mouth:.483,fade:.648,angle:13,middleArc:0}
   };
   var keys=Object.keys(variants);
   var params=new URLSearchParams(location.search);
@@ -103,89 +103,193 @@ body.capture .switcher,body.capture .prototype-note{display:none}
   if(params.get("capture")==="1"){document.body.classList.add("capture")}
   if(params.get("debug")==="1"){document.body.classList.add("debug")}
   var stage=document.querySelector(".stage");
-  var group=document.querySelector(".moving-group");
-  var lineElements=Array.from(document.querySelectorAll(".glyph-line"));
+  var canvas=document.querySelector(".motion-canvas");
+  var context=canvas.getContext("2d");
   var stateLabel=document.querySelector(".switcher-state span");
   var stateNote=document.querySelector(".switcher-state small");
   stateLabel.textContent=variant+" — "+settings.name;
   stateNote.textContent=settings.note;
 
-  lineElements.forEach(function(line){
-    Array.from(line.dataset.text).forEach(function(character){
-      var glyph=document.createElement("span");
-      glyph.className="glyph";
-      glyph.textContent=character===" "?"\u00a0":character;
-      line.appendChild(glyph);
-    });
-  });
-  var lines=lineElements.map(function(line){return Array.from(line.querySelectorAll(".glyph"))});
+  var selectedGroups=[
+    ["systems become autonomous","tools improve the model","GPU becomes the factory"],
+    ["governance lags behind capability","agency changes the risk","mistakes become irreversible"],
+    ["data reveals the edges","inference creates insight","interfaces should disappear"],
+    ["agents fail in the long tail","edge cases expose the system","feedback compounds judgment"],
+    ["open source multiplies experiments","directing replaces programming","every change stays inspectable"],
+    ["bottlenecks move toward energy","better systems beat bigger models","insight becomes action"]
+  ];
+  var fillerCopy=[
+    "capability moves faster than governance",
+    "economic diffusion lags behind model progress",
+    "the real cost stays hidden from the user",
+    "power concentrates around compute and energy",
+    "systems fail where polished demos end",
+    "open source multiplies possible experiments",
+    "direction matters more than raw speed",
+    "feedback reveals what assumptions miss",
+    "better infrastructure changes the product",
+    "not every observation becomes a lesson"
+  ];
 
   function clamp(value,min,max){return Math.min(max,Math.max(min,value))}
+  function mod(value,divisor){return ((value%divisor)+divisor)%divisor}
   function range(value,start,end){return clamp((value-start)/(end-start),0,1)}
   function smooth(t){return t*t*(3-2*t)}
-  function ease(t){return 1-Math.pow(1-t,3)}
   function mix(start,end,amount){return start+(end-start)*amount}
   function colorFor(t){
     var a=[255,235,202],b=[189,116,77];
     return "rgb("+a.map(function(value,index){return Math.round(mix(value,b[index],smooth(t)))}).join(",")+")";
   }
+  function makePattern(text,font){
+    context.font=font;
+    var patternText=text+"   ·   ";
+    var glyphs=Array.from(patternText).map(function(character){return {character:character,width:context.measureText(character).width}});
+    return {text:patternText,glyphs:glyphs,width:glyphs.reduce(function(total,glyph){return total+glyph.width},0)};
+  }
+
   var geometry;
+  var streamPatterns;
+  var fillerPatterns;
   function measure(){
-    group.style.transform="none";
-    lines.flat().forEach(function(glyph){glyph.style.transform="none"});
     var stageRect=stage.getBoundingClientRect();
-    var lineRects=lineElements.map(function(line){return line.getBoundingClientRect()});
-    var middleY=lineRects[1].top+lineRects[1].height/2-stageRect.top;
+    var pixelRatio=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.round(stageRect.width*pixelRatio);
+    canvas.height=Math.round(stageRect.height*pixelRatio);
+    context.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+    var loopStart=stageRect.width*.04;
+    var loopEnd=stageRect.width*(settings.fade+.02);
+    var fontSize=stageRect.width*.0118;
+    var fillerSize=fontSize*.76;
     geometry={
       width:stageRect.width,
+      height:stageRect.height,
+      loopStart:loopStart,
+      loopEnd:loopEnd,
       nodeX:stageRect.width*settings.node,
       mouthX:stageRect.width*settings.mouth,
       bendWidth:stageRect.width*(settings.mouth-settings.node),
-      travel:stageRect.width*settings.travel,
-      glyphs:lines.map(function(line,lineIndex){
-        return line.map(function(glyph){
-          var rect=glyph.getBoundingClientRect();
-          return {element:glyph,baseX:rect.left+rect.width/2-stageRect.left,deltaY:middleY-(rect.top+rect.height/2-stageRect.top),lineIndex:lineIndex};
-        });
-      })
+      fadeX:stageRect.width*settings.fade,
+      panelEnd:stageRect.width*.408,
+      fontSize:fontSize,
+      fillerSize:fillerSize,
+      centers:[.2085,.3466,.4847,.6227,.7608,.8989].map(function(value){return stageRect.height*value}),
+      mainFont:"650 "+fontSize.toFixed(2)+"px Arial, sans-serif",
+      fillerFont:"550 "+fillerSize.toFixed(2)+"px Arial, sans-serif"
     };
+    context.textBaseline="middle";
+    streamPatterns=selectedGroups.map(function(group){return group.map(function(text){return makePattern(text,geometry.mainFont)})});
+    fillerPatterns=fillerCopy.map(function(text){return makePattern(text,geometry.fillerFont)});
     document.querySelector(".debug-node").style.left=(settings.node*100)+"%";
     document.querySelector(".debug-mouth").style.left=(settings.mouth*100)+"%";
     document.querySelector(".debug-fade").style.left=(settings.fade*100)+"%";
   }
-  measure();
 
-  function render(progress){
-    var move=geometry.travel*range(progress,.04,.92);
-    group.style.transform="translate3d("+move.toFixed(2)+"px,0,0)";
-    group.style.opacity="1";
-    geometry.glyphs.forEach(function(line,lineIndex){
-      line.forEach(function(item){
-        var currentX=item.baseX+move;
-        var crossed=range(currentX,geometry.nodeX,geometry.nodeX+geometry.bendWidth);
-        var gathered=smooth(crossed);
-        var tangent=Math.sin(Math.PI*crossed)*settings.angle;
-        var sign=item.deltaY===0?0:Math.sign(item.deltaY);
-        var middleLift=lineIndex===1?Math.sin(Math.PI*crossed)*settings.middleArc:0;
-        var translateY=item.deltaY*gathered-middleLift;
-        var rotation=sign*tangent-(lineIndex===1?Math.cos(Math.PI*crossed)*settings.middleArc*.35:0);
-        var glyphScale=mix(1,.54,gathered);
-        item.element.style.transform="translate3d(0,"+translateY.toFixed(2)+"px,0) rotate("+rotation.toFixed(2)+"deg) scale("+glyphScale.toFixed(3)+")";
-        item.element.style.color=colorFor(crossed);
-        item.element.style.opacity=String(1-smooth(range(currentX,geometry.width*settings.fade,geometry.width*(settings.fade+.02))));
+  function repeatStarts(pattern,distance,phase,startX,endX){
+    var offset=mod(distance+phase,pattern.width);
+    var starts=[];
+    for(var x=startX+offset-pattern.width;x<endX;x+=pattern.width){starts.push(x)}
+    return starts;
+  }
+
+  function drawFlatStreams(distance){
+    context.save();
+    context.beginPath();
+    context.rect(geometry.loopStart,0,geometry.nodeX-geometry.loopStart,geometry.height);
+    context.clip();
+    var gradient=context.createLinearGradient(geometry.loopStart,0,geometry.nodeX,0);
+    gradient.addColorStop(0,"rgba(255,235,202,0)");
+    gradient.addColorStop(.035,"rgba(255,235,202,.94)");
+    gradient.addColorStop(1,"rgba(255,235,202,.94)");
+    context.fillStyle=gradient;
+    context.font=geometry.mainFont;
+    streamPatterns.forEach(function(group,groupIndex){
+      group.forEach(function(pattern,lineIndex){
+        var y=geometry.centers[groupIndex]+(lineIndex-1)*geometry.fontSize*1.42;
+        var phase=groupIndex*geometry.width*.023+lineIndex*geometry.width*.014;
+        repeatStarts(pattern,distance,phase,geometry.loopStart,geometry.nodeX).forEach(function(x){context.fillText(pattern.text,x,y)});
+      });
+    });
+    context.restore();
+  }
+
+  function drawCurvedStreams(distance){
+    context.font=geometry.mainFont;
+    streamPatterns.forEach(function(group,groupIndex){
+      group.forEach(function(pattern,lineIndex){
+        var sourceY=geometry.centers[groupIndex]+(lineIndex-1)*geometry.fontSize*1.42;
+        var deltaY=geometry.centers[groupIndex]-sourceY;
+        var phase=groupIndex*geometry.width*.023+lineIndex*geometry.width*.014;
+        repeatStarts(pattern,distance,phase,geometry.loopStart,geometry.loopEnd).forEach(function(startX){
+          var cursor=startX;
+          pattern.glyphs.forEach(function(glyph){
+            var currentX=cursor+glyph.width/2;
+            cursor+=glyph.width;
+            if(currentX<geometry.nodeX||currentX>geometry.loopEnd){return}
+            var crossed=range(currentX,geometry.nodeX,geometry.mouthX);
+            var gathered=smooth(crossed);
+            var tangent=Math.sin(Math.PI*crossed)*settings.angle;
+            var sign=deltaY===0?0:Math.sign(deltaY);
+            var middleLift=lineIndex===1?Math.sin(Math.PI*crossed)*settings.middleArc:0;
+            var currentY=sourceY+deltaY*gathered-middleLift;
+            var rotation=(sign*tangent-(lineIndex===1?Math.cos(Math.PI*crossed)*settings.middleArc*.35:0))*Math.PI/180;
+            var scale=mix(1,.54,gathered);
+            var opacity=1-smooth(range(currentX,geometry.fadeX,geometry.loopEnd));
+            if(opacity<=.01||glyph.character===" "){return}
+            context.save();
+            context.translate(currentX,currentY);
+            context.rotate(rotation);
+            context.scale(scale,scale);
+            context.globalAlpha=opacity;
+            context.fillStyle=colorFor(crossed);
+            context.fillText(glyph.character,-glyph.width/2,0);
+            context.restore();
+          });
+        });
       });
     });
   }
 
+  function drawFillerStreams(distance){
+    context.save();
+    context.beginPath();
+    context.rect(geometry.loopStart,0,geometry.panelEnd-geometry.loopStart,geometry.height);
+    context.clip();
+    var gradient=context.createLinearGradient(geometry.loopStart,0,geometry.panelEnd,0);
+    gradient.addColorStop(0,"rgba(255,235,202,0)");
+    gradient.addColorStop(.05,"rgba(255,235,202,.40)");
+    gradient.addColorStop(.88,"rgba(255,235,202,.40)");
+    gradient.addColorStop(1,"rgba(255,235,202,0)");
+    context.fillStyle=gradient;
+    context.font=geometry.fillerFont;
+    for(var gapIndex=0;gapIndex<5;gapIndex++){
+      var middle=(geometry.centers[gapIndex]+geometry.centers[gapIndex+1])/2;
+      for(var lineIndex=0;lineIndex<2;lineIndex++){
+        var fillerIndex=gapIndex*2+lineIndex;
+        var pattern=fillerPatterns[fillerIndex];
+        var y=middle+(lineIndex===0?-geometry.fillerSize*.62:geometry.fillerSize*.62);
+        var localDistance=distance*(lineIndex===0?.63:.78);
+        var phase=fillerIndex*geometry.width*.061;
+        repeatStarts(pattern,localDistance,phase,geometry.loopStart,geometry.panelEnd).forEach(function(x){context.fillText(pattern.text,x,y)});
+      }
+    }
+    context.restore();
+  }
+
+  function render(distance){
+    context.clearRect(0,0,geometry.width,geometry.height);
+    drawFillerStreams(distance);
+    drawFlatStreams(distance);
+    drawCurvedStreams(distance);
+  }
+
   var started=performance.now();
   function frame(now){
-    var cycle=((now-started)%8200)/8200;
-    var progress=cycle<.84?cycle/.84:1;
-    render(progress);
+    render((now-started)*geometry.width*.082/1000);
     requestAnimationFrame(frame);
   }
-  if(frozen!==null||matchMedia("(prefers-reduced-motion: reduce)").matches){render(frozen===null?.58:frozen)}else{requestAnimationFrame(frame)}
-  new ResizeObserver(function(){measure();render(frozen===null?0:frozen)}).observe(stage);
+  measure();
+  if(frozen!==null||matchMedia("(prefers-reduced-motion: reduce)").matches){render(geometry.width*(frozen===null?.58:frozen))}else{requestAnimationFrame(frame)}
+  new ResizeObserver(function(){measure();render(geometry.width*(frozen===null?0:frozen))}).observe(stage);
 
   function go(direction){
     var index=(keys.indexOf(variant)+direction+keys.length)%keys.length;

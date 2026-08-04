@@ -108,11 +108,10 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .wip{background:var(--bg-card);border:2px dashed var(--border);border-radius:var(--r);padding:3rem 2rem;text-align:center}[data-theme="terminal"] .wip{border-radius:0;border:1px dashed var(--border)}
 .wip p{color:var(--text3);font-size:.95rem;line-height:1.7}.wip p strong{color:var(--text2)}
 .writing-section{margin-top:5.5rem;margin-bottom:5.5rem}
-.writing-intro{max-width:34rem;margin-bottom:2rem}
-.writing-heading{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.35rem);font-weight:800;line-height:1.02;letter-spacing:-.04em;margin-bottom:.7rem;color:var(--text)}
-.writing-description{max-width:31rem;font-size:1rem;line-height:1.55;color:var(--text2)}
-.writing-source{margin-top:.55rem;font-size:.78rem;color:var(--accent)}
-.writing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4.5rem 2.5rem}
+.writing-intro{max-width:880px;margin:0 auto 1.65rem}
+.writing-heading{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.65rem);font-weight:800;line-height:1.04;letter-spacing:-.035em;margin-bottom:.45rem;color:var(--text)}
+.writing-source{font-size:.76rem;color:var(--accent)}
+.writing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:880px;margin:0 auto;gap:4rem 2.25rem}
 .writing-card{min-width:0}
 .writing-cover-link{display:block;border-radius:5px;overflow:hidden;background:#111;box-shadow:0 12px 28px rgba(49,38,24,.1);transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
 .writing-cover-link:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(49,38,24,.16)}
@@ -127,7 +126,7 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .writing-archive-link:hover{border-color:var(--accent);transform:translateY(-1px)}
 [data-theme="terminal"] .writing-cover-link,[data-theme="terminal"] .writing-archive-link{border-radius:0;box-shadow:none}
 [data-theme="terminal"] .writing-cover-link:hover,[data-theme="terminal"] .writing-archive-link:hover{transform:none}
-@media(max-width:639px){.podcast-item{grid-template-columns:1fr;gap:.15rem}.podcast-date{padding-top:0}.writing-section{margin-top:4rem;margin-bottom:4rem}.writing-grid{grid-template-columns:1fr;gap:3.5rem}.writing-intro{margin-bottom:1.5rem}.writing-heading{font-size:2.25rem}.writing-description{font-size:.92rem}.writing-card-title{font-size:1rem}}
+@media(max-width:639px){.podcast-item{grid-template-columns:1fr;gap:.15rem}.podcast-date{padding-top:0}.writing-section{margin-top:4rem;margin-bottom:4rem}.writing-grid{grid-template-columns:1fr;max-width:none;gap:3.5rem}.writing-intro{margin-bottom:1.35rem}.writing-heading{font-size:2.05rem}.writing-card-title{font-size:1rem}}
 /* side toc */
 .side-nav{position:fixed;left:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;z-index:50;font-family:var(--font-body);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
 .side-nav.is-visible{opacity:1;visibility:visible;pointer-events:auto}
@@ -282,7 +281,6 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
   <section class="section writing-section" id="writing" aria-labelledby="writing-title">
     <header class="writing-intro">
       <h2 class="writing-heading" id="writing-title">Writing &amp; Thoughts</h2>
-      <p class="writing-description">Visual essays on AI, products,<br>and everything I'm still figuring out.</p>
       <p class="writing-source">Articles open on Xiaohongshu ↗</p>
     </header>
     <div class="writing-grid" id="writing-list" aria-live="polite"><div class="wip"><p>Loading...</p></div></div>

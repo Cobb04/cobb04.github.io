@@ -109,12 +109,20 @@ test("homepage presents writing as a two-column editorial gallery", () => {
   const writing = homepage.match(/<section class="section writing-section"[\s\S]*?<\/section>/)?.[0] || "";
 
   assert.match(writing, /Writing &amp; Thoughts/);
-  assert.match(writing, /Visual essays on AI, products/);
+  assert.doesNotMatch(writing, /Visual essays on AI, products/);
   assert.match(writing, /Articles open on Xiaohongshu ↗/);
   assert.match(writing, /id="writing-list"/);
   assert.match(writing, /href="writing\.html"[^>]*>View all writing →/);
   assert.match(homepage, /<script src="writing\/writing-gallery\.js"><\/script>/);
   assert.match(homepage, /WritingGallery\.selectHomepagePosts\(posts,4\)/);
   assert.match(homepage, /\.writing-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(homepage, /\.writing-grid\{[^}]*max-width:880px[^}]*margin:0 auto/);
+  assert.match(homepage, /\.writing-heading\{[^}]*font-size:clamp\(1\.8rem,3vw,2\.65rem\)/);
   assert.match(homepage, /@media\(max-width:639px\)[\s\S]*?\.writing-grid\{grid-template-columns:1fr/);
+});
+
+test("writing archive keeps its introduction concise", () => {
+  const archive = fs.readFileSync(path.join(root, "writing.html"), "utf8");
+  assert.doesNotMatch(archive, /Visual essays on AI, products/);
+  assert.match(archive, /Every article opens on Xiaohongshu ↗/);
 });

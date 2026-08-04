@@ -8,7 +8,7 @@
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root,[data-theme="warm"]{--bg:#FDFAF5;--bg-card:#F8F4EC;--bg-warm:#F3EDE2;--text:#2C2C2C;--text2:#6B6B6B;--text3:#716B63;--accent:#C54229;--border:#E8E0D5;--border-strong:#d4c8b8;--shelf-back:#EEE9DF;--shelf-edge:#A98B68;--shelf-edge-dark:#775F46;--page-edge:#E9E1D2;--r:16px;--font-display:'Bricolage Grotesque',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow:2px 2px 0 rgba(0,0,0,.06);--shadow-h:4px 4px 0 rgba(0,0,0,.1);--ease:cubic-bezier(.16,1,.3,1)}
 body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
@@ -225,15 +225,31 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 [data-theme="terminal"] .side-nav a{border-radius:0}
 @media(max-width:768px){.wrap{width:calc(100% - 2rem);padding:0}.nav{display:grid;grid-template-columns:auto minmax(0,1fr);min-height:0;row-gap:.45rem;padding:1rem 0}.nav-brand{grid-column:1;grid-row:1}.nav-actions{grid-column:2;grid-row:1;justify-self:end}.nav-links{grid-column:1 / -1;grid-row:2;justify-self:stretch;width:100%;max-width:100%;gap:1rem;overflow-x:auto;padding-bottom:.2rem;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}.hero{grid-template-columns:1fr;gap:0;min-height:calc(100svh - 133px);padding:2.8rem 0 4rem;overflow:hidden}.hero::before{left:20%;height:24%}.hero-copy{width:100%;max-width:none;padding-top:0;transform:none}.hero h1.hero-title{font-size:clamp(3rem,15vw,5.1rem);max-width:none}.hero-tagline{margin-top:1.35rem;font-size:.82rem}.hero .socials{margin-top:1.55rem;gap:.65rem}.hero .socials .social-button{min-width:145px;min-height:54px;padding:0 1.05rem;font-size:.82rem}.hero-clock{margin-top:1.5rem;font-size:.72rem}.hero-character{top:2rem;right:-55%;width:150%;height:auto;opacity:.08;object-position:top right}.hero .hero-reading{position:relative;right:auto;bottom:auto;width:100%;margin-top:3rem}.reading-deck-stage{padding-right:1.25rem;padding-left:1.25rem}.reading-deck-title{font-size:1.18rem}}
 @media(max-width:768px){.hero-reading-head{padding:1.1rem 1.25rem .75rem}.hero-reading-head h2{font-size:.72rem}.hero-reading-head a{font-size:.58rem}}
+.focus-section{margin:0 0 clamp(5rem,9vw,8rem);scroll-margin-top:2rem}
+.focus-chapter-intro{display:flex;min-height:clamp(330px,38vw,480px);flex-direction:column;align-items:center;justify-content:center;padding:clamp(3.5rem,8vw,6.5rem) 0 clamp(2.5rem,5vw,4rem);text-align:center}
+.focus-chapter-title{display:flex;flex-direction:column;color:var(--text);font-family:'Bodoni Moda',Didot,'Bodoni 72',serif;font-size:clamp(3rem,5.4vw,5.4rem);font-weight:400;line-height:.94;letter-spacing:-.065em}
+.focus-chapter-subtitle{max-width:760px;margin-top:clamp(1.4rem,2.8vw,2.1rem);color:var(--text2);font-size:clamp(.92rem,1.45vw,1.16rem);line-height:1.55}
+.focus-chapter-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:1.75rem;margin-top:clamp(1.4rem,2.6vw,2rem)}
+.focus-chapter-actions a,.focus-chapter-footer a{padding-bottom:.28rem;border-bottom:1px solid currentColor;color:var(--accent);font:500 .72rem/1.2 var(--font-mono);text-decoration:none;transition:color .2s var(--ease)}
+.focus-chapter-actions a:hover,.focus-chapter-footer a:hover{color:var(--text)}
+.focus-motion{position:relative;width:min(82%,960px);margin-inline:auto;aspect-ratio:4/3;overflow:hidden;border-radius:20px;background:#ede2d2;box-shadow:0 0 0 1px var(--border-strong)}
+.focus-motion-frame{display:block;width:100%;height:100%;border:0;background:#ede2d2;pointer-events:none}
+.focus-chapter-footer{display:grid;width:min(82%,960px);margin-inline:auto;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:end;padding:clamp(1.5rem,3vw,2.2rem) 0;border-bottom:1px solid var(--border)}
+.focus-chapter-footer h3{font-family:var(--font-display);font-size:clamp(1.45rem,2.5vw,2rem);line-height:1;letter-spacing:-.04em}
+.focus-chapter-footer p{margin-top:.55rem;color:var(--text3);font-size:.78rem;line-height:1.5}
+[data-theme="terminal"] .focus-chapter-footer h3{font-family:var(--font-mono);font-weight:400;letter-spacing:-.045em}
+[data-theme="terminal"] .focus-motion{border-radius:0}
+@media(max-width:800px){.focus-chapter-intro{min-height:360px;padding:4rem 0 3rem}.focus-chapter-title{font-size:clamp(2.75rem,13vw,5rem)}.focus-motion{width:100%;border-radius:14px}.focus-chapter-footer{width:100%;grid-template-columns:1fr;gap:1.25rem;align-items:start}}
+@media(max-width:520px){.focus-chapter-intro{min-height:330px}.focus-chapter-subtitle{font-size:.86rem}.focus-chapter-actions{gap:1.2rem}.focus-motion{border-radius:10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.side-nav{transition:none}.hero .socials .social-button{transition:none}.reading-deck-card{transition:none}.hero-character{transition:none}}
 </style>
 </head>
 <body>
-<nav class="side-nav" id="sideNav" aria-label="Page sections"><a href="#top">Top</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="#writing">Writing</a></nav>
+<nav class="side-nav" id="sideNav" aria-label="Page sections"><a href="#top">Top</a><a href="#focus">Focus</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="#writing">Writing</a></nav>
 <div class="wrap">
   <nav class="nav" aria-label="Primary">
     <a href="/" class="nav-logo" id="logo">Cobb<span class="nav-logo-dot">.</span></a>
-    <div class="nav-links"><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="wiki.html">Wiki</a><a href="#writing">Writing</a></div>
+    <div class="nav-links"><a href="#focus">Focus</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="wiki.html">Wiki</a><a href="#writing">Writing</a></div>
     <div class="nav-actions">
       <a href="editor.html" class="nav-editor" aria-label="Editor">✎</a>
       <button class="theme-switch" id="ts" type="button" aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
@@ -259,14 +275,18 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
       </aside>
     </div>
   </header>
-  <section class="section" id="projects"><h2 class="section-title">Projects</h2><p class="section-desc">Standalone products and apps I've built.</p>
-    <div class="grid2">
-      <a class="card bar-cdx card-side" href="https://github.com/Cobb04/Codex-Level"><div class="card-side-text"><span class="meta">macOS · SwiftUI</span><h3>Codex Level</h3><p class="desc">Menu bar app that turns lifetime Codex usage into QQ-style levels and progress.</p><div class="tags"><span class="tag">SwiftUI</span><span class="tag">macOS</span><span class="tag">Menu Bar</span></div></div><img class="card-side-img" src="codex-preview.png" width="818" height="1078" alt="Codex Level"></a>
-      <a class="card bar-mbti card-pet" href="https://github.com/Cobb04/MBTI-clawd-on-desk"><span class="meta">Desktop Pet · SwiftUI</span><h3>MBTI Clawd on Desk</h3><p class="desc">A pixel pet that watches your AI agents code. So you don't have to.</p><div class="tags"><span class="tag">Desktop Pet</span><span class="tag">AI Agents</span></div><object class="card-pet-object" data="infj-working.svg" width="120" height="90" type="image/svg+xml" aria-label="INFJ desktop pet working"></object></a>
-    </div>
-  </section>
-  <section class="section" id="skills"><h2 class="section-title">Skills</h2><p class="section-desc">Claude Code skills I've built - each one does one thing well.</p>
-    <div class="skill-row"><a class="skill-chip" href="https://github.com/Cobb04/podcast-to-course">🎙️ podcast-to-course</a><a class="skill-chip" href="https://github.com/Cobb04/kaoyan-vocab-overlay">📖 kaoyan-vocab-overlay</a><a class="skill-chip" href="https://github.com/Cobb04/ai-builders-gazette">📰 ai-builders-gazette</a></div>
+  <section class="focus-section" id="focus">
+    <article class="focus-chapter">
+      <header class="focus-chapter-intro">
+        <h2 class="focus-chapter-title"><span>Faster than listening.</span><span>Deeper than listening.</span></h2>
+        <p class="focus-chapter-subtitle">Turn long-form conversations into structured, evidence-backed courses, so you can understand more, decide better, and act.</p>
+        <div class="focus-chapter-actions"><a href="podcast-to-course.html">Experience the project ↗</a><a href="https://github.com/Cobb04/podcast-to-course" target="_blank" rel="noopener noreferrer">View the skill ↗</a></div>
+      </header>
+      <div class="focus-motion">
+        <iframe class="focus-motion-frame" src="podcast-to-course-motion-prototype.html?variant=A&amp;capture=1" title="Podcast transcript continuously converging into six course outcomes" loading="lazy" tabindex="-1"></iframe>
+      </div>
+      <footer class="focus-chapter-footer"><div><h3>Podcast to Course</h3><p>Learning system, knowledge design, kinetic typography.</p></div><a href="podcast-to-course.html">Open full project ↗</a></footer>
+    </article>
   </section>
   <section class="section" id="courses"><h2 class="section-title">Podcast Notes</h2>
     <div class="podcast-list" id="cg"></div>

@@ -228,9 +228,69 @@ test("homepage keeps semantic structure and readable contrast", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
   assert.match(html, /<main>[\s\S]*?<header class="hero"[\s\S]*?<\/main>/);
   assert.match(html, /podcast-copy"><h3>/);
-  assert.match(html, /<object[^>]+aria-label="INFJ desktop pet working"/);
+  assert.match(html, /<iframe[^>]+title="Podcast transcript continuously converging into six course outcomes"/);
   assert.match(html, /--text3:#716B63/);
   assert.match(html, /\.footer a\{[^}]*text-decoration:underline/);
+});
+
+test("homepage Focus uses the full-width A chapter and preserves the complete animation", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const focus = html.match(/<section class="focus-section" id="focus">[\s\S]*?<\/section>/)?.[0] || "";
+
+  assert.match(html, /href="#focus">Focus<\/a>/);
+  assert.doesNotMatch(html, /href="#projects"|href="#skills"/);
+  assert.match(focus, /class="focus-chapter"/);
+  assert.match(focus, /<h2 class="focus-chapter-title"><span>Faster than listening\.<\/span><span>Deeper than listening\.<\/span><\/h2>/);
+  assert.match(focus, /<iframe[^>]+class="focus-motion-frame"[^>]+src="podcast-to-course-motion-prototype\.html\?variant=A&amp;capture=1"/);
+  assert.match(focus, /href="podcast-to-course\.html"/);
+  assert.match(focus, /href="https:\/\/github\.com\/Cobb04\/podcast-to-course"/);
+  assert.doesNotMatch(focus, /class="focus-feature"|class="focus-projects"|class="focus-skills"/);
+  assert.match(html, /\.focus-motion\{[^}]*aspect-ratio:4\/3/);
+  assert.doesNotMatch(html, /<section[^>]+id="projects"|<section[^>]+id="skills"/);
+});
+
+test("homepage Focus uses the editorial serif and a restrained centered stage", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+
+  assert.match(html, /family=Bodoni\+Moda/);
+  assert.match(html, /\.focus-chapter-title\{[^}]*font-family:'Bodoni Moda',Didot,'Bodoni 72',serif[^}]*font-weight:400/);
+  assert.doesNotMatch(html, /\[data-theme="terminal"\] \.focus-chapter-title/);
+  assert.match(html, /\.focus-motion\{[^}]*width:min\(82%,960px\)[^}]*margin-inline:auto/);
+  assert.match(html, /@media\(max-width:800px\)[\s\S]*?\.focus-motion\{[^}]*width:100%/);
+});
+
+test("podcast-to-course keeps six grouped scrolling transcript bands", () => {
+  const pagePath = path.join(__dirname, "..", "podcast-to-course.html");
+  assert.ok(fs.existsSync(pagePath), "standalone podcast-to-course page should exist");
+  const html = fs.readFileSync(pagePath, "utf8");
+
+  assert.match(html, /class="flow-stage"/);
+  assert.match(html, /aspect-ratio:4\/3/);
+  assert.equal((html.match(/class="flow-transcript-line"/g) || []).length, 24);
+  assert.equal((html.match(/class="flow-transcript-track"/g) || []).length, 24);
+  const ambientGroups = [...html.matchAll(/<div class="flow-transcript-group" data-group="([^"]+)"/g)];
+  assert.deepEqual(ambientGroups.map((match) => match[1]), ["structure", "judgment", "evidence", "deciding", "tools", "action"]);
+  ambientGroups.forEach((group, index) => {
+    const end = ambientGroups[index + 1]?.index ?? html.indexOf('<div class="flow-foreground', group.index);
+    assert.equal((html.slice(group.index, end).match(/class="flow-transcript-line"/g) || []).length, 4);
+  });
+  assert.match(html, /class="flow-title">Podcast</);
+  assert.match(html, /\.flow-transcript-line\{[^}]*font:600 1\.22cqw/);
+  assert.match(html, /\.flow-transcripts\{[^}]*display:grid[^}]*gap:1\.7cqw/);
+  assert.match(html, /\.flow-transcript-group\{[^}]*grid-template-rows:repeat\(4,1\.5cqw\)/);
+  assert.match(html, /\.flow-transcript-track\{[^}]*animation:/);
+  assert.match(html, /querySelectorAll\(["']\.flow-transcript-track["']\)/);
+  assert.match(html, /appendChild\(track\.firstElementChild\.cloneNode\(true\)\)/);
+  assert.match(html, /\.flow-transcripts\{[^}]*z-index:2/);
+  assert.match(html, /\.flow-foreground\{[^}]*z-index:3/);
+  assert.match(html, /class="flow-foreground flow-person"/);
+  assert.match(html, /class="flow-foreground flow-microphone"/);
+  assert.equal((html.match(/class="flow-foreground /g) || []).length, 2);
+  assert.doesNotMatch(html, /flow-hands/);
+  assert.match(html, /\.flow-waveform\{[^}]*top:7\.1%[^}]*right:54\.6%/);
+  assert.doesNotMatch(html, /convergence-layer|convergence-group|convergence-line|convergence-target|flow-outcome|flow-title-course/);
+  assert.match(html, /@media\(prefers-reduced-motion:reduce\)[\s\S]*?\.flow-transcript-track\{animation:none/);
+  assert.doesNotMatch(html, /window\.addEventListener\(["']scroll/);
 });
 
 test("currently reading card exposes real title, creator, type badge, and library link", async () => {

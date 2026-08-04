@@ -89,14 +89,6 @@ a.card:hover{border-color:var(--accent);box-shadow:var(--shadow-h);transform:tra
 .skill-chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;color:var(--text);text-decoration:none;padding:.5rem 1rem;border:1.5px solid var(--border-strong);border-radius:24px;background:var(--bg-card);transition:all .2s;font-weight:500}
 [data-theme="terminal"] .skill-chip{border-radius:0;font-family:var(--font-mono);font-size:.72rem}
 a.skill-chip:hover{border-color:var(--accent);background:var(--accent-l);color:var(--accent)}
-.podcast-list{border-top:1px solid var(--border)}
-.podcast-item{display:grid;grid-template-columns:92px minmax(0,1fr);gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border);color:var(--text);text-decoration:none;transition:color .2s var(--ease),padding-left .2s var(--ease)}
-.podcast-item:hover{color:var(--accent);padding-left:.25rem}
-.podcast-date{font-family:var(--font-mono);font-size:.68rem;color:var(--text3);padding-top:.18rem}
-.podcast-copy{min-width:0}.podcast-copy h3{font-family:var(--font-display);font-size:.95rem;line-height:1.35;letter-spacing:-.01em}
-.podcast-source{display:block;margin-top:.18rem;font-size:.75rem;color:var(--text3)}
-[data-theme="terminal"] .podcast-copy h3{font-weight:400;font-size:.85rem}
-[data-theme="terminal"] .podcast-source{font-size:.65rem}
 .c-card{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r);padding:1rem 1.2rem;transition:all .25s;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:.3rem;box-shadow:var(--shadow)}
 [data-theme="terminal"] .c-card{border-left-width:2px;border-radius:0}
 a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme="terminal"] a.c-card:hover{transform:none;background:rgba(0,255,0,.03)}
@@ -124,7 +116,7 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .writing-archive-link:hover{border-color:var(--accent);transform:translateY(-1px)}
 [data-theme="terminal"] .writing-cover-link,[data-theme="terminal"] .writing-archive-link{border-radius:0;box-shadow:none}
 [data-theme="terminal"] .writing-cover-link:hover,[data-theme="terminal"] .writing-archive-link:hover{transform:none}
-@media(max-width:639px){.podcast-item{grid-template-columns:1fr;gap:.15rem}.podcast-date{padding-top:0}.writing-section{margin-top:4rem;margin-bottom:4rem}.writing-grid{grid-template-columns:1fr;max-width:none;gap:3.5rem}.writing-intro{margin-bottom:1.35rem}.writing-heading{font-size:1.9rem}.writing-card-title{font-size:1rem}}
+@media(max-width:639px){.writing-section{margin-top:4rem;margin-bottom:4rem}.writing-grid{grid-template-columns:1fr;max-width:none;gap:3.5rem}.writing-intro{margin-bottom:1.35rem}.writing-heading{font-size:1.9rem}.writing-card-title{font-size:1rem}}
 /* side toc */
 .side-nav{position:fixed;left:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;z-index:50;font-family:var(--font-body);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
 .side-nav.is-visible{opacity:1;visibility:visible;pointer-events:auto}
@@ -241,11 +233,11 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 </style>
 </head>
 <body>
-<nav class="side-nav" id="sideNav" aria-label="Page sections"><a href="#top">Top</a><a href="#focus">Focus</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="#writing">Writing</a></nav>
+<nav class="side-nav" id="sideNav" aria-label="Page sections"><a href="#top">Top</a><a href="#focus">Focus</a><a href="reading.html">Reading</a><a href="#writing">Writing</a></nav>
 <div class="wrap">
   <nav class="nav" aria-label="Primary">
     <a href="/" class="nav-logo" id="logo">Cobb<span class="nav-logo-dot">.</span></a>
-    <div class="nav-links"><a href="#focus">Focus</a><a href="#courses">Podcast</a><a href="reading.html">Reading</a><a href="wiki.html">Wiki</a><a href="#writing">Writing</a></div>
+    <div class="nav-links"><a href="#focus">Focus</a><a href="reading.html">Reading</a><a href="wiki.html">Wiki</a><a href="#writing">Writing</a></div>
     <div class="nav-actions">
       <a href="editor.html" class="nav-editor" aria-label="Editor">✎</a>
       <button class="theme-switch" id="ts" type="button" aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
@@ -283,10 +275,6 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
       </div>
     </article>
   </section>
-  <section class="section" id="courses"><h2 class="section-title">Podcast Notes</h2>
-    <div class="podcast-list" id="cg"></div>
-    <p style="margin-top:1rem;font-size:.85rem;color:var(--text3)"><a href="https://cobb04.github.io/podcast-to-course/" style="color:var(--accent)">View all notes →</a></p>
-  </section>
   <section class="section writing-section" id="writing" aria-labelledby="writing-title">
     <header class="writing-intro">
       <h2 class="writing-heading" id="writing-title">Writing &amp; Thoughts</h2>
@@ -302,8 +290,6 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 <script src="writing/writing-gallery.js"></script>
 <script>
 (function(){
-  var courses=[{date:"2026-07-08",title:"AI认知债：思考被外包",podcast:"产品思考集·方大业",slug:"2026-07-08-ai-cognitive-debt",accent:"#E06B56"},{date:"2026-07-19",title:"AI 发展了 4 年，把应用发展没了？",podcast:"42章经·曲凯",slug:"2026-07-19-ai-midyear-app-is-dead",accent:"#2D8B55"},{date:"2026-07-08",title:"为什么支付宝和微信的 AI，打开一次就不想再打开",podcast:"哇哦产品·Link",slug:"2026-07-08-super-app-ai-paradox",accent:"#D94F30"},{date:"2026-05-19",title:"AI 时代人应该有两个自己",podcast:"以鹅传鹅FM·Jason&王博源",slug:"2026-05-19-ai-two-selves-workbuddy",accent:"#2A7B9B"},{date:"2026-05-15",title:"硅谷00后AI产品经理入行靠的竟是狗运",podcast:"OtherWise·Harry",slug:"2026-05-15-doubao-ai-pm-dog-luck",accent:"#D4A843"}];
-  var g=document.getElementById("cg");courses.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,3).forEach(function(x){var d=document.createElement("a");d.className="podcast-item";d.href="https://cobb04.github.io/podcast-to-course/courses/"+x.slug+"/";d.innerHTML='<span class="podcast-date">'+x.date+'</span><span class="podcast-copy"><h3>'+x.title+'</h3><span class="podcast-source">'+x.podcast+'</span></span>';g.appendChild(d)});
   var b=document.getElementById("ts"),h=document.documentElement;
   var sunIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
   var terminalIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10l3 2-3 2M13 14h4"/></svg>';

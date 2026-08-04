@@ -90,7 +90,6 @@ function homepageScript() {
 
 async function runHomepage(options = {}) {
   const elements = new Map([
-    ["cg", bindClassList(new FakeElement("cg"))],
     ["ts", bindClassList(new FakeElement("ts"))],
     ["logo", bindClassList(new FakeElement("logo"))],
     ["greeting", bindClassList(new FakeElement("greeting"))],
@@ -151,7 +150,7 @@ async function runHomepage(options = {}) {
   return { elements, context, mediaQuery };
 }
 
-test("currently reading card still renders when optional podcast source list is absent", async () => {
+test("currently reading card renders without a Podcast Notes section", async () => {
   const { elements } = await runHomepage();
   assert.ok(elements.get("readingCard").children.length > 0);
 });
@@ -217,17 +216,19 @@ test("hero action buttons use GitHub mark SVG and mailbox emoji", () => {
   assert.match(html, /\.hero \.socials a\{[^}]*min-height:52px/);
 });
 
-test("homepage podcast section shows only the three newest notes", async () => {
-  const { elements } = await runHomepage();
-  const podcasts = elements.get("cg").children;
-  assert.equal(podcasts.length, 3);
-  assert.match(podcasts[0].innerHTML, /2026-07-19/);
+test("homepage omits the Podcast Notes section and its dead navigation", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+
+  assert.doesNotMatch(html, /<section[^>]+id="courses"|Podcast Notes|id="cg"/);
+  assert.doesNotMatch(html, /href="#courses"/);
+  assert.doesNotMatch(html, /\.podcast-(?:list|item|date|copy|source)/);
+  assert.doesNotMatch(html, /var courses=|getElementById\("cg"\)/);
 });
 
 test("homepage keeps semantic structure and readable contrast", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
   assert.match(html, /<main>[\s\S]*?<header class="hero"[\s\S]*?<\/main>/);
-  assert.match(html, /podcast-copy"><h3>/);
+  assert.match(html, /class="writing-grid"/);
   assert.match(html, /<iframe[^>]+title="Podcast transcript continuously converging into six course outcomes"/);
   assert.match(html, /--text3:#716B63/);
   assert.match(html, /\.footer a\{[^}]*text-decoration:underline/);

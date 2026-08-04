@@ -1,0 +1,195 @@
+<!doctype html>
+<!--
+  PROTOTYPE — throw away after the glyph-convergence decision is captured.
+  Question: can each glyph stay horizontal until it crosses a spatial node, turn smoothly into one shared centerline, then enter a glass bottle?
+  Three curvature variants via ?variant=A|B|C. Freeze with ?freeze=0.58. Show the threshold with ?debug=1.
+  Run: python3 -m http.server 4173
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Per-glyph Bottle Convergence Prototype</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#1e1915;--cream:#ffebca;--terra:#bd744d;--stage:url("assets/podcast-to-course-base.png")}
+html,body{min-height:100%;overflow:hidden}
+body{display:grid;place-items:center;background:#ede2d2;font-family:Arial,"Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased}
+.shell{display:grid;width:100vw;height:100dvh;place-items:center}
+.stage{position:relative;container-type:inline-size;width:min(100vw,calc(100dvh * 4 / 3));aspect-ratio:4/3;overflow:hidden;isolation:isolate;background:var(--stage) center/100% 100% no-repeat}
+.title{position:absolute;z-index:8;top:7.1%;color:var(--ink);font:400 4.45cqw/.9 Georgia,"Times New Roman",serif;letter-spacing:-.055em}
+.title-podcast{left:4.05%}.title-course{left:50.8%;opacity:0}
+.ambient{position:absolute;z-index:2;top:15%;bottom:5.5%;left:4%;width:42.4%;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));gap:1.5cqw;overflow:hidden;color:var(--cream);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 94%,transparent);opacity:.66}
+.ambient-group{display:grid;align-content:center;gap:.28cqw;min-height:0}
+.ambient-line{white-space:nowrap;font:600 1.05cqw/1.14 Arial,"Helvetica Neue",sans-serif;letter-spacing:-.025em;text-shadow:0 1px 5px rgba(55,25,5,.25)}
+.ambient-group:first-child{opacity:.28}
+.foreground{position:absolute;z-index:4;inset:0;pointer-events:none;background:var(--stage) center/100% 100% no-repeat}
+.person{clip-path:polygon(2.05% 42%,3.6% 39%,7% 36.9%,12% 36.8%,15.7% 38.8%,18.1% 43%,18.4% 48%,17.1% 54.3%,18.3% 57.4%,16.7% 59.7%,15.3% 61.2%,16.9% 63.8%,18.2% 69%,19.5% 76%,23% 82.5%,28% 87%,33.5% 90.5%,37.4% 96%,39.2% 100%,2.05% 100%)}
+.microphone{clip-path:polygon(15.4% 57.5%,17.3% 56.6%,19.4% 57.5%,22.8% 60.1%,25.8% 63.6%,29.1% 65.8%,31.4% 68.2%,32.4% 71.2%,30.7% 72.6%,28.8% 70.3%,25.5% 69.1%,22.2% 66.4%,19.6% 63.5%,17.2% 62.2%,15.8% 60.4%)}
+.target-right-png{position:absolute;z-index:5;inset:0;background:url("assets/podcast-to-course-target-static.png") center/100% 100% no-repeat;clip-path:inset(0 0 0 40.8%);pointer-events:none}
+.outcomes{position:absolute;z-index:7;top:17%;right:4.25%;bottom:1.9%;left:71.85%;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));color:var(--ink);opacity:0;pointer-events:none}
+.outcome{align-self:start}.outcome h2{font:700 1.82cqw/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.047em}.outcome p{max-width:20.4cqw;margin-top:.55cqw;font:400 1.28cqw/1.35 "Avenir Next",Avenir,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.038em}
+.motion-layer{position:absolute;z-index:6;inset:0;overflow:visible;pointer-events:none}
+.moving-group{position:absolute;left:17.8%;top:18.8%;display:flex;width:max-content;flex-direction:column;gap:.34cqw;transform:translate3d(0,0,0);transform-origin:right center;will-change:transform,opacity;color:var(--cream);text-shadow:0 1px 5px rgba(55,25,5,.24)}
+.glyph-line{display:block;width:max-content;white-space:nowrap;font:650 1.18cqw/1.12 Arial,"Helvetica Neue",sans-serif;letter-spacing:-.028em}
+.glyph{display:inline-block;min-width:.13em;transform-origin:center center;will-change:transform;color:inherit}
+.debug-node{position:absolute;z-index:10;top:13%;bottom:7%;left:46%;display:none;width:1px;background:rgba(169,82,44,.42)}
+.debug-node::before{content:"each glyph starts turning here";position:absolute;top:-17px;left:7px;width:max-content;color:#9b5f3c;font:600 9px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+body.debug .debug-node{display:block}
+.prototype-note{position:absolute;z-index:12;top:2%;left:50%;transform:translateX(-50%);padding:.36rem .68rem;border:1px solid rgba(77,48,28,.16);border-radius:999px;background:rgba(255,249,239,.78);backdrop-filter:blur(7px);color:#6f4930;font:600 10px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.switcher{position:fixed;z-index:30;left:50%;bottom:18px;display:flex;align-items:center;gap:6px;transform:translateX(-50%);padding:7px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(24,20,17,.92);box-shadow:0 12px 35px rgba(29,18,9,.24);color:white;font:600 13px/1.1 Arial,sans-serif;backdrop-filter:blur(12px)}
+.switcher button{display:grid;width:30px;height:30px;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:white;font-size:17px;cursor:pointer}.switcher button:hover{background:rgba(255,255,255,.2)}
+.switcher-state{min-width:265px;padding:0 10px;text-align:center}.switcher-state small{display:block;margin-top:3px;color:#bdb3aa;font-size:10px;font-weight:500}
+body.capture .switcher,body.capture .prototype-note{display:none}
+@media(max-aspect-ratio:4/3){.stage{width:100vw;height:auto}}@media(min-aspect-ratio:4/3){.stage{width:auto;height:100dvh}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <section class="stage" aria-label="Throwaway prototype of per-glyph transcript convergence">
+    <div class="prototype-note">Per-glyph bottle convergence prototype</div>
+    <h1 class="title title-podcast">Podcast</h1>
+    <div class="title title-course" aria-hidden="true">Course</div>
+    <div class="ambient" aria-hidden="true">
+      <div class="ambient-group"><span class="ambient-line">incentives move faster than governance</span><span class="ambient-line">models change the tools around them</span><span class="ambient-line">infrastructure becomes the product</span></div>
+      <div class="ambient-group"><span class="ambient-line">intelligence is not the danger</span><span class="ambient-line">systems can act</span><span class="ambient-line">mistakes become irreversible</span></div>
+      <div class="ambient-group"><span class="ambient-line">infrastructure produces intelligence</span><span class="ambient-line">compute, data, and energy</span><span class="ambient-line">the real cost stays hidden</span></div>
+      <div class="ambient-group"><span class="ambient-line">agents fail in the long tail</span><span class="ambient-line">systems cannot keep learning</span><span class="ambient-line">progress reaches the edge cases</span></div>
+      <div class="ambient-group"><span class="ambient-line">open source multiplies experiments</span><span class="ambient-line">directing instead of programming</span><span class="ambient-line">every change can be inspected</span></div>
+      <div class="ambient-group"><span class="ambient-line">the bottleneck keeps moving</span><span class="ambient-line">better systems, not only models</span><span class="ambient-line">insights become action</span></div>
+    </div>
+    <div class="foreground person" aria-hidden="true"></div>
+    <div class="foreground microphone" aria-hidden="true"></div>
+    <div class="target-right-png" aria-hidden="true"></div>
+    <div class="outcomes">
+      <article class="outcome"><h2>Structure, not summary.</h2><p>Turn free-flowing conversations into a coherent learning map.</p></article>
+      <article class="outcome"><h2>Judgment, not quotes.</h2><p>Move from what the speaker said to how you should decide.</p></article>
+      <article class="outcome"><h2>Evidence-backed learning.</h2><p>Keep every insight traceable to its original evidence.</p></article>
+      <article class="outcome"><h2>Learn by deciding.</h2><p>Turn passive understanding into practical judgment through scenarios.</p></article>
+      <article class="outcome"><h2>Reusable decision tools.</h2><p>Convert expert experience into reusable decision frameworks.</p></article>
+      <article class="outcome"><h2>From learning to action.</h2><p>Carry insights into your decisions, actions, and communication.</p></article>
+    </div>
+    <div class="motion-layer" aria-hidden="true">
+      <div class="moving-group"><span class="glyph-line" data-text="systems become autonomous"></span><span class="glyph-line" data-text="tools improve the model"></span><span class="glyph-line" data-text="GPU becomes the factory"></span></div>
+      <span class="debug-node"></span>
+    </div>
+  </section>
+</main>
+<div class="switcher" role="group" aria-label="Glyph convergence variants">
+  <button type="button" data-direction="-1" aria-label="Previous variant">←</button>
+  <div class="switcher-state"><span></span><small></small></div>
+  <button type="button" data-direction="1" aria-label="Next variant">→</button>
+</div>
+<script>
+(function(){
+  var variants={
+    A:{name:"Wide soft bend",note:"early node · wide turn · 7° maximum tangent",node:.445,bend:.205,angle:7,travel:.365,middleArc:1},
+    B:{name:"Editorial S-curve",note:"middle node · deeper character wave · 10° tangent",node:.465,bend:.15,angle:10,travel:.37,middleArc:3},
+    C:{name:"Late tight funnel",note:"late node · short turn · 13° maximum tangent",node:.49,bend:.095,angle:13,travel:.39,middleArc:0}
+  };
+  var keys=Object.keys(variants);
+  var params=new URLSearchParams(location.search);
+  var variant=(params.get("variant")||"A").toUpperCase();
+  if(!variants[variant]){variant="A"}
+  var settings=variants[variant];
+  var frozen=params.has("freeze")?Math.min(1,Math.max(0,Number(params.get("freeze"))||0)):null;
+  if(params.get("capture")==="1"){document.body.classList.add("capture")}
+  if(params.get("debug")==="1"){document.body.classList.add("debug")}
+  var stage=document.querySelector(".stage");
+  var group=document.querySelector(".moving-group");
+  var lineElements=Array.from(document.querySelectorAll(".glyph-line"));
+  var stateLabel=document.querySelector(".switcher-state span");
+  var stateNote=document.querySelector(".switcher-state small");
+  stateLabel.textContent=variant+" — "+settings.name;
+  stateNote.textContent=settings.note;
+
+  lineElements.forEach(function(line){
+    Array.from(line.dataset.text).forEach(function(character){
+      var glyph=document.createElement("span");
+      glyph.className="glyph";
+      glyph.textContent=character===" "?"\u00a0":character;
+      line.appendChild(glyph);
+    });
+  });
+  var lines=lineElements.map(function(line){return Array.from(line.querySelectorAll(".glyph"))});
+
+  function clamp(value,min,max){return Math.min(max,Math.max(min,value))}
+  function range(value,start,end){return clamp((value-start)/(end-start),0,1)}
+  function smooth(t){return t*t*(3-2*t)}
+  function ease(t){return 1-Math.pow(1-t,3)}
+  function mix(start,end,amount){return start+(end-start)*amount}
+  function colorFor(t){
+    var a=[255,235,202],b=[189,116,77];
+    return "rgb("+a.map(function(value,index){return Math.round(mix(value,b[index],smooth(t)))}).join(",")+")";
+  }
+  var geometry;
+  function measure(){
+    group.style.transform="none";
+    lines.flat().forEach(function(glyph){glyph.style.transform="none"});
+    var stageRect=stage.getBoundingClientRect();
+    var lineRects=lineElements.map(function(line){return line.getBoundingClientRect()});
+    var middleY=lineRects[1].top+lineRects[1].height/2-stageRect.top;
+    geometry={
+      width:stageRect.width,
+      nodeX:stageRect.width*settings.node,
+      bendWidth:stageRect.width*settings.bend,
+      travel:stageRect.width*settings.travel,
+      glyphs:lines.map(function(line,lineIndex){
+        return line.map(function(glyph){
+          var rect=glyph.getBoundingClientRect();
+          return {element:glyph,baseX:rect.left+rect.width/2-stageRect.left,deltaY:middleY-(rect.top+rect.height/2-stageRect.top),lineIndex:lineIndex};
+        });
+      })
+    };
+    document.querySelector(".debug-node").style.left=(settings.node*100)+"%";
+  }
+  measure();
+
+  function render(progress){
+    var bottleEntry=smooth(range(progress,.76,.96));
+    var move=geometry.travel*range(progress,.04,.92)-geometry.width*.014*bottleEntry;
+    var scale=mix(1,.34,bottleEntry);
+    group.style.transform="translate3d("+move.toFixed(2)+"px,0,0) scale("+scale.toFixed(3)+")";
+    group.style.opacity=String(mix(1,.56,smooth(range(progress,.95,1))));
+    geometry.glyphs.forEach(function(line,lineIndex){
+      line.forEach(function(item){
+        var currentX=item.baseX+move;
+        var crossed=range(currentX,geometry.nodeX,geometry.nodeX+geometry.bendWidth);
+        var gathered=smooth(crossed);
+        var tangent=Math.sin(Math.PI*crossed)*settings.angle;
+        var sign=item.deltaY===0?0:Math.sign(item.deltaY);
+        var middleLift=lineIndex===1?Math.sin(Math.PI*crossed)*settings.middleArc:0;
+        var translateY=item.deltaY*gathered*.78-middleLift;
+        var rotation=sign*tangent-(lineIndex===1?Math.cos(Math.PI*crossed)*settings.middleArc*.35:0);
+        item.element.style.transform="translate3d(0,"+translateY.toFixed(2)+"px,0) rotate("+rotation.toFixed(2)+"deg)";
+        item.element.style.color=colorFor(crossed);
+      });
+    });
+  }
+
+  var started=performance.now();
+  function frame(now){
+    var cycle=((now-started)%6000)/6000;
+    var progress=cycle<.84?cycle/.84:1;
+    render(progress);
+    requestAnimationFrame(frame);
+  }
+  if(frozen!==null||matchMedia("(prefers-reduced-motion: reduce)").matches){render(frozen===null?.58:frozen)}else{requestAnimationFrame(frame)}
+  new ResizeObserver(function(){measure();render(frozen===null?0:frozen)}).observe(stage);
+
+  function go(direction){
+    var index=(keys.indexOf(variant)+direction+keys.length)%keys.length;
+    params.set("variant",keys[index]);
+    location.search=params.toString();
+  }
+  document.querySelectorAll(".switcher button").forEach(function(button){button.addEventListener("click",function(){go(Number(button.dataset.direction))})});
+  addEventListener("keydown",function(event){
+    var active=document.activeElement;
+    if(active&&(active.tagName==="INPUT"||active.tagName==="TEXTAREA"||active.isContentEditable)){return}
+    if(event.key==="ArrowLeft"){go(-1)}
+    if(event.key==="ArrowRight"){go(1)}
+  });
+})();
+</script>
+</body>
+</html>

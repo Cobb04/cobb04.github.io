@@ -163,6 +163,7 @@ test("hero uses character art plus a currently reading card instead of a duplica
   assert.match(hero, /class="hero-copy"/);
   assert.match(hero, /class="hero-visual"/);
   assert.match(hero, /class="hero-character"/);
+  assert.equal((hero.match(/class="hero-character"/g) || []).length, 1);
   assert.match(hero, /src="assets\/hero-character\.jpg"/);
   assert.match(hero, /class="hero-reading"/);
   assert.match(hero, /Currently reading|id="readingCard"/);
@@ -174,6 +175,9 @@ test("hero uses character art plus a currently reading card instead of a duplica
   assert.match(html, /selectHomepageEntries\(posts,posts\.length\)/);
   assert.match(html, /@media\(max-width:768px\)[\s\S]*?\.hero\{grid-template-columns:1fr/);
   assert.doesNotMatch(hero, /shelf-row|class="book/);
+  assert.doesNotMatch(hero, /hero-scroll/);
+  assert.match(html, /\.hero-character\{[^}]*mask-image:linear-gradient\(180deg,transparent 0%/);
+  assert.doesNotMatch(html, /mask-composite/);
   assert.doesNotMatch(html, /Page 128|42%|The Pragmatic Programmer/);
 });
 

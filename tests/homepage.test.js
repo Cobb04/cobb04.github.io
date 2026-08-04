@@ -245,6 +245,8 @@ test("homepage Focus uses the full-width A chapter and preserves the complete an
   assert.match(focus, /href="podcast-to-course\.html"/);
   assert.match(focus, /href="https:\/\/github\.com\/Cobb04\/podcast-to-course"/);
   assert.doesNotMatch(focus, /class="focus-feature"|class="focus-projects"|class="focus-skills"/);
+  assert.doesNotMatch(focus, /class="focus-chapter-footer"|Open full project/);
+  assert.doesNotMatch(html, /\.focus-chapter-footer/);
   assert.match(html, /\.focus-motion\{[^}]*aspect-ratio:4\/3/);
   assert.doesNotMatch(html, /<section[^>]+id="projects"|<section[^>]+id="skills"/);
 });

@@ -230,16 +230,12 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
 .focus-chapter-title{display:flex;flex-direction:column;color:var(--text);font-family:'Bodoni Moda',Didot,'Bodoni 72',serif;font-size:clamp(3rem,5.4vw,5.4rem);font-weight:400;line-height:.94;letter-spacing:-.065em}
 .focus-chapter-subtitle{max-width:760px;margin-top:clamp(1.4rem,2.8vw,2.1rem);color:var(--text2);font-size:clamp(.92rem,1.45vw,1.16rem);line-height:1.55}
 .focus-chapter-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:1.75rem;margin-top:clamp(1.4rem,2.6vw,2rem)}
-.focus-chapter-actions a,.focus-chapter-footer a{padding-bottom:.28rem;border-bottom:1px solid currentColor;color:var(--accent);font:500 .72rem/1.2 var(--font-mono);text-decoration:none;transition:color .2s var(--ease)}
-.focus-chapter-actions a:hover,.focus-chapter-footer a:hover{color:var(--text)}
+.focus-chapter-actions a{padding-bottom:.28rem;border-bottom:1px solid currentColor;color:var(--accent);font:500 .72rem/1.2 var(--font-mono);text-decoration:none;transition:color .2s var(--ease)}
+.focus-chapter-actions a:hover{color:var(--text)}
 .focus-motion{position:relative;width:min(82%,960px);margin-inline:auto;aspect-ratio:4/3;overflow:hidden;border-radius:20px;background:#ede2d2;box-shadow:0 0 0 1px var(--border-strong)}
 .focus-motion-frame{display:block;width:100%;height:100%;border:0;background:#ede2d2;pointer-events:none}
-.focus-chapter-footer{display:grid;width:min(82%,960px);margin-inline:auto;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:end;padding:clamp(1.5rem,3vw,2.2rem) 0;border-bottom:1px solid var(--border)}
-.focus-chapter-footer h3{font-family:var(--font-display);font-size:clamp(1.45rem,2.5vw,2rem);line-height:1;letter-spacing:-.04em}
-.focus-chapter-footer p{margin-top:.55rem;color:var(--text3);font-size:.78rem;line-height:1.5}
-[data-theme="terminal"] .focus-chapter-footer h3{font-family:var(--font-mono);font-weight:400;letter-spacing:-.045em}
 [data-theme="terminal"] .focus-motion{border-radius:0}
-@media(max-width:800px){.focus-chapter-intro{min-height:360px;padding:4rem 0 3rem}.focus-chapter-title{font-size:clamp(2.75rem,13vw,5rem)}.focus-motion{width:100%;border-radius:14px}.focus-chapter-footer{width:100%;grid-template-columns:1fr;gap:1.25rem;align-items:start}}
+@media(max-width:800px){.focus-chapter-intro{min-height:360px;padding:4rem 0 3rem}.focus-chapter-title{font-size:clamp(2.75rem,13vw,5rem)}.focus-motion{width:100%;border-radius:14px}}
 @media(max-width:520px){.focus-chapter-intro{min-height:330px}.focus-chapter-subtitle{font-size:.86rem}.focus-chapter-actions{gap:1.2rem}.focus-motion{border-radius:10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.side-nav{transition:none}.hero .socials .social-button{transition:none}.reading-deck-card{transition:none}.hero-character{transition:none}}
 </style>
@@ -285,7 +281,6 @@ a.c-card:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}[data-theme
       <div class="focus-motion">
         <iframe class="focus-motion-frame" src="podcast-to-course-motion-prototype.html?variant=A&amp;capture=1" title="Podcast transcript continuously converging into six course outcomes" loading="lazy" tabindex="-1"></iframe>
       </div>
-      <footer class="focus-chapter-footer"><div><h3>Podcast to Course</h3><p>Learning system, knowledge design, kinetic typography.</p></div><a href="podcast-to-course.html">Open full project ↗</a></footer>
     </article>
   </section>
   <section class="section" id="courses"><h2 class="section-title">Podcast Notes</h2>

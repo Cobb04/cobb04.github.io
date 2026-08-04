@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "slug": "doubao-feishu-opportunity",
+    "title": "豆包柳暗花明的机会，在飞书吗？",
+    "date": "2026-08-02",
+    "category": "AI Product",
+    "url": "https://www.xiaohongshu.com/explore/6a6ffd340000000033008b38?xsec_token=ABPxx0urR_ddzzaELHdsNU5waT48uTiqjOaEYWk2Sy6rw=&xsec_source=pc_user",
+    "cover": "assets/writing/doubao-feishu-800.webp",
+    "cover_srcset": "assets/writing/doubao-feishu-480.webp 480w, assets/writing/doubao-feishu-800.webp 800w, assets/writing/doubao-feishu-1086.webp 1086w",
+    "cover_width": 1086,
+    "cover_height": 1448,
+    "featured": true
+  },
+  {
+    "slug": "deepseek-v4-flash",
+    "title": "广积粮，缓称王：DeepSeek V4 Flash 正式版 API 公测",
+    "date": "2026-08-01",
+    "category": "Model",
+    "url": "https://www.xiaohongshu.com/explore/6a6e074f000000003400e82c?xsec_token=ABDJru2TaIX5MC2J11Z7RGTdwz5Kz6fgMLKlGOreGcvX4=&xsec_source=pc_user",
+    "cover": "assets/writing/deepseek-v4-flash-800.webp",
+    "cover_srcset": "assets/writing/deepseek-v4-flash-480.webp 480w, assets/writing/deepseek-v4-flash-800.webp 800w, assets/writing/deepseek-v4-flash-1086.webp 1086w",
+    "cover_width": 1086,
+    "cover_height": 1448,
+    "featured": true
+  }
+]

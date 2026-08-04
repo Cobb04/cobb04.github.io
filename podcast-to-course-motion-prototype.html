@@ -26,16 +26,21 @@ body{display:grid;place-items:center;background:#ede2d2;font-family:Arial,"Helve
 .foreground{position:absolute;z-index:4;inset:0;pointer-events:none;background:var(--stage) center/100% 100% no-repeat}
 .person{clip-path:polygon(2.05% 42%,3.6% 39%,7% 36.9%,12% 36.8%,15.7% 38.8%,18.1% 43%,18.4% 48%,17.1% 54.3%,18.3% 57.4%,16.7% 59.7%,15.3% 61.2%,16.9% 63.8%,18.2% 69%,19.5% 76%,23% 82.5%,28% 87%,33.5% 90.5%,37.4% 96%,39.2% 100%,2.05% 100%)}
 .microphone{clip-path:polygon(15.4% 57.5%,17.3% 56.6%,19.4% 57.5%,22.8% 60.1%,25.8% 63.6%,29.1% 65.8%,31.4% 68.2%,32.4% 71.2%,30.7% 72.6%,28.8% 70.3%,25.5% 69.1%,22.2% 66.4%,19.6% 63.5%,17.2% 62.2%,15.8% 60.4%)}
-.target-right-png{position:absolute;z-index:5;inset:0;background:url("assets/podcast-to-course-target-static.png") center/100% 100% no-repeat;clip-path:inset(0 0 0 40.8%);pointer-events:none}
+.target-right-png{position:absolute;z-index:5;inset:0;background:url("assets/podcast-to-course-sand-pile-concept-v2-aged.png") center/100% 100% no-repeat;clip-path:inset(0 0 0 40.8%);pointer-events:none}
 .outcomes{position:absolute;z-index:7;top:17%;right:4.25%;bottom:1.9%;left:71.85%;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));color:var(--ink);opacity:0;pointer-events:none}
 .outcome{align-self:start}.outcome h2{font:700 1.82cqw/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.047em}.outcome p{max-width:20.4cqw;margin-top:.55cqw;font:400 1.28cqw/1.35 "Avenir Next",Avenir,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.038em}
 .motion-layer{position:absolute;z-index:6;inset:0;overflow:visible;pointer-events:none}
-.moving-group{position:absolute;left:17.8%;top:18.8%;display:flex;width:max-content;flex-direction:column;gap:.34cqw;transform:translate3d(0,0,0);transform-origin:right center;will-change:transform,opacity;color:var(--cream);text-shadow:0 1px 5px rgba(55,25,5,.24)}
+.moving-group{position:absolute;left:17.8%;top:17.75%;display:flex;width:max-content;flex-direction:column;gap:.34cqw;transform:translate3d(0,0,0);will-change:transform;color:var(--cream);text-shadow:0 1px 5px rgba(55,25,5,.24)}
 .glyph-line{display:block;width:max-content;white-space:nowrap;font:650 1.18cqw/1.12 Arial,"Helvetica Neue",sans-serif;letter-spacing:-.028em}
 .glyph{display:inline-block;min-width:.13em;transform-origin:center center;will-change:transform;color:inherit}
-.debug-node{position:absolute;z-index:10;top:13%;bottom:7%;left:46%;display:none;width:1px;background:rgba(169,82,44,.42)}
+.debug-node,.debug-mouth,.debug-fade{position:absolute;z-index:10;top:13%;bottom:7%;display:none;width:1px}
+.debug-node{left:37%;background:rgba(169,82,44,.42)}
 .debug-node::before{content:"each glyph starts turning here";position:absolute;top:-17px;left:7px;width:max-content;color:#9b5f3c;font:600 9px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-body.debug .debug-node{display:block}
+.debug-mouth{left:48.3%;background:rgba(65,91,92,.55)}
+.debug-mouth::before{content:"one line by bottle mouth";position:absolute;top:-17px;right:7px;width:max-content;color:#46696a;font:600 9px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.debug-fade{left:64.8%;background:rgba(31,25,20,.72)}
+.debug-fade::before{content:"fade after this line";position:absolute;top:-17px;right:7px;width:max-content;color:#302720;font:600 9px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+body.debug .debug-node,body.debug .debug-mouth,body.debug .debug-fade{display:block}
 .prototype-note{position:absolute;z-index:12;top:2%;left:50%;transform:translateX(-50%);padding:.36rem .68rem;border:1px solid rgba(77,48,28,.16);border-radius:999px;background:rgba(255,249,239,.78);backdrop-filter:blur(7px);color:#6f4930;font:600 10px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
 .switcher{position:fixed;z-index:30;left:50%;bottom:18px;display:flex;align-items:center;gap:6px;transform:translateX(-50%);padding:7px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(24,20,17,.92);box-shadow:0 12px 35px rgba(29,18,9,.24);color:white;font:600 13px/1.1 Arial,sans-serif;backdrop-filter:blur(12px)}
 .switcher button{display:grid;width:30px;height:30px;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:white;font-size:17px;cursor:pointer}.switcher button:hover{background:rgba(255,255,255,.2)}
@@ -72,6 +77,8 @@ body.capture .switcher,body.capture .prototype-note{display:none}
     <div class="motion-layer" aria-hidden="true">
       <div class="moving-group"><span class="glyph-line" data-text="systems become autonomous"></span><span class="glyph-line" data-text="tools improve the model"></span><span class="glyph-line" data-text="GPU becomes the factory"></span></div>
       <span class="debug-node"></span>
+      <span class="debug-mouth"></span>
+      <span class="debug-fade"></span>
     </div>
   </section>
 </main>
@@ -83,9 +90,9 @@ body.capture .switcher,body.capture .prototype-note{display:none}
 <script>
 (function(){
   var variants={
-    A:{name:"Wide soft bend",note:"early node · wide turn · 7° maximum tangent",node:.445,bend:.205,angle:7,travel:.365,middleArc:1},
-    B:{name:"Editorial S-curve",note:"middle node · deeper character wave · 10° tangent",node:.465,bend:.15,angle:10,travel:.37,middleArc:3},
-    C:{name:"Late tight funnel",note:"late node · short turn · 13° maximum tangent",node:.49,bend:.095,angle:13,travel:.39,middleArc:0}
+    A:{name:"Wide soft bend",note:"early turn · fully converged at bottle mouth · fade at sand marker",node:.37,mouth:.483,fade:.648,angle:7,travel:.50,middleArc:1},
+    B:{name:"Editorial S-curve",note:"middle turn · fully converged at bottle mouth · fade at sand marker",node:.395,mouth:.483,fade:.648,angle:10,travel:.505,middleArc:3},
+    C:{name:"Late tight funnel",note:"late turn · fully converged at bottle mouth · fade at sand marker",node:.425,mouth:.483,fade:.648,angle:13,travel:.51,middleArc:0}
   };
   var keys=Object.keys(variants);
   var params=new URLSearchParams(location.search);
@@ -132,7 +139,8 @@ body.capture .switcher,body.capture .prototype-note{display:none}
     geometry={
       width:stageRect.width,
       nodeX:stageRect.width*settings.node,
-      bendWidth:stageRect.width*settings.bend,
+      mouthX:stageRect.width*settings.mouth,
+      bendWidth:stageRect.width*(settings.mouth-settings.node),
       travel:stageRect.width*settings.travel,
       glyphs:lines.map(function(line,lineIndex){
         return line.map(function(glyph){
@@ -142,15 +150,15 @@ body.capture .switcher,body.capture .prototype-note{display:none}
       })
     };
     document.querySelector(".debug-node").style.left=(settings.node*100)+"%";
+    document.querySelector(".debug-mouth").style.left=(settings.mouth*100)+"%";
+    document.querySelector(".debug-fade").style.left=(settings.fade*100)+"%";
   }
   measure();
 
   function render(progress){
-    var bottleEntry=smooth(range(progress,.76,.96));
-    var move=geometry.travel*range(progress,.04,.92)-geometry.width*.014*bottleEntry;
-    var scale=mix(1,.34,bottleEntry);
-    group.style.transform="translate3d("+move.toFixed(2)+"px,0,0) scale("+scale.toFixed(3)+")";
-    group.style.opacity=String(mix(1,.56,smooth(range(progress,.95,1))));
+    var move=geometry.travel*range(progress,.04,.92);
+    group.style.transform="translate3d("+move.toFixed(2)+"px,0,0)";
+    group.style.opacity="1";
     geometry.glyphs.forEach(function(line,lineIndex){
       line.forEach(function(item){
         var currentX=item.baseX+move;
@@ -159,17 +167,19 @@ body.capture .switcher,body.capture .prototype-note{display:none}
         var tangent=Math.sin(Math.PI*crossed)*settings.angle;
         var sign=item.deltaY===0?0:Math.sign(item.deltaY);
         var middleLift=lineIndex===1?Math.sin(Math.PI*crossed)*settings.middleArc:0;
-        var translateY=item.deltaY*gathered*.78-middleLift;
+        var translateY=item.deltaY*gathered-middleLift;
         var rotation=sign*tangent-(lineIndex===1?Math.cos(Math.PI*crossed)*settings.middleArc*.35:0);
-        item.element.style.transform="translate3d(0,"+translateY.toFixed(2)+"px,0) rotate("+rotation.toFixed(2)+"deg)";
+        var glyphScale=mix(1,.54,gathered);
+        item.element.style.transform="translate3d(0,"+translateY.toFixed(2)+"px,0) rotate("+rotation.toFixed(2)+"deg) scale("+glyphScale.toFixed(3)+")";
         item.element.style.color=colorFor(crossed);
+        item.element.style.opacity=String(1-smooth(range(currentX,geometry.width*settings.fade,geometry.width*(settings.fade+.02))));
       });
     });
   }
 
   var started=performance.now();
   function frame(now){
-    var cycle=((now-started)%6000)/6000;
+    var cycle=((now-started)%8200)/8200;
     var progress=cycle<.84?cycle/.84:1;
     render(progress);
     requestAnimationFrame(frame);

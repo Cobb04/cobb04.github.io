@@ -121,7 +121,7 @@ test("writing manifest and archive include the latest LibTV essay as a responsiv
   assert.match(archive, /@media\(max-width:620px\)[\s\S]*grid-template-columns:1fr/);
 });
 
-test("homepage presents writing as a two-column editorial gallery", () => {
+test("homepage presents writing as a three-column editorial gallery", () => {
   const homepage = fs.readFileSync(path.join(root, "index.html"), "utf8");
   const writing = homepage.match(/<section class="section writing-section"[\s\S]*?<\/section>/)?.[0] || "";
 
@@ -132,11 +132,12 @@ test("homepage presents writing as a two-column editorial gallery", () => {
   assert.match(writing, /href="writing\.html"[^>]*>View all writing →/);
   assert.match(homepage, /<script src="writing\/writing-gallery\.js"><\/script>/);
   assert.match(homepage, /WritingGallery\.selectHomepagePosts\(posts,4\)/);
-  assert.match(homepage, /\.writing-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(homepage, /\.writing-grid\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(homepage, /\.writing-intro\{[^}]*max-width:720px[^}]*margin:0 0 1\.45rem/);
-  assert.match(homepage, /\.writing-grid\{[^}]*max-width:720px[^}]*margin:0;/);
-  assert.match(homepage, /\.writing-actions\{[^}]*max-width:720px[^}]*justify-content:flex-start/);
+  assert.match(homepage, /\.writing-grid\{[^}]*max-width:none[^}]*margin:0;/);
+  assert.match(homepage, /\.writing-actions\{[^}]*max-width:none[^}]*justify-content:flex-start/);
   assert.match(homepage, /\.writing-heading\{[^}]*font-size:clamp\(1\.65rem,2\.5vw,2\.25rem\)/);
+  assert.match(homepage, /@media\(max-width:900px\)[\s\S]*?\.writing-grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(homepage, /@media\(max-width:639px\)[\s\S]*?\.writing-grid\{grid-template-columns:1fr/);
 });
 

@@ -51,6 +51,7 @@
     image.loading = index < (options.eagerCount || 0) ? "eager" : "lazy";
     image.decoding = "async";
     image.alt = "文章封面：" + post.title;
+    if (post.cover_position) image.setAttribute("style", "object-position:" + post.cover_position);
     coverLink.appendChild(image);
 
     var meta = document.createElement("p");

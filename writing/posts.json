@@ -1,5 +1,18 @@
 [
   {
+    "slug": "libtv-model-makers",
+    "title": "借船出海，能靠岸吗？LibTV × 模型厂的 AI 应用生存博弈",
+    "date": "2026-08-06",
+    "category": "AI Product",
+    "url": "https://www.xiaohongshu.com/explore/6a7375020000000033034a91?xsec_token=ABmY2rVLbLg8OkPqFFBUgOg_W8ndcKJ03zLP9BJWR-QfE=&xsec_source=pc_user",
+    "cover": "assets/writing/libtv-model-makers-800.webp",
+    "cover_srcset": "assets/writing/libtv-model-makers-480.webp 480w, assets/writing/libtv-model-makers-800.webp 800w, assets/writing/libtv-model-makers-941.webp 941w",
+    "cover_width": 941,
+    "cover_height": 1672,
+    "cover_position": "top",
+    "featured": true
+  },
+  {
     "slug": "doubao-feishu-opportunity",
     "title": "豆包柳暗花明的机会，在飞书吗？",
     "date": "2026-08-02",

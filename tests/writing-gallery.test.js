@@ -58,6 +58,7 @@ test("writing cards expose responsive covers, metadata, and two explicit Xiaohon
     cover_srcset: "assets/writing/doubao-feishu-480.webp 480w, assets/writing/doubao-feishu-800.webp 800w",
     cover_width: 1086,
     cover_height: 1448,
+    cover_position: "top",
   };
 
   gallery.renderGallery(fakeDocument, container, [post], {
@@ -79,20 +80,36 @@ test("writing cards expose responsive covers, metadata, and two explicit Xiaohon
   assert.equal(image.loading, "lazy");
   assert.equal(image.width, 1086);
   assert.equal(image.height, 1448);
+  assert.equal(image.attributes.style, "object-position:top");
   assert.equal(meta.textContent, "AUG 02, 2026 · AI PRODUCT");
   assert.equal(titleLink.href, post.url);
   assert.equal(titleLink.textContent, `${post.title} ↗`);
 });
 
-test("writing manifest and archive provide a real two-post responsive collection", () => {
+test("writing manifest and archive include the latest LibTV essay as a responsive collection", () => {
   const posts = JSON.parse(fs.readFileSync(path.join(root, "writing", "posts.json"), "utf8"));
   const archivePath = path.join(root, "writing.html");
-  assert.equal(posts.length, 2);
-  assert.deepEqual(posts.map((post) => post.date), ["2026-08-02", "2026-08-01"]);
+  assert.equal(posts.length, 3);
+  assert.deepEqual(posts.map((post) => post.date), ["2026-08-06", "2026-08-02", "2026-08-01"]);
+  assert.deepEqual(
+    {
+      slug: posts[0].slug,
+      title: posts[0].title,
+      category: posts[0].category,
+      coverPosition: posts[0].cover_position,
+    },
+    {
+      slug: "libtv-model-makers",
+      title: "借船出海，能靠岸吗？LibTV × 模型厂的 AI 应用生存博弈",
+      category: "AI Product",
+      coverPosition: "top",
+    },
+  );
   posts.forEach((post) => {
     assert.match(post.url, /^https:\/\/www\.xiaohongshu\.com\/explore\//);
     assert.ok(fs.existsSync(path.join(root, post.cover)));
-    assert.match(post.cover_srcset, /480w[\s\S]*800w[\s\S]*1086w/);
+    assert.match(post.cover_srcset, /480w[\s\S]*800w/);
+    assert.match(post.cover_srcset, new RegExp(`${post.cover_width}w`));
   });
 
   assert.ok(fs.existsSync(archivePath), "writing archive should exist");
